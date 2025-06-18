@@ -12,8 +12,8 @@ public static class GameConfig
     public const float NetworkTimeout = 30f; // seconds
 
     // UI settings
-    public const string MainMenuSceneName = "MainMenu";
-    public const string LobbySceneName = "Lobby";
+    public const string LOGIN_SCENE = "Login";
+    public const string MAIN_MENU_SCENE = "MainMenu";
 }
 
 public static class UISettings
