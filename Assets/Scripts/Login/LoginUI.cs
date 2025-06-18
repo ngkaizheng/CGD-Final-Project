@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayFabLoginUI : MonoBehaviour
+public class LoginUI : MonoBehaviour
 {
     [Header("Login UI Elements")]
     public GameObject loginPanel;
@@ -22,6 +22,9 @@ public class PlayFabLoginUI : MonoBehaviour
     public Button backToLoginButton;
     public TMP_Text signupStatusText;
 
+    [Header("UI Settings")]
+    public Button settingsButton; // Button to open settings panel
+
     private void Start()
     {
         // Login UI
@@ -33,10 +36,15 @@ public class PlayFabLoginUI : MonoBehaviour
         signUpButton.onClick.AddListener(OnSignUpButtonClicked);
         backToLoginButton.onClick.AddListener(() => ShowLoginPanel());
 
+        // Settings UI
+        settingsButton.onClick.AddListener(() => OnSettingsButtonClicked());
+
         // Show the login panel by default
         ShowLoginPanel();
     }
 
+
+    #region OnButtonClicked Methods
     public void OnLoginButtonClicked()
     {
         PlayFabLoginController.Instance.LoginWithEmail(emailInput.text, passwordInput.text);
@@ -50,6 +58,12 @@ public class PlayFabLoginUI : MonoBehaviour
         }
         PlayFabLoginController.Instance.SignUpWithEmail(signUpEmailInput.text, signUpPasswordInput.text, displayNameInput.text);
     }
+
+    public void OnSettingsButtonClicked()
+    {
+        GameSettings.Instance.ToggleSettingsPanel();
+    }
+    #endregion
 
     public bool ValidateSignUpInputs()
     {

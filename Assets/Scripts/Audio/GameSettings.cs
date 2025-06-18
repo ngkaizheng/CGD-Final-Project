@@ -12,27 +12,34 @@ public class GameSettings : MonoBehaviour
     [SerializeField] private TMP_Dropdown resolutionDropdown;  // Reference to the resolution dropdown
     [SerializeField] private Slider lookSensitivitySlider;  // Reference to the look sensitivity slider
     [SerializeField] private TMP_Text lookSensitivityText;  // Reference to the text displaying look sensitivity value
+    [SerializeField] private Button toggleSettingsButton;  // Button to toggle settings panel visibility
 
     // Keys for PlayerPrefs
     public static string MusicVolumeKey = "MusicVolume";
     public static string SFXVolumeKey = "SFXVolume";
     public static string FullscreenKey = "Fullscreen";
     public static string ResolutionIndexKey = "ResolutionIndex";
-    public static string LookSensitivityKey = "LookSensitivity"; // New key for look sensitivity
+    public static string LookSensitivityKey = "LookSensitivity";
 
-    // Global variable
-    public static bool isFullscreen;
-    public static int resolutionsSelected = 0; // Global variable to store the selected resolution index
+    public static GameSettings Instance { get; private set; }
+
+    private static bool isFullscreen;
+    private static int resolutionsSelected = 0; // Global variable to store the selected resolution index
     // List of supported resolutions
     private Resolution[] resolutions;
 
     private void Awake()
     {
-        if (settingsPanel != null)
+        if (Instance == null)
         {
-            settingsPanel.SetActive(false);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
+        settingsPanel.SetActive(false);
     }
 
     private void Start()
@@ -56,6 +63,9 @@ public class GameSettings : MonoBehaviour
         // Add listeners to update volumes and save when sliders change
         musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
         sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
+
+        // Add listener to toggle settings panel visibility
+        toggleSettingsButton.onClick.AddListener(ToggleSettingsPanel);
 
         InitializeResolutionDropdown();
         // Initialize fullscreen toggle
@@ -96,6 +106,7 @@ public class GameSettings : MonoBehaviour
         PlayerPrefs.Save(); // Ensure data is written to disk
     }
 
+    #region Resolution Management
     private void InitializeResolutionDropdown()
     {
         // Get all supported resolutions
@@ -183,6 +194,7 @@ public class GameSettings : MonoBehaviour
             Debug.Log($"Resolution set to: {res.width} x {res.height}");
         }
     }
+    #endregion
 
     #region Look Sensitivity
     private void OnLookSensitivityChanged(float value)
@@ -212,6 +224,16 @@ public class GameSettings : MonoBehaviour
         // CameraController.Instance.SetLookSensitivity(sensitivity);
         GameConfig.LOOK_SENSITIVITY = sensitivity; // Update global variable
         Debug.Log($"Look Sensitivity set to: {sensitivity}");
+    }
+    #endregion
+
+    #region OnPanelToggle
+    public void ToggleSettingsPanel()
+    {
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(!settingsPanel.activeSelf);
+        }
     }
     #endregion
 
