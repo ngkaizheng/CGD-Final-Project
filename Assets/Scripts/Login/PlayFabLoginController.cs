@@ -66,6 +66,10 @@ public class PlayFabLoginController : MonoBehaviour
             Email = email,
             Password = password,
             TitleId = titleId,
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true
+            }
         };
 
         PlayFabClientAPI.LoginWithEmailAddress(request, result =>
@@ -74,6 +78,12 @@ public class PlayFabLoginController : MonoBehaviour
             playFabId = result.PlayFabId;
             entityId = result.EntityToken.Entity.Id;
             entityType = result.EntityToken.Entity.Type;
+
+            Debug.Log($"Email: {email}");
+            Debug.Log($"Display Name: {result.InfoResultPayload.PlayerProfile.DisplayName}");
+            Debug.Log($"PlayFab ID: {playFabId}");
+
+            PlayFabUserController.Instance.SetUserInfo(email, result.InfoResultPayload.PlayerProfile.DisplayName, playFabId);
 
             StartCoroutine(LoadLoginSceneAsync());
         },

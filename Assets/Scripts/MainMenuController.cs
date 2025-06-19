@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-
+    #region Variables
     [Header("Main Menu Section")]
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button settingsButton;
@@ -26,24 +26,34 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button lobbyBackButton;
     [SerializeField] private Button startGameInLobbyButton;
 
+    [Header("Store Section")]
+    [SerializeField] private Button storeButton;
+    [SerializeField] private Button storeBackButton;
+
     [Header("Settings Section")]
     [SerializeField] private Button settingsBackButton;
+
+    [Header("Profile Section")]
+    [SerializeField] private Button profileButton;
 
     [Header("Layout Settings")]
     [SerializeField] private GameObject mainMenuLayout;
     [SerializeField] private GameObject settingsLayout;
     [SerializeField] private GameObject multiplayerLayout;
     [SerializeField] private GameObject lobbyLayout;
+    [SerializeField] private GameObject storeLayout;
 
     private LobbyLogic lobbyLogic;
     public static MainMenuController Instance { get; private set; }
+    #endregion
 
+    #region Unity Methods
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        lobbyLogic = FindObjectOfType<LobbyLogic>();
+        lobbyLogic = FindAnyObjectByType<LobbyLogic>();
 
         // Main menu buttons
         startGameButton.onClick.AddListener(() => ShowSection(MenuState.Multiplayer));
@@ -62,12 +72,34 @@ public class MainMenuController : MonoBehaviour
 
         // Settings buttons
         settingsBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
+
+        // Store button
+        storeButton.onClick.AddListener(() => ShowSection(MenuState.Store));
+        storeBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
+
+        // Profile button
+        profileButton.onClick.AddListener(() => ProfileController.Instance.ShowProfilePanel());
     }
 
     private void Start()
     {
         ShowSection(MenuState.MainMenu);
     }
+    private void OnDestroy()
+    {
+        startGameButton.onClick.RemoveAllListeners();
+        settingsButton.onClick.RemoveAllListeners();
+        exitButton.onClick.RemoveAllListeners();
+        createRoomButton.onClick.RemoveAllListeners();
+        joinRoomButton.onClick.RemoveAllListeners();
+        quickPlayButton.onClick.RemoveAllListeners();
+        multiplayerBackButton.onClick.RemoveAllListeners();
+        lobbyBackButton.onClick.RemoveAllListeners();
+        startGameInLobbyButton.onClick.RemoveAllListeners();
+        settingsBackButton.onClick.RemoveAllListeners();
+        storeButton.onClick.RemoveAllListeners();
+    }
+    #endregion
 
     #region Navigation Methods
 
@@ -77,6 +109,11 @@ public class MainMenuController : MonoBehaviour
         multiplayerLayout.SetActive(state == MenuState.Multiplayer);
         lobbyLayout.SetActive(state == MenuState.Lobby);
         settingsLayout.SetActive(state == MenuState.Settings);
+        storeLayout.SetActive(state == MenuState.Store);
+        ClearUI();
+
+        if (state == MenuState.Store)
+            PlayFabCurrencyController.Instance.GetCurrencyBalance();
     }
 
     private async void ExitNetworkAndShowMainMenu()
@@ -158,6 +195,24 @@ public class MainMenuController : MonoBehaviour
         }
     }
     #endregion
+
+
+    #region UI Update Methods
+    public void UpdateRoomInputFieldStatus(string message)
+    {
+        roomInputFieldStatusText.text = message;
+    }
+    public void UpdateMultiplayerMainStatus(string message)
+    {
+        multiplayerMainStatusText.text = message;
+    }
+    public void ClearUI()
+    {
+        roomIdInputField.text = "";
+        roomInputFieldStatusText.text = "";
+        multiplayerMainStatusText.text = "";
+    }
+    #endregion
 }
 
 public enum MenuState
@@ -165,5 +220,6 @@ public enum MenuState
     MainMenu,
     Multiplayer,
     Lobby,
-    Settings
+    Settings,
+    Store
 }
