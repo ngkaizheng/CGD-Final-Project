@@ -7,6 +7,7 @@ public class SkinData : ScriptableObject
     public string skinName;
     public string skinDescription;
     public Sprite skinIcon;
+    public PlayerRole role; // OUTSIDER or PONTIANAK
     public int price;
 
     // Add any additional properties or methods needed for the skin data

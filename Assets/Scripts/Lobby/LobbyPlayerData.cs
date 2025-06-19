@@ -7,6 +7,9 @@ public class LobbyPlayerData : NetworkBehaviour
     [Networked] public PlayerRef PlayerRef { get; set; }
     [Networked, OnChangedRender(nameof(OnDataChanged))] public NetworkString<_32> Nickname { get; set; }
     [Networked, OnChangedRender(nameof(OnDataChanged))] public bool IsReady { get; set; }
+    [Networked, OnChangedRender(nameof(OnDataChanged))] public PlayerRole Role { get; set; } = PlayerRole.OUTSIDER;
+    [Networked, OnChangedRender(nameof(OnDataChanged))] public NetworkString<_32> SelectedSkinId { get; set; }
+
 
     [Header("Event Listening")]
     [SerializeField] private LobbyPlayerDataEvent _onPlayerDataUpdated;
@@ -30,7 +33,12 @@ public class LobbyPlayerData : NetworkBehaviour
 
         if (Object.HasInputAuthority)
         {
-            RPC_SetNickname(PlayerNickname.Instance.GetNickname());
+            RPC_SetNickname(PlayFabUserController.Instance.DisplayName);
+            var ownedSkins = PlayFabInventoryController.Instance.GetOwnedSkinsByRole(Role);
+            if (ownedSkins != null && ownedSkins.Count > 0)
+            {
+                RPC_SetSelectedSkin(ownedSkins[0].itemId);
+            }
         }
     }
 
@@ -46,6 +54,12 @@ public class LobbyPlayerData : NetworkBehaviour
         IsReady = isReady;
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetSelectedSkin(string skinId)
+    {
+        SelectedSkinId = skinId;
+    }
+
     public void RPC_KickPlayer()
     {
         if (Runner.IsServer)
@@ -53,6 +67,12 @@ public class LobbyPlayerData : NetworkBehaviour
             Runner.Disconnect(PlayerRef); // Force disconnect
             // Runner.Despawn(Object); // Remove player object
         }
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetPlayerRole(PlayerRole role)
+    {
+        Role = role;
     }
 
     private void OnDataChanged()

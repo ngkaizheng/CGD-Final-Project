@@ -32,3 +32,9 @@ public static class UISettings
     public static readonly Color DisabledColor = new Color(1f, 1f, 1f, DisabledOpacity);
     public static readonly Color EnabledColor = new Color(1f, 1f, 1f, EnabledOpacity);
 }
+
+public enum PlayerRole
+{
+    OUTSIDER,
+    PONTIANAK
+}

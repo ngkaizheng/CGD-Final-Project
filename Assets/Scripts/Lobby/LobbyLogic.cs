@@ -42,6 +42,7 @@ public class LobbyLogic : MonoBehaviour
             SessionName = roomId
         });
     }
+
     public async Task<StartGameResult> QuickPlay()
     {
         _runner = Instantiate(_networkRunnerPrefab);

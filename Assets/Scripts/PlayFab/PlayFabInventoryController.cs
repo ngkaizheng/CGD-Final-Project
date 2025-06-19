@@ -9,10 +9,11 @@ public class PlayFabInventoryController : MonoBehaviour
 {
     public static PlayFabInventoryController Instance { get; private set; }
 
+    [Header("All Skins Data")]
+    [SerializeField] private List<SkinData> allSkins = new List<SkinData>();
 
     // Stores which skins the player owns (using PlayFab Item IDs)
     private HashSet<string> ownedSkinIds = new HashSet<string>();
-
     public GameEvent OnInventoryLoaded;
 
     private void Awake()
@@ -32,6 +33,7 @@ public class PlayFabInventoryController : MonoBehaviour
         LoadPlayerInventory();
     }
 
+    #region Load Player Inventory
     public void LoadPlayerInventory()
     {
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), OnGetInventorySuccess, OnGetInventoryFailure);
@@ -57,7 +59,9 @@ public class PlayFabInventoryController : MonoBehaviour
     {
         Debug.LogWarning($"Failed to load player inventory: {error.GenerateErrorReport()}");
     }
+    #endregion
 
+    #region Purchase Item
     public void PurchaseItem(string itemId, int price)
     {
         if (IsSkinOwned(itemId))
@@ -91,10 +95,44 @@ public class PlayFabInventoryController : MonoBehaviour
     {
         Debug.LogWarning($"Failed to purchase item: {error.GenerateErrorReport()}");
     }
-
+    #endregion
 
     public bool IsSkinOwned(string skinId)
     {
         return ownedSkinIds.Contains(skinId);
+    }
+
+    public SkinData GetSkinData(string skinId)
+    {
+        return allSkins.Find(skin => skin != null && skin.itemId == skinId);
+    }
+
+    public List<SkinData> GetOwnedSkins()
+    {
+        List<SkinData> owned = new List<SkinData>();
+        foreach (var skinId in ownedSkinIds)
+        {
+            var skin = GetSkinData(skinId);
+            if (skin != null)
+                owned.Add(skin);
+        }
+        return owned;
+    }
+
+    public List<SkinData> GetOwnedSkinsByRole(PlayerRole role)
+    {
+        List<SkinData> owned = new List<SkinData>();
+        foreach (var skinId in ownedSkinIds)
+        {
+            var skin = GetSkinData(skinId);
+            if (skin != null && skin.role == role)
+                owned.Add(skin);
+        }
+        return owned;
+    }
+
+    public List<SkinData> GetAllSkinsByRole(PlayerRole role)
+    {
+        return allSkins.FindAll(skin => skin != null && skin.role == role);
     }
 }

@@ -16,4 +16,5 @@ MonoBehaviour:
   skinName: Pontianak 1
   skinDescription: Good
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  role: 1
   price: 50

@@ -1349,6 +1349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07753f1861a93e4483abce334d12c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Email: 
+  DisplayName: 
+  PlayFabId: 
 --- !u!4 &294050267
 Transform:
   m_ObjectHideFlags: 0

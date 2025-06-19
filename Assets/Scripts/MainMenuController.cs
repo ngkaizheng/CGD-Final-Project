@@ -57,7 +57,7 @@ public class MainMenuController : MonoBehaviour
 
         // Main menu buttons
         startGameButton.onClick.AddListener(() => ShowSection(MenuState.Multiplayer));
-        settingsButton.onClick.AddListener(() => ShowSection(MenuState.Settings));
+        settingsButton.onClick.AddListener(() => GameSettings.Instance.ToggleSettingsPanel());
         exitButton.onClick.AddListener(ExitGame);
 
         // Multiplayer buttons
@@ -71,7 +71,7 @@ public class MainMenuController : MonoBehaviour
         startGameInLobbyButton.onClick.AddListener(() => StartGameOrReadyInLobby());
 
         // Settings buttons
-        settingsBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
+        // settingsBackButton.onClick.AddListener(() => GameSettings.Instance.ToggleSettingsPanel());
 
         // Store button
         storeButton.onClick.AddListener(() => ShowSection(MenuState.Store));

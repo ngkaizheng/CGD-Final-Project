@@ -28,6 +28,7 @@ public class LobbyUI : MonoBehaviour
         _playerDataUpdatedEvent.OnRaised.RemoveListener(UpdatePlayerListItem);
     }
 
+    #region Update Player List Management
     private void UpdatePlayerList(NetworkLinkedList<LobbyPlayerData> players)
     {
         foreach (var kvp in _playerListItems.ToList()) // ToList() to avoid modification during iteration
@@ -58,11 +59,18 @@ public class LobbyUI : MonoBehaviour
             bool isHost = Runner != null && Runner.IsServer;
 
             // Always update the display ID and name to keep them in sync
+            // listItem.Initialize(
+            //     $"P{displayIndex}",
+            //     player,
+            //     isLocalPlayer,
+            //     isHost
+            // );
             listItem.Initialize(
-                $"P{displayIndex}",
                 player,
                 isLocalPlayer,
-                isHost
+                isHost,
+                role: PlayerRole.OUTSIDER
+            // player.PlayerRef.ToString(),
             );
             displayIndex++;
         }
@@ -75,4 +83,5 @@ public class LobbyUI : MonoBehaviour
             listItem.UpdatePlayerItem(playerData.Nickname.ToString(), playerData.IsReady, isLocalPlayer);
         }
     }
+    #endregion
 }
