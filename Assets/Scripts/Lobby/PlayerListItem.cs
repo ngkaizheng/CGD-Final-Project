@@ -26,6 +26,7 @@ public class PlayerListItem : MonoBehaviour
     [Tooltip("Button to kick the player from the lobby. Only visible for host.")]
     [SerializeField] private Button kickButton;
     [SerializeField] private Sprite kickIcon;
+    [SerializeField] private GameObject kickButtonContainer;
 
     private LobbyPlayerData _playerData;
     private PlayerRole _playerRole = PlayerRole.OUTSIDER; // Default role
@@ -130,11 +131,13 @@ public class PlayerListItem : MonoBehaviour
         {
             if (isHost && isLocalPlayer)
             {
-                kickButton.gameObject.SetActive(false);
+                // kickButton.gameObject.SetActive(false);
+                kickButtonContainer.SetActive(false);
             }
             else
             {
-                kickButton.gameObject.SetActive(isHost);
+                kickButtonContainer.SetActive(isHost);
+                // kickButton.gameObject.SetActive(isHost);
                 kickButton.image.sprite = kickIcon;
                 kickButton.onClick.RemoveAllListeners();
                 kickButton.onClick.AddListener(OnKickButtonClicked);
@@ -144,13 +147,27 @@ public class PlayerListItem : MonoBehaviour
         // Player role buttons
         if (playerRolePrevButton != null)
         {
-            playerRolePrevButton.onClick.RemoveAllListeners();
-            playerRolePrevButton.onClick.AddListener(OnRoleChangeButtonClicked);
+            if (!isLocalPlayer)
+            {
+                playerRolePrevButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                playerRolePrevButton.onClick.RemoveAllListeners();
+                playerRolePrevButton.onClick.AddListener(OnRoleChangeButtonClicked);
+            }
         }
         if (playerRoleNextButton != null)
         {
-            playerRoleNextButton.onClick.RemoveAllListeners();
-            playerRoleNextButton.onClick.AddListener(OnRoleChangeButtonClicked);
+            if (!isLocalPlayer)
+            {
+                playerRoleNextButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                playerRoleNextButton.onClick.RemoveAllListeners();
+                playerRoleNextButton.onClick.AddListener(OnRoleChangeButtonClicked);
+            }
         }
     }
 
@@ -211,12 +228,28 @@ public class PlayerListItem : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerItem(string newName, bool isReady, bool isLocalPlayer)
+    public void UpdatePlayerItem(string newName, bool isReady, bool isLocalPlayer, string selectedSkinId = null, PlayerRole? role = null)
     {
+        // Update name
         playerNameText.text = isLocalPlayer ? $"{newName} (You)" : newName;
+
+        // Update ready state
         if (readyButton != null)
         {
             UpdateReadyButton(isReady);
+        }
+
+        // Update role if provided
+        if (role.HasValue)
+        {
+            _playerRole = role.Value;
+            playerRoleText.text = _playerRole == PlayerRole.OUTSIDER ? "Outsider" : "Pontianak";
+        }
+
+        // Update skin if provided
+        if (!string.IsNullOrEmpty(selectedSkinId))
+        {
+            UpdateSkinImage(selectedSkinId);
         }
     }
 

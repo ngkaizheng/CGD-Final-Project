@@ -80,7 +80,13 @@ public class LobbyUI : MonoBehaviour
         if (_playerListItems.TryGetValue(playerData.PlayerRef, out var listItem))
         {
             bool isLocalPlayer = Runner != null && playerData.PlayerRef == Runner.LocalPlayer;
-            listItem.UpdatePlayerItem(playerData.Nickname.ToString(), playerData.IsReady, isLocalPlayer);
+            listItem.UpdatePlayerItem(
+                playerData.Nickname.ToString(),
+                playerData.IsReady,
+                isLocalPlayer,
+                playerData.SelectedSkinId.ToString(),
+                playerData.Role
+            );
         }
     }
     #endregion
