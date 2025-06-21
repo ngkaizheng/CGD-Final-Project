@@ -17,10 +17,9 @@ public class Player : NetworkBehaviour
 
     [Networked] public PlayerHealth Health { get; private set; }
 
-    // private NetworkCharacterController _cc;
-    // private CharacterController _characterController;
     private KCC kcc;
     private PlayerInputController _inputController;
+    public PlayerAction playerAction;
 
     private Vector2 currentFacingRotation;
     private Vector2 targetFacingRotation;
@@ -32,13 +31,10 @@ public class Player : NetworkBehaviour
 
     private void Awake()
     {
-        // _cc = GetComponent<NetworkCharacterController>();
-        // _characterController = GetComponent<CharacterController>();
         kcc = GetComponent<KCC>();
         _inputController = GetComponent<PlayerInputController>();
-
-
         _inputController.Initialize(this);
+        playerAction = GetComponent<PlayerAction>();
     }
 
     public override void Spawned()
@@ -90,10 +86,6 @@ public class Player : NetworkBehaviour
 
             UpdateRotation(input);
             UpdateMoveDirection(input);
-            // if (data.Buttons.IsSet(InputButton.Jump))
-            // {
-            //     _cc.Jump();
-            // }
             PreviousButtons = input.Buttons;
         }
     }
@@ -131,26 +123,6 @@ public class Player : NetworkBehaviour
         Debug.Log($"Player {Object.InputAuthority} moving with direction: {moveDir} {useLocked}");
     }
 
-    // private void UpdateRotation(NetInput input)
-    // {
-    //     Vector3 moveDirection = input.Direction.X0Y();
-    //     if (moveDirection.IsZero() == false)
-    //     {
-    //         Vector3 inputDirection = Quaternion.Euler(0.0f, _fixedLookRotation.y, 0.0f) * moveDirection;
-    //         targetFacingRotation = new Vector2(_fixedLookRotation.x, KCCUtility.GetClampedEulerLookRotation(inputDirection.OnlyXZ().normalized).y);
-    //     }
-    //     else
-    //     {
-    //         targetFacingRotation = new Vector2(currentFacingRotation.x, currentFacingRotation.y);
-    //     }
-
-    //     Quaternion currentRotation = Quaternion.Euler(currentFacingRotation.x, currentFacingRotation.y, 0);
-    //     Quaternion targetRotation = Quaternion.Euler(targetFacingRotation.x, targetFacingRotation.y, 0);
-    //     Quaternion smoothRotation = Quaternion.Slerp(currentRotation, targetRotation, Runner.DeltaTime * rotationSpeed);
-    //     currentFacingRotation = new Vector2(smoothRotation.eulerAngles.x, smoothRotation.eulerAngles.y);
-
-    //     kcc.SetLookRotation(currentFacingRotation);
-    // }
     private void UpdateRotation(NetInput input)
     {
         // Check for Alt press in Player script
@@ -185,43 +157,10 @@ public class Player : NetworkBehaviour
         kcc.SetLookRotation(currentFacingRotation);
     }
 
-    // private void UpdateRotation(NetInput input)
-    // {
-    //     Vector3 lookDirection = new Vector3(
-    //         input.LookDirection.x,
-    //         0,
-    //         input.LookDirection.y
-    //     ).normalized;
-    //     if (lookDirection.sqrMagnitude > 0.001f)
-    //     {
-    //         Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-    //         Quaternion smoothedRotation = Quaternion.Slerp(
-    //             transform.rotation,
-    //             targetRotation,
-    //             _rotationSpeed * Runner.DeltaTime
-    //         );
-    //         transform.rotation = smoothedRotation;
-    //     }
-
-    //     if (Object.HasStateAuthority)
-    //     {
-    //         Debug.DrawLine(
-    //             transform.position,
-    //             transform.position + lookDirection * 2f,
-    //             Color.red,
-    //             1f
-    //         );
-    //     }
-    //     else
-    //     {
-    //         Debug.DrawLine(
-    //             transform.position,
-    //             transform.position + lookDirection * 2f,
-    //             Color.blue,
-    //             1f
-    //         );
-    //     }
-    // }
+    public override void Render()
+    {
+        playerAction.UpdateInteractPrompt(this.gameObject.transform);
+    }
 
     #region Player Actions
     public void LeftClick()
@@ -239,11 +178,6 @@ public class Player : NetworkBehaviour
             Health.TakeDamage(10, Object.InputAuthority);
         }
 
-    }
-    public void Reload()
-    {
-        Debug.Log("Reload Action Triggered");
-        // Implement reload action logic here
     }
     #endregion
 

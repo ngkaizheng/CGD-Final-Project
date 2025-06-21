@@ -25,10 +25,13 @@ public class SimpleAnimator : NetworkBehaviour
     [Networked] private int HurtTick { get; set; } // Networked tick for hurt trigger
     [Networked] private int DieTick { get; set; } // Networked tick for die trigger
     [Networked] private bool IsDead { get; set; } // Networked death state
+    [Networked] private bool isInteracting { get; set; }
+    [Networked] private int InteractTick { get; set; } // Networked tick for interaction trigger
     public int lastProcessedAttackTick; // Track the last processed attack tick
     public int lastProcessedUseItemTick; // Track the last processed use item tick
     public int lastProcessedHurtTick; // Track the last processed hurt tick
     public int lastProcessedDieTick; // Track the last processed die tick
+    public int lastProcessedInteractTick; // Track the last processed interaction tick
     #endregion
 
     // STATIC MEMBER
@@ -53,6 +56,9 @@ public class SimpleAnimator : NetworkBehaviour
     private static readonly int HURT_PARAM_HASH = Animator.StringToHash("Hurt");
     private static readonly int DIE_PARAM_HASH = Animator.StringToHash("Die");
     private static readonly int IS_DEAD_PARAM_HASH = Animator.StringToHash("IsDead");
+    private static readonly int INTERACT_TRIGGER_HASH = Animator.StringToHash("InteractTrigger");
+    private static readonly int IS_INTERACTING_HASH = Animator.StringToHash("isInteracting");
+
     #endregion
 
     #region Movement State
@@ -160,6 +166,8 @@ public class SimpleAnimator : NetworkBehaviour
         animator.SetFloat(MOTION_SPEED_PARAM_HASH, MULTIPLIER); // Add speed multiplier to Idle Walk Run Blend blend Tree
         animator.SetBool(IS_GROUNDED_PARAM_HASH, isGrounded); // set grounded bool state based on kcc.FixedData.IsGrounded
         animator.SetBool(IS_DEAD_PARAM_HASH, IsDead);
+        animator.SetBool(IS_INTERACTING_HASH, isInteracting);
+
 
         if (isJump)
         {
@@ -234,6 +242,13 @@ public class SimpleAnimator : NetworkBehaviour
             lastProcessedDieTick = DieTick;
             Debug.Log($"[{Object.Id}] Setting Die trigger on tick {Runner.Tick}");
         }
+
+        if (isInteracting && InteractTick > lastProcessedInteractTick)
+        {
+            animator.SetTrigger(INTERACT_TRIGGER_HASH);
+            lastProcessedInteractTick = InteractTick;
+            Debug.Log($"[{Object.Id}] Setting Interact trigger on tick {Runner.Tick}");
+        }
     }
 
     public void TriggerAttackAnimation()
@@ -270,6 +285,19 @@ public class SimpleAnimator : NetworkBehaviour
             DieTick = Runner.Tick;
             Debug.Log($"[{Object.Id}] Triggered Die animation (StateAuthority) on tick {Runner.Tick}");
         }
+    }
+    public void SetInteracting(bool interacting)
+    {
+        if (interacting && !isInteracting)
+        {
+            isInteracting = true; // Networked bool for sync and exit
+            InteractTick = Runner.Tick; // Set interaction tick
+        }
+        else if (!interacting && isInteracting)
+        {
+            isInteracting = false; // Will cause transition back to Idle/Locomotion
+        }
+        Debug.Log($"[{Object.Id}] Set Interacting to {interacting}");
     }
 
     #region Audio SFX
