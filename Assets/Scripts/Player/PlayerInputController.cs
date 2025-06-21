@@ -77,16 +77,20 @@ public class PlayerInputController : NetworkBehaviour
 
     private void CheckInteract(NetInput input, NetworkButtons previousButtons)
     {
-        //Since player need to hold to interact, use set instead of was pressed
-        if (input.Buttons.IsSet(InputButton.E) && kcc.FixedData.IsGrounded)
-        {
-            player.playerAction.Interact(player.gameObject.transform, true);
-            Debug.Log("Interact pressed");
-        }
-        else if (input.Buttons.WasReleased(previousButtons, InputButton.E))
-        {
-            player.playerAction.Interact(player.gameObject.transform, false);
-            Debug.Log("Interact released");
-        }
+        // Update the interact state based on button press/release
+        bool isInteracting = input.Buttons.IsSet(InputButton.E) && kcc.FixedData.IsGrounded;
+        player.playerAction.Interact(isInteracting);
+
+        // //Since player need to hold to interact, use set instead of was pressed
+        // if (input.Buttons.IsSet(InputButton.E) && kcc.FixedData.IsGrounded)
+        // {
+        //     player.playerAction.Interact(player.gameObject.transform, true);
+        //     Debug.Log("Interact pressed");
+        // }
+        // else if (input.Buttons.WasReleased(previousButtons, InputButton.E))
+        // {
+        //     player.playerAction.Interact(player.gameObject.transform, false);
+        //     Debug.Log("Interact released");
+        // }
     }
 }

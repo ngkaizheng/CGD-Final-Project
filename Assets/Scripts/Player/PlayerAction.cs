@@ -8,7 +8,6 @@ public class PlayerAction : NetworkBehaviour
 
     private IInteractable lastPromptedInteractable;
     private bool isCurrentlyInteracting = false;
-
     private Player player;
 
     public override void Spawned()
@@ -16,91 +15,78 @@ public class PlayerAction : NetworkBehaviour
         player = GetComponent<Player>();
     }
 
-    /// <summary>
-    /// Call this every frame or when player moves to update the interact prompt.
-    /// </summary>
-    public void UpdateInteractPrompt(Transform playerTransform)
+
+    public override void Render()
     {
-        Collider[] colliders = Physics.OverlapSphere(playerTransform.position, interactDistance, interactMask);
-        IInteractable closestInteractable = null;
+        if (!Object.HasInputAuthority) return;
+        UpdateInteractionUI();
+    }
+
+    private IInteractable FindClosestInteractable(Vector3 position)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, interactDistance, interactMask);
+        IInteractable closest = null;
         float closestDist = float.MaxValue;
 
         foreach (var col in colliders)
         {
-            if (col.transform.root.gameObject == playerTransform.root.gameObject) continue;
-
+            if (col.transform.root.gameObject == player.transform.root.gameObject) continue;
             var interactable = col.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                float dist = Vector3.Distance(playerTransform.position, col.transform.position);
+                float dist = Vector3.Distance(position, col.transform.position);
                 if (dist < closestDist)
                 {
                     closestDist = dist;
-                    closestInteractable = interactable;
+                    closest = interactable;
                 }
             }
         }
+        return closest;
+    }
 
-        // Hide prompt on the previous interactable if it's not the closest anymore
+    public void UpdateInteractionUI()
+    {
+        var closestInteractable = FindClosestInteractable(player.transform.position);
+
+        // Prompt UI
         if (lastPromptedInteractable != null && lastPromptedInteractable != closestInteractable)
-        {
-            lastPromptedInteractable.SetPromptVisible(false);
-        }
+            GameUI.SetInteractPromptActive(false, null);
 
-        // Show prompt on the new closest interactable, only if it's different
         if (closestInteractable != null && closestInteractable != lastPromptedInteractable)
+            GameUI.SetInteractPromptActive(true, closestInteractable);
+
+        // if (isCurrentlyInteracting && closestInteractable == null)
+        // {
+        //     player.GetComponent<SimpleAnimator>().SetInteracting(false);
+        //     isCurrentlyInteracting = false;
+        // }
+
+        // Progress Bar UI
+        if (closestInteractable is IProgressInteractable progressInteractable)
         {
-            closestInteractable.SetPromptVisible(true);
+            GameUI.SetProgressBarActive(true);
+            GameUI.UpdateProgressBar(progressInteractable.GetProgress());
         }
-        // Stop interacting if player left the interactable while holding the button ---
-        if (isCurrentlyInteracting && closestInteractable == null)
+        else
         {
-            player.GetComponent<SimpleAnimator>().SetInteracting(false);
-            isCurrentlyInteracting = false;
+            GameUI.SetProgressBarActive(false);
         }
 
         lastPromptedInteractable = closestInteractable;
     }
 
-    /// <summary>
-    /// Call this when the player presses the interact button.
-    /// </summary>
-    public void Interact(Transform playerTransform, bool isInteracting)
+    public void Interact(bool isInteracting)
     {
-        if (isInteracting)
+        var closestInteractable = FindClosestInteractable(player.transform.position);
+
+        if (isInteracting && closestInteractable != null)
         {
-            Collider[] colliders = Physics.OverlapSphere(playerTransform.position, interactDistance, interactMask);
-            IInteractable closestInteractable = null;
-            float closestDist = float.MaxValue;
-
-            foreach (var col in colliders)
-            {
-                if (col.transform.root.gameObject == playerTransform.root.gameObject) continue;
-
-                var interactable = col.GetComponent<IInteractable>();
-                if (interactable != null)
-                {
-                    float dist = Vector3.Distance(playerTransform.position, col.transform.position);
-                    if (dist < closestDist)
-                    {
-                        closestDist = dist;
-                        closestInteractable = interactable;
-                    }
-                }
-            }
-
-            if (closestInteractable != null)
-            {
-                isCurrentlyInteracting = true;
-                Debug.Log($"Interacting with {closestInteractable} at distance {closestDist}");
-                closestInteractable.OnInteract(GetComponent<Player>());
-            }
-            else
-            {
-                Debug.Log("No interactable found in range.");
-            }
+            isCurrentlyInteracting = true;
+            Debug.Log($"Interacting with {closestInteractable}");
+            closestInteractable.OnInteract(player);
         }
-        else
+        else if (isCurrentlyInteracting)
         {
             Debug.Log("Interact Action Released");
             player.GetComponent<SimpleAnimator>().SetInteracting(false);

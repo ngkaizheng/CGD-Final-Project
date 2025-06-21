@@ -157,10 +157,10 @@ public class Player : NetworkBehaviour
         kcc.SetLookRotation(currentFacingRotation);
     }
 
-    public override void Render()
-    {
-        playerAction.UpdateInteractPrompt(this.gameObject.transform);
-    }
+    // public override void Render()
+    // {
+    //     playerAction.UpdateInteractPrompt();
+    // }
 
     #region Player Actions
     public void LeftClick()
