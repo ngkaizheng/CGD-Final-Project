@@ -98,7 +98,7 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     {
         if (!Runner.IsServer) return false;
 
-        foreach (var player in FindObjectsOfType<LobbyPlayerData>())
+        foreach (var player in Players)
         {
             if (!player.IsReady)
             {
