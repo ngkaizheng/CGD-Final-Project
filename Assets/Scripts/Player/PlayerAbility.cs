@@ -7,7 +7,7 @@ public abstract class PlayerAbility : NetworkBehaviour
     [SerializeField] protected float cooldown = 3f;
     [SerializeField] protected InputButton inputButton = InputButton.Q;
     [Networked] protected TickTimer CooldownTimer { get; set; }
-    protected Player player;
+    // protected Player player;
 
     public bool IsOnCooldown => !CooldownTimer.ExpiredOrNotRunning(Runner);
     public float CooldownProgress => IsOnCooldown ? CooldownTimer.RemainingTime(Runner).Value : 0f;
@@ -15,7 +15,7 @@ public abstract class PlayerAbility : NetworkBehaviour
 
     protected virtual void Awake()
     {
-        player = GetComponent<Player>();
+        // player = GetComponent<Player>();
     }
 
     public bool CanActivate(NetworkButtons currentButtons, NetworkButtons prevButtons)

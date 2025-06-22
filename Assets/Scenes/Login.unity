@@ -932,58 +932,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151854829}
   m_CullTransparentMesh: 1
---- !u!1 &155768087
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 155768089}
-  - component: {fileID: 155768088}
-  m_Layer: 0
-  m_Name: AudioController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &155768088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155768087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa67c5a83395353479975a1844a68d39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundEffectMappings: []
-  musicTrackMappings:
-  - track: 0
-    clip: {fileID: 8300000, guid: 0e8889193915345498bbc6dac7c17813, type: 3}
-  - track: 1
-    clip: {fileID: 8300000, guid: a5a42c1f293a625478b7b3f1edf88496, type: 3}
-  musicVolume: 1
-  sfxVolume: 1
---- !u!4 &155768089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155768087}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &191706604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,6 +2724,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &650380019
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1145630843869682450, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_Name
+      value: 'AudioController '
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
 --- !u!1 &665761781
 GameObject:
   m_ObjectHideFlags: 0
@@ -7340,6 +7345,6 @@ SceneRoots:
   - {fileID: 1024165302}
   - {fileID: 648890975}
   - {fileID: 688651846}
-  - {fileID: 155768089}
+  - {fileID: 650380019}
   - {fileID: 494465553}
   - {fileID: 294050267}

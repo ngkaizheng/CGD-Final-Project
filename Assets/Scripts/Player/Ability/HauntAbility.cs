@@ -11,9 +11,29 @@ public class HauntAbility : PlayerAbility
     [SerializeField] private float revealDuration = 5f;
     [SerializeField] private LayerMask affectedLayerMasks; // Use LayerMask array
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioSource;
+
+    [Header("VFX Settings")]
+    [SerializeField] private float shakeAmplitude = 0.5f;
+    [SerializeField] private float shakeFrequency = 50f;
+    [SerializeField] private float shakeDuration = 0.5f;
+
     // [SerializeField] private ParticleSystem hauntVFX;
     [Networked, Capacity(8)] NetworkLinkedList<PlayerRef> HauntedPlayers => default;
     [Networked, Capacity(8)] NetworkLinkedList<Outsider> HauntedOutsiders => default;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1f; // 3D audio
+        }
+    }
 
     protected override void ExecuteAbility()
     {
@@ -48,9 +68,19 @@ public class HauntAbility : PlayerAbility
                 RPC_ApplyHauntEffects(outsider.Object.InputAuthority);
             }
         }
+
+        RPC_HauntEffectsForAll();
+
         // Notify Pontianak
-        if (HauntedPlayers.Count > 0)
-            RPC_PontianakFeedback();
+        // if (HauntedPlayers.Count > 0)
+        RPC_PontianakFeedback();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_HauntEffectsForAll()
+    {
+        CameraShaker.Instance.ShakeOnce(shakeAmplitude, shakeFrequency, shakeDuration);
+        AudioController.Instance.PlaySoundEffect(SoundEffect.PontianakHaunt, audioSource);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -64,14 +94,14 @@ public class HauntAbility : PlayerAbility
     private void RPC_PontianakFeedback()
     {
         // Only runs on Pontianak's machine
-        // Debug.Log($"Successfully haunted {HauntedCount} players!");
 
         Debug.Log($"Haunted players: {string.Join(", ", HauntedPlayers)}");
-        foreach (var outsider in HauntedOutsiders)
-        {
-            if (outsider != null)
-                StartCoroutine(ApplyXRayEffect(outsider.playerModel));
-        }
+        StartCoroutine(DelayedXRayEffect());
+        // foreach (var outsider in HauntedOutsiders)
+        // {
+        //     if (outsider != null)
+        //         StartCoroutine(ApplyXRayEffect(outsider.playerModel));
+        // }
         // Add VFX, SFX, UI, etc. for the Pontianak here
     }
 
@@ -79,6 +109,16 @@ public class HauntAbility : PlayerAbility
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radius);
+    }
+
+    private IEnumerator DelayedXRayEffect()
+    {
+        yield return new WaitForSeconds(shakeDuration);
+        foreach (var outsider in HauntedOutsiders)
+        {
+            if (outsider != null)
+                StartCoroutine(ApplyXRayEffect(outsider.playerModel));
+        }
     }
 
     private IEnumerator ApplyXRayEffect(GameObject playerObj)

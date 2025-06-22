@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1145630843869682450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6148304391976806146}
+  - component: {fileID: 5318821106284732542}
+  m_Layer: 0
+  m_Name: AudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6148304391976806146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145630843869682450}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -953.29694, y: -648.4311, z: 0.6024929}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5318821106284732542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145630843869682450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa67c5a83395353479975a1844a68d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundEffectMappings:
+  - effect: 17
+    clip: {fileID: 8300000, guid: 48df7d91b9b6a764d947c87b0ada5ceb, type: 3}
+  - effect: 18
+    clip: {fileID: 8300000, guid: 1dd9db5ecbd33c2458f6ccc95eae3835, type: 3}
+  - effect: 19
+    clip: {fileID: 8300000, guid: 30ea352222e131b4287b1ce1d1fb87aa, type: 3}
+  - effect: 20
+    clip: {fileID: 8300000, guid: a7dc04461c279e34bbd07028b33fa3c1, type: 3}
+  - effect: 21
+    clip: {fileID: 8300000, guid: d8dd53ad633aba747b294ddbd3114dc4, type: 3}
+  - effect: 23
+    clip: {fileID: 8300000, guid: cd6820361dc56b74ea43cf752e74ab57, type: 3}
+  musicTrackMappings:
+  - track: 0
+    clip: {fileID: 8300000, guid: 0e8889193915345498bbc6dac7c17813, type: 3}
+  - track: 1
+    clip: {fileID: 8300000, guid: a5a42c1f293a625478b7b3f1edf88496, type: 3}
+  musicVolume: 1
+  sfxVolume: 1

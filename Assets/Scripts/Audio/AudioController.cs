@@ -153,7 +153,7 @@ public class AudioController : MonoBehaviour
     }
 
     // Play a sound effect by enum using a specified AudioSource (for spatial audio)
-    public void PlaySoundEffect(SoundEffect effect, AudioSource audioSource)
+    public void PlaySoundEffect(SoundEffect effect, AudioSource audioSource, bool stopCurrent = false)
     {
         if (audioSource == null)
         {
@@ -163,6 +163,10 @@ public class AudioController : MonoBehaviour
 
         if (soundEffectDictionary.TryGetValue(effect, out AudioClip clip))
         {
+            if (stopCurrent && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
             audioSource.volume = sfxVolume;
             audioSource.spatialBlend = 1f; // Ensure 3D audio
             audioSource.PlayOneShot(clip);
@@ -367,6 +371,7 @@ public enum SoundEffect
     Footstep_Player4,
     Footstep_Player5,
     JumpLand,
+    PontianakHaunt,
 }
 
 // Enum for music tracks
