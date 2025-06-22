@@ -11,6 +11,7 @@ public enum InputButton
     Reload,
     E,
     Alt,
+    Q,
 }
 
 public struct NetInput : INetworkInput

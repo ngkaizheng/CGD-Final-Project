@@ -7,6 +7,7 @@ public class PlayerInputController : NetworkBehaviour
 {
     private Player player;
     private KCC kcc;
+    private Pontianak pontianak;
 
     [Networked] private NetworkButtons PreviousButtons { get; set; }
 
@@ -19,7 +20,7 @@ public class PlayerInputController : NetworkBehaviour
     {
         kcc = GetComponent<KCC>();
         player = GetComponent<Player>();
-
+        TryGetComponent(out pontianak); // Will be null for non-Pontianak players
     }
 
     public override void FixedUpdateNetwork()
@@ -65,6 +66,7 @@ public class PlayerInputController : NetworkBehaviour
         // }
         CheckJump(input, previousButtons);
         CheckInteract(input, previousButtons);
+        CheckAbilities(input, previousButtons);
     }
 
     private void CheckJump(NetInput input, NetworkButtons previousButtons)
@@ -92,5 +94,14 @@ public class PlayerInputController : NetworkBehaviour
         //     player.playerAction.Interact(player.gameObject.transform, false);
         //     Debug.Log("Interact released");
         // }
+    }
+
+    private void CheckAbilities(NetInput input, NetworkButtons previousButtons)
+    {
+        // Only check abilities if this is a Pontianak
+        if (pontianak != null)
+        {
+            pontianak.CheckAbilityInput(input.Buttons, previousButtons);
+        }
     }
 }

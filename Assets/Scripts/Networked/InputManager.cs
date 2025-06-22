@@ -84,6 +84,7 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             buttons.Set(InputButton.Escape, keyboard.escapeKey.isPressed);
             buttons.Set(InputButton.Reload, keyboard.rKey.isPressed);
             buttons.Set(InputButton.E, keyboard.eKey.isPressed);
+            buttons.Set(InputButton.Q, keyboard.qKey.isPressed);
             buttons.Set(InputButton.Alt, keyboard.zKey.isPressed || keyboard.rightAltKey.isPressed);
         }
 

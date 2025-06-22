@@ -7,7 +7,7 @@ public class PlayerAction : NetworkBehaviour
     [SerializeField] private LayerMask interactMask = default;
 
     private IInteractable lastPromptedInteractable;
-    private bool isCurrentlyInteracting = false;
+    [HideInInspector] public bool isInteracting = false;
     private Player player;
 
     public override void Spawned()
@@ -56,10 +56,10 @@ public class PlayerAction : NetworkBehaviour
         if (closestInteractable != null && closestInteractable != lastPromptedInteractable)
             GameUI.SetInteractPromptActive(true, closestInteractable);
 
-        // if (isCurrentlyInteracting && closestInteractable == null)
+        // if (isInteracting && closestInteractable == null)
         // {
         //     player.GetComponent<SimpleAnimator>().SetInteracting(false);
-        //     isCurrentlyInteracting = false;
+        //     isInteracting = false;
         // }
 
         // Progress Bar UI
@@ -82,15 +82,15 @@ public class PlayerAction : NetworkBehaviour
 
         if (isInteracting && closestInteractable != null)
         {
-            isCurrentlyInteracting = true;
+            this.isInteracting = true;
             Debug.Log($"Interacting with {closestInteractable}");
             closestInteractable.OnInteract(player);
         }
-        else if (isCurrentlyInteracting)
+        else if (this.isInteracting)
         {
             Debug.Log("Interact Action Released");
             player.GetComponent<SimpleAnimator>().SetInteracting(false);
-            isCurrentlyInteracting = false;
+            this.isInteracting = false;
         }
     }
 }

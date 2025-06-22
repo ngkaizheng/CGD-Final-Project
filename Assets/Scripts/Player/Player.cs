@@ -4,30 +4,28 @@ using Fusion.Addons.KCC;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : NetworkBehaviour
+public abstract class Player : NetworkBehaviour
 {
     [Header("Player Settings")]
-    [SerializeField] private float _rotationSpeed = 10f;
-    [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] private float rotationSpeed = 20f;
+    [SerializeField] private float moveSpeed = 1f;
+    public PlayerRole playerRole = PlayerRole.OUTSIDER;
+    public GameObject playerModel;
 
-    [Header("Camera Settings")]
-    [SerializeField] private Transform camLookAt;
-    [SerializeField] private Transform followTarget;
-
-
-    [Networked] public PlayerHealth Health { get; private set; }
+    private Vector2 currentFacingRotation = Vector2.zero;
+    private Vector2 targetFacingRotation = Vector2.zero;
 
     private KCC kcc;
     private PlayerInputController _inputController;
-    public PlayerAction playerAction;
+    [HideInInspector] public PlayerAction playerAction;
+    [HideInInspector] public SimpleCameraFollow simpleCameraFollow;
 
-    private Vector2 currentFacingRotation;
-    private Vector2 targetFacingRotation;
-    public float rotationSpeed = 20f;
     [Networked] public Vector2 _fixedLookRotation { get; set; }
     [Networked] public float NetworkedLookSensitivity { get; set; } = 0.1f;
-    public SimpleCameraFollow simpleCameraFollow; // Reference to SimpleCameraFollow script
     [Networked] private NetworkButtons PreviousButtons { get; set; }
+    // [Networked] public PlayerHealth Health { get; private set; }
+
+    public virtual bool isAlive() => true;
 
     private void Awake()
     {
@@ -35,16 +33,16 @@ public class Player : NetworkBehaviour
         _inputController = GetComponent<PlayerInputController>();
         _inputController.Initialize(this);
         playerAction = GetComponent<PlayerAction>();
+        simpleCameraFollow = transform.parent.GetComponentInChildren<SimpleCameraFollow>();
+        playerModel = transform.GetChild(0).gameObject;
     }
 
     public override void Spawned()
     {
-        Health = GetComponent<PlayerHealth>();
+        // Health = GetComponent<PlayerHealth>();
 
         if (Object.InputAuthority == Runner.LocalPlayer)
         {
-            // CameraController.Instance.SetFollowTarget(camLookAt, followTarget);  
-
             InputManager inputManager = GetComponentInChildren<InputManager>();
             if (inputManager != null)
             {
@@ -69,23 +67,14 @@ public class Player : NetworkBehaviour
     {
         if (GetInput(out NetInput input))
         {
-            if (!isAlive()) return;
+            // if (!isAlive()) return;
 
-            if (!input.Buttons.IsSet(InputButton.Alt))
+            bool useLocked = input.Buttons.IsSet(InputButton.Alt);
+            if (!useLocked)
                 _fixedLookRotation = KCCUtility.GetClampedEulerLookRotation(_fixedLookRotation, input.LookDelta * NetworkedLookSensitivity, -35f, 80f);
 
-            // Use WasReleased for Alt
-            // if (input.Buttons.WasReleased(PreviousButtons, InputButton.Alt))
-            // {
-            //     Debug.Log($"Player {Object.InputAuthority} released Alt, setting lockedLookRotation to {_fixedLookRotation}");
-            //     _fixedLookRotation = simpleCameraFollow.lockedLookRotation;
-            //     currentFacingRotation = simpleCameraFollow.lockedLookRotation;
-            //     targetFacingRotation = simpleCameraFollow.lockedLookRotation;
-            //     kcc.SetLookRotation(currentFacingRotation);
-            // }
-
-            UpdateRotation(input);
-            UpdateMoveDirection(input);
+            UpdateRotation(input, useLocked);
+            UpdateMoveDirection(input, useLocked);
             PreviousButtons = input.Buttons;
         }
     }
@@ -108,23 +97,21 @@ public class Player : NetworkBehaviour
         Gizmos.DrawRay(transform.position, lockedLookForward * 5f);
     }
 
-    private void UpdateMoveDirection(NetInput input)
+    private void UpdateMoveDirection(NetInput input, bool useLocked)
     {
-        bool useLocked = input.Buttons.IsSet(InputButton.Alt);
-        // Vector2 move2D = input.Direction.normalized;
-        // Vector3 move = new Vector3(move2D.x, 0, move2D.y); // XZ plane
-        // Vector3 inputDirection = kcc.Data.TransformRotation * move;
-
-        // Vector3 moveDir = simpleCameraFollow.GetCameraDirection(input.Direction);
-        // _cc.Move(move);
-
+        if (!IsMoveable())
+        {
+            kcc.SetInputDirection(Vector3.zero);
+            return;
+        }
         Vector3 moveDir = simpleCameraFollow.GetCameraDirection(input.Direction, useLocked);
+        moveDir *= moveSpeed;
         kcc.SetInputDirection(moveDir);
-        Debug.Log($"Player {Object.InputAuthority} moving with direction: {moveDir} {useLocked}");
     }
 
-    private void UpdateRotation(NetInput input)
+    private void UpdateRotation(NetInput input, bool useLocked)
     {
+        if (!IsMoveable()) return;
         // Check for Alt press in Player script
         if (input.Buttons.WasPressed(PreviousButtons, InputButton.Alt))
         {
@@ -135,9 +122,7 @@ public class Player : NetworkBehaviour
             simpleCameraFollow.NetworkedLookRotation = simpleCameraFollow.lockedLookRotation;
         }
 
-        bool useLocked = input.Buttons.IsSet(InputButton.Alt);
         Vector2 lookRotation = useLocked ? simpleCameraFollow.lockedLookRotation : _fixedLookRotation;
-
         Vector3 moveDirection = input.Direction.X0Y();
         if (moveDirection.IsZero() == false)
         {
@@ -157,29 +142,13 @@ public class Player : NetworkBehaviour
         kcc.SetLookRotation(currentFacingRotation);
     }
 
-    // public override void Render()
-    // {
-    //     playerAction.UpdateInteractPrompt();
-    // }
-
-    #region Player Actions
-    public void LeftClick()
+    private bool IsMoveable()
     {
-        Debug.Log("Left Click Action Triggered");
-        // Implement left click action logic here
-    }
-    public void RightClick()
-    {
-        Debug.Log("Right Click Action Triggered");
-        // Implement right click action logic here
-        // Deduct 10 HP from the player
-        if (Health != null && Health.IsAlive)
-        {
-            Health.TakeDamage(10, Object.InputAuthority);
-        }
+        if (playerAction.isInteracting)
+            return false;
 
+        return true;
     }
-    #endregion
 
     #region Event Handlers
     private void HandleDeath(PlayerRef killer)
@@ -189,8 +158,5 @@ public class Player : NetworkBehaviour
     }
     #endregion
 
-    public bool isAlive()
-    {
-        return Health != null && Health.IsAlive;
-    }
+
 }
