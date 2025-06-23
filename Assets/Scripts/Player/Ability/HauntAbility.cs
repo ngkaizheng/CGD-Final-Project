@@ -83,11 +83,13 @@ public class HauntAbility : PlayerAbility
     private void RPC_HauntEffectsForAll()
     {
         // Prevent server/client mode issues
-        if (Object.HasStateAuthority && !Object.HasInputAuthority) return;
+        // if (Object.HasStateAuthority && !Object.HasInputAuthority) return;
 
+        Debug.Log("Applying haunt effects for all players!");
         CameraShaker.Instance.ShakeOnce(shakeAmplitude, shakeFrequency, shakeDuration);
         AudioController.Instance.PlaySoundEffect(SoundEffect.PontianakHaunt, audioSource, true);
-        StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve));
+        // if (Object.InputAuthority == Runner.LocalPlayer) return; // Pontianak's machine
+        // StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve));
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -95,6 +97,7 @@ public class HauntAbility : PlayerAbility
     {
         Debug.Log($"You have been haunted! (to player {target})");
         // Add VFX, SFX, UI, etc. for the haunted player here
+        StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve, shakeDuration));
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]

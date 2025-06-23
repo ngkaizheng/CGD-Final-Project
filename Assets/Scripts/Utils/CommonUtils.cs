@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public static class CommonUtils
@@ -19,5 +18,15 @@ public static class CommonUtils
                gameObject.GetComponentInParent<T>() ??
                gameObject.transform.root.GetComponent<T>() ??
                 gameObject.transform.root.GetComponentInChildren<T>();
+    }
+    // Utility to get the local player
+    public static Player GetLocalPlayer()
+    {
+        foreach (var player in Object.FindObjectsByType<Player>(FindObjectsSortMode.None))
+        {
+            if (player.Object != null && player.Object.HasInputAuthority)
+                return player;
+        }
+        return null;
     }
 }

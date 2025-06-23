@@ -79,8 +79,11 @@ public abstract class Player : NetworkBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (!Application.isPlaying) return;
+
         // Draw currentFacingRotation direction in the Scene view
         Vector3 forward = Quaternion.Euler(currentFacingRotation.x, currentFacingRotation.y, 0) * Vector3.forward;
         Gizmos.color = Color.red;
@@ -96,6 +99,7 @@ public abstract class Player : NetworkBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position, lockedLookForward * 5f);
     }
+#endif
 
     private void UpdateMoveDirection(NetInput input, bool useLocked)
     {

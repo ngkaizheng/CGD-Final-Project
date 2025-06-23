@@ -1,9 +1,11 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using System.Collections;
-public class CameraShaker : MonoBehaviour
+using Fusion;
+
+public class CameraShaker : NetworkBehaviour
 {
-    private CinemachineCamera vcam;
+    [SerializeField] private CinemachineCamera vcam;
     private CinemachineBasicMultiChannelPerlin perlin;
 
     private float shakeTimer;
@@ -17,17 +19,26 @@ public class CameraShaker : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        // if (Instance != null && Instance != this)
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
+        // Instance = this;
 
         vcam = GetComponent<CinemachineCamera>();
         if (vcam != null)
             perlin = vcam.GetCinemachineComponent(CinemachineCore.Stage.Noise) as CinemachineBasicMultiChannelPerlin;
     }
+
+    public override void Spawned()
+    {
+        if (Object.HasInputAuthority)
+        {
+            Instance = this;
+        }
+    }
+
 
     public void Shake(float magnitude, float roughness, float fadeIn, float fadeOut, float duration)
     {
@@ -53,6 +64,7 @@ public class CameraShaker : MonoBehaviour
 
     private IEnumerator ShakeCoroutine(float amplitudeGain, float frequencyGain, float duration)
     {
+        Debug.Log($"Shaking camera with Amplitude: {amplitudeGain}, Frequency: {frequencyGain}, Duration: {duration}");
         perlin.AmplitudeGain = amplitudeGain;
         perlin.FrequencyGain = frequencyGain;
         yield return new WaitForSeconds(duration);

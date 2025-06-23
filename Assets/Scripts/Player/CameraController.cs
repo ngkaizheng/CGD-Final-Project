@@ -56,10 +56,13 @@ public class CameraController : MonoBehaviour
     /// <param name="end">Ending intensity</param>
     /// <param name="duration">Duration in seconds</param>
     /// <param name="curve">AnimationCurve describing the flow (e.g., linear, ease-in, etc.)</param>
-    public IEnumerator ChangeVignetteIntensity(float start, float end, float duration, float fadeOutDuration = 0f, AnimationCurve curve = null)
+    public IEnumerator ChangeVignetteIntensity(float start, float end, float duration, float fadeOutDuration = 0f, AnimationCurve curve = null, float delay = 0f)
     {
         if (vignette == null)
             yield break;
+
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
 
         float timer = 0f;
         while (timer < duration)

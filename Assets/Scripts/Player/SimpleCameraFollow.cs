@@ -15,6 +15,7 @@ public class SimpleCameraFollow : NetworkBehaviour
     public Vector2 pitchClamp = new Vector2(-35f, 80f);
     public float rotationSharpness = 10f;
     public CinemachineCamera vcam;
+    public CameraShaker cameraShaker; // Assign the CameraShaker component if needed
 
     [Networked] public Vector2 NetworkedLookRotation { get; set; }
     [Networked] public Vector3 NetworkedCameraForward { get; set; }
@@ -52,6 +53,7 @@ public class SimpleCameraFollow : NetworkBehaviour
             Debug.LogError("Player component not found on player object!");
             return;
         }
+        cameraShaker = GetComponentInChildren<CameraShaker>();
 
         SetupLocalCamera(HasInputAuthority);
     }

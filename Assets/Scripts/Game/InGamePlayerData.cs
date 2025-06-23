@@ -17,14 +17,14 @@ public class InGamePlayerData : NetworkBehaviour
 
         if (Runner.IsServer)
         {
+            Role = PlayerRole.None;
+
             if (string.IsNullOrEmpty(Nickname.Value))
             {
                 CopyNicknameFromLobby();
             }
             Kills = 0;
             Deaths = 0;
-
-            Role = PlayerRole.None;
         }
     }
 

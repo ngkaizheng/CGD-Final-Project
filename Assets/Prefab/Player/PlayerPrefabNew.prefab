@@ -188,6 +188,7 @@ MonoBehaviour:
   pitchClamp: {x: -35, y: 80}
   rotationSharpness: 10
   vcam: {fileID: 5405989806198891363}
+  cameraShaker: {fileID: 0}
   _NetworkedLookRotation: {x: 0, y: 0}
   _NetworkedCameraForward: {x: 0, y: 0, z: 0}
   _NetworkedCameraRight: {x: 0, y: 0, z: 0}
@@ -324,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4654754803681093532
 Transform:
   m_ObjectHideFlags: 0
@@ -455,6 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36bd431f2f6f9744d8237143ee187218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vcam: {fileID: 0}
 --- !u!1 &3785078205751301061
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +609,7 @@ MonoBehaviour:
   - {fileID: 532001350306606386}
   NetworkedBehaviours:
   - {fileID: 8119270364693051353}
+  - {fileID: 3348332845471961078}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &5110635103318997054
 GameObject:
