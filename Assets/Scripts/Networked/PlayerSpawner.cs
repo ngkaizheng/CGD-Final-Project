@@ -7,8 +7,12 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     [SerializeField] private NetworkObject pontianakPrefab;
     [SerializeField] private NetworkObject outsiderPrefab;
 
+    [SerializeField] private NetworkObject inGamePlayerManagerPrefab;
+    [SerializeField] private NetworkObject gameInitializerPrefab;
+
     private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
     private List<PlayerRef> joinOrder = new List<PlayerRef>();
+    public bool isTesting = false;
 
     public override void Spawned()
     {
@@ -16,25 +20,50 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerJoined(PlayerRef player)
     {
+        Debug.Log($"Player {player} joined the game. Total players: {_spawnedPlayers.Count} + {Runner.IsServer}");
+        // if (Runner.IsServer)
+        // {
+        //     Runner.Spawn(inGamePlayerManagerPrefab, position: Vector3.zero, inputAuthority: player);
+        //     Runner.Spawn(gameInitializerPrefab, position: Vector3.zero, inputAuthority: player);
+        // }
+    }
+
+    public void SpawnPlayer(PlayerRef player)
+    {
+        // if (Runner.IsServer)
+        // {
+        //     joinOrder.Add(player);
+
+        //     SpawnPoint[] spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
+        //     Transform spawnPoint = null;
+        //     if (spawnPoints.Length > 0)
+        //         spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
+
+        //     // // First player is Pontianak, others are Outsiders
+        //     // NetworkObject prefabToSpawn = (joinOrder[0] == player) ? pontianakPrefab : outsiderPrefab;
+        //     // SpawnPlayer(player, prefabToSpawn, spawnPoint);
+
+        //     // Debug.Log($"Player {player} joined as {(joinOrder[0] == player ? "Pontianak" : "Outsider")}. Total players: {_spawnedPlayers.Count}");
+        //     // Second player is Pontianak, others are Outsiders
+        //     NetworkObject prefabToSpawn = (joinOrder.Count == 2 && joinOrder[1] == player) ? pontianakPrefab : outsiderPrefab;
+        //     SpawnPlayer(player, prefabToSpawn, spawnPoint);
+
+        //     Debug.Log($"Player {player} joined as {((joinOrder.Count == 2 && joinOrder[1] == player) ? "Pontianak" : "Outsider")}. Total players: {_spawnedPlayers.Count}");
+        // }
+
         if (Runner.IsServer)
         {
-            joinOrder.Add(player);
+            var playerData = InGamePlayerManager.Instance.GetPlayerData(player);
+            var prefab = playerData.Role == PlayerRole.PONTIANAK
+                ? pontianakPrefab
+                : outsiderPrefab;
 
             SpawnPoint[] spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
-            Transform spawnPoint = null;
-            if (spawnPoints.Length > 0)
-                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
+            Transform spawnPoint = spawnPoints.Length > 0
+                ? spawnPoints[Random.Range(0, spawnPoints.Length)].transform
+                : null;
 
-            // // First player is Pontianak, others are Outsiders
-            // NetworkObject prefabToSpawn = (joinOrder[0] == player) ? pontianakPrefab : outsiderPrefab;
-            // SpawnPlayer(player, prefabToSpawn, spawnPoint);
-
-            // Debug.Log($"Player {player} joined as {(joinOrder[0] == player ? "Pontianak" : "Outsider")}. Total players: {_spawnedPlayers.Count}");
-            // Second player is Pontianak, others are Outsiders
-            NetworkObject prefabToSpawn = (joinOrder.Count == 2 && joinOrder[1] == player) ? pontianakPrefab : outsiderPrefab;
-            SpawnPlayer(player, prefabToSpawn, spawnPoint);
-
-            Debug.Log($"Player {player} joined as {((joinOrder.Count == 2 && joinOrder[1] == player) ? "Pontianak" : "Outsider")}. Total players: {_spawnedPlayers.Count}");
+            SpawnPlayer(player, prefab, spawnPoint);
         }
     }
 

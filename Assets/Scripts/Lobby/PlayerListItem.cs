@@ -199,7 +199,8 @@ public class PlayerListItem : MonoBehaviour
 
     private void OnRoleChangeButtonClicked()
     {
-        _playerRole = (PlayerRole)(((int)_playerRole + 1) % Enum.GetValues(typeof(PlayerRole)).Length);
+        // _playerRole = (PlayerRole)(((int)_playerRole + 1) % Enum.GetValues(typeof(PlayerRole)).Length);
+        _playerRole = _playerRole == PlayerRole.OUTSIDER ? PlayerRole.PONTIANAK : PlayerRole.OUTSIDER;
         _playerData.RPC_SetPlayerRole(_playerRole);
         playerRoleText.text = _playerRole == PlayerRole.OUTSIDER ? "Outsider" : "Pontianak";
 

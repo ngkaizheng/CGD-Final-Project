@@ -67,6 +67,7 @@ public class PlayerInputController : NetworkBehaviour
         CheckJump(input, previousButtons);
         CheckInteract(input, previousButtons);
         CheckAbilities(input, previousButtons);
+        CheckAttack(input, previousButtons);
     }
 
     private void CheckJump(NetInput input, NetworkButtons previousButtons)
@@ -102,6 +103,17 @@ public class PlayerInputController : NetworkBehaviour
         if (pontianak != null)
         {
             pontianak.CheckAbilityInput(input.Buttons, previousButtons);
+        }
+    }
+
+    private void CheckAttack(NetInput input, NetworkButtons previousButtons)
+    {
+        // Check for left click attack
+        if (pontianak == null) return;
+
+        if (input.Buttons.WasPressed(previousButtons, InputButton.LeftClick))
+        {
+            pontianak.playerAttack.PerformAttack();
         }
     }
 }

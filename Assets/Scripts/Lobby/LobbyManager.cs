@@ -1,6 +1,8 @@
 using Fusion;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
 {
@@ -33,7 +35,7 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     private void SpawnPlayerData(PlayerRef player)
     {
         var playerObj = Runner.Spawn(_lobbyPlayerPrefab, position: Vector3.zero, inputAuthority: player);
-        playerObj.transform.SetParent(transform, false);
+        // playerObj.transform.SetParent(transform, false);
         playerObj.name = "LobbyPlayer_" + Players.Count + 1;
 
         Players.Add(playerObj.GetComponent<LobbyPlayerData>());
@@ -73,8 +75,48 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     {
         if (Runner.IsServer && Players.Count > 0)
         {
+            Runner.SessionInfo.IsOpen = false; // Lock the session
             Debug.Log("Starting game with " + Players.Count + " players.");
+            SceneRef gameScene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath($"Assets/Scenes/{GameConfig.GAME_SCENE}.unity"));
+            Runner.LoadScene(gameScene, LoadSceneMode.Single);
+            // StartCoroutine(StartGameWithCountdown());
         }
+    }
+
+    private IEnumerator StartGameWithCountdown()
+    {
+        int countdown = 3;
+        float timer = 0f;
+        float interval = 1f;
+
+        // Show countdown: 3, 2, 1
+        while (countdown > 0)
+        {
+            Debug.Log(countdown); // Replace with your UI update if needed
+                                  // TODO: Update your countdown UI here
+
+            timer = 0f;
+            while (timer < interval)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            countdown--;
+        }
+
+        // After countdown, load the game scene
+        Debug.Log("Loading game scene...");
+        // TODO: Update your UI to show "Loading..." here
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(GameConfig.GAME_SCENE); // Replace with your game scene name/key
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        asyncLoad.allowSceneActivation = true;
     }
 
     public void OnStartGameOrReadyClicked()

@@ -14,6 +14,7 @@ public static class GameConfig
     // UI settings
     public const string LOGIN_SCENE = "Login";
     public const string MAIN_MENU_SCENE = "MainMenu";
+    public const string GAME_SCENE = "Game"; // Replace with your actual game scene name
 
     // Game settings
     public static float LOOK_SENSITIVITY = 0.1f; // Default look sensitivity
@@ -33,8 +34,11 @@ public static class UISettings
     public static readonly Color EnabledColor = new Color(1f, 1f, 1f, EnabledOpacity);
 }
 
+[System.Flags]
 public enum PlayerRole
 {
-    OUTSIDER,
-    PONTIANAK
+    None = 0,
+    OUTSIDER = 1 << 0, // 1
+    PONTIANAK = 1 << 1, // 2
+    ALL = OUTSIDER | PONTIANAK // 3
 }

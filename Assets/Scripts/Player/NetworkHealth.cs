@@ -3,8 +3,8 @@ using UnityEngine;
 
 public abstract class NetworkHealth : NetworkBehaviour, IDamageable
 {
-    [Networked] public int CurrentHealth { get; protected set; }
-    [Networked] public int MaxHealth { get; protected set; } = 100;
+    [Networked] public float CurrentHealth { get; protected set; }
+    [Networked] public float MaxHealth { get; protected set; } = 100;
 
     [Networked, OnChangedRender(nameof(OnAliveStateChanged))] public NetworkBool IsAlive { get; protected set; }
 
@@ -14,7 +14,7 @@ public abstract class NetworkHealth : NetworkBehaviour, IDamageable
         IsAlive = true;
     }
 
-    public virtual void TakeDamage(int damage, PlayerRef attacker)
+    public virtual void TakeDamage(float damage, PlayerRef attacker)
     {
         if (!IsAlive) return;
 

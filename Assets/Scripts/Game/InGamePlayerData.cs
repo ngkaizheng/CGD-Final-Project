@@ -6,6 +6,7 @@ public class InGamePlayerData : NetworkBehaviour
 {
     [Networked] public PlayerRef PlayerRef { get; set; }
     [Networked] public NetworkString<_32> Nickname { get; set; } // Copy from lobby
+    [Networked] public PlayerRole Role { get; set; } // Add this enum
     [Networked, OnChangedRender(nameof(OnKillDeathsChanged))] public int Kills { get; set; }
     [Networked, OnChangedRender(nameof(OnKillDeathsChanged))] public int Deaths { get; set; }
 
@@ -22,6 +23,8 @@ public class InGamePlayerData : NetworkBehaviour
             }
             Kills = 0;
             Deaths = 0;
+
+            Role = PlayerRole.None;
         }
     }
 
@@ -31,6 +34,7 @@ public class InGamePlayerData : NetworkBehaviour
         if (lobbyData != null)
         {
             Nickname = lobbyData.Nickname;
+            Role = lobbyData.Role;
         }
     }
 

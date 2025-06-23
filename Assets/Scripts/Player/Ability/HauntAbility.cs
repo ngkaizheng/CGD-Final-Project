@@ -17,7 +17,10 @@ public class HauntAbility : PlayerAbility
     [Header("VFX Settings")]
     [SerializeField] private float shakeAmplitude = 0.5f;
     [SerializeField] private float shakeFrequency = 50f;
-    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeDuration = 2.0f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
+    [SerializeField] private AnimationCurve shakeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Add this line
+
 
     // [SerializeField] private ParticleSystem hauntVFX;
     [Networked, Capacity(8)] NetworkLinkedList<PlayerRef> HauntedPlayers => default;
@@ -79,8 +82,12 @@ public class HauntAbility : PlayerAbility
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_HauntEffectsForAll()
     {
+        // Prevent server/client mode issues
+        if (Object.HasStateAuthority && !Object.HasInputAuthority) return;
+
         CameraShaker.Instance.ShakeOnce(shakeAmplitude, shakeFrequency, shakeDuration);
-        AudioController.Instance.PlaySoundEffect(SoundEffect.PontianakHaunt, audioSource);
+        AudioController.Instance.PlaySoundEffect(SoundEffect.PontianakHaunt, audioSource, true);
+        StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve));
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

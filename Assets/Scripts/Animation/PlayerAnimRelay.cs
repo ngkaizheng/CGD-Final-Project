@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerAnimRelay : MonoBehaviour
 {
-    // private PlayerAttack playerAttack;
+    private PlayerAttack playerAttack;
     private SimpleAnimator simpleAnimator;
 
     private void Awake()
     {
-        // playerAttack = GetComponentInParent<PlayerAttack>();
+        playerAttack = GetComponentInParent<PlayerAttack>();
         // if (playerAttack == null)
         // {
         //     Debug.LogError($"[{gameObject.name}] AnimationEventRelay: PlayerAttack component not found in parents!");
@@ -20,18 +20,18 @@ public class PlayerAnimRelay : MonoBehaviour
         }
     }
 
-    // public void OnAttackHit()
-    // {
-    //     if (playerAttack != null)
-    //     {
-    //         Debug.Log($"[{gameObject.name}] AnimationEventRelay: Forwarding OnAttackHit to PlayerAttack.");
-    //         playerAttack.OnAttackHit();
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning($"[{gameObject.name}] AnimationEventRelay: PlayerAttack reference is null, cannot call OnAttackHit!");
-    //     }
-    // }
+    public void OnAttackHit()
+    {
+        if (playerAttack != null)
+        {
+            Debug.Log($"[{gameObject.name}] AnimationEventRelay: Forwarding OnAttackHit to PlayerAttack.");
+            playerAttack.OnAttackHit();
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] AnimationEventRelay: PlayerAttack reference is null, cannot call OnAttackHit!");
+        }
+    }
 
     public void OnFootstep()
     {

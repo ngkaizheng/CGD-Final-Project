@@ -192,6 +192,52 @@ MonoBehaviour:
   _NetworkedCameraForward: {x: 0, y: 0, z: 0}
   _NetworkedCameraRight: {x: 0, y: 0, z: 0}
   _lockedLookRotation: {x: 0, y: 0}
+--- !u!1 &2133063528216988652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2272543853535953343}
+  - component: {fileID: 5600787570250664117}
+  m_Layer: 0
+  m_Name: CameraController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2272543853535953343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133063528216988652}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 349101762861393825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5600787570250664117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133063528216988652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd97701241c253c4cb36fac3f4d0981a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 5405989806198891363}
+  vignette: {fileID: 0}
 --- !u!1 &2362079231449722465
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,6 +649,7 @@ Transform:
   - {fileID: 2459937004865835548}
   - {fileID: 3570066284044775744}
   - {fileID: 5714512664334030509}
+  - {fileID: 2272543853535953343}
   m_Father: {fileID: 6587103893577072855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &532001350306606386
@@ -730,7 +777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 20
   moveSpeed: 1
-  playerRole: 0
+  playerRole: 1
   playerModel: {fileID: 0}
   playerAction: {fileID: 0}
   simpleCameraFollow: {fileID: 0}

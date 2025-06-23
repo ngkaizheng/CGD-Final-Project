@@ -27,6 +27,8 @@ public class LobbyPlayerData : NetworkBehaviour
                 IsReady = true;
             else
                 IsReady = false;
+
+            Runner.MakeDontDestroyOnLoad(gameObject);
         }
 
         isInitialized = true;

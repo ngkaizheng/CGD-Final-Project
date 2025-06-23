@@ -27,7 +27,7 @@ public abstract class Player : NetworkBehaviour
 
     public virtual bool isAlive() => true;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         kcc = GetComponent<KCC>();
         _inputController = GetComponent<PlayerInputController>();

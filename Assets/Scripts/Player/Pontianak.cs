@@ -8,6 +8,14 @@ public class Pontianak : Player
     [SerializeField] private List<PlayerAbility> abilities = new List<PlayerAbility>();
     private Dictionary<InputButton, PlayerAbility> abilityMap = new Dictionary<InputButton, PlayerAbility>();
 
+    public PlayerAttack playerAttack;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerAttack = GetComponent<PlayerAttack>();
+    }
+
     public override void Spawned()
     {
         base.Spawned();

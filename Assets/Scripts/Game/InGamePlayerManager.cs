@@ -37,8 +37,10 @@ public class InGamePlayerManager : NetworkBehaviour
         }
         Instance = this;
 
+        Debug.Log("InGamePlayerManager Spawned" + Runner.IsServer);
         if (Runner.IsServer)
         {
+            Debug.Log("InGamePlayerManager Spawned on Server");
             InitializeAllPlayerData();
         }
     }
@@ -46,6 +48,7 @@ public class InGamePlayerManager : NetworkBehaviour
     {
         foreach (var player in Runner.ActivePlayers)
         {
+            Debug.Log($"Spawning player data for {player}");
             SpawnPlayerData(player);
         }
     }

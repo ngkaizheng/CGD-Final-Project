@@ -32,7 +32,7 @@ public class PlayerAction : NetworkBehaviour
         {
             if (col.transform.root.gameObject == player.transform.root.gameObject) continue;
             var interactable = col.GetComponent<IInteractable>();
-            if (interactable != null)
+            if (interactable != null && interactable.CanInteract(player))
             {
                 float dist = Vector3.Distance(position, col.transform.position);
                 if (dist < closestDist)

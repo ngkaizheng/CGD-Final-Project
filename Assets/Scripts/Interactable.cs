@@ -10,6 +10,8 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     [Networked] public bool progressCompleted { get; set; } = false;
     [Networked] private float lastSavePoint { get; set; } = 0f;
 
+    public PlayerRole playerRoleCanInteract = PlayerRole.ALL;
+
     private static readonly float[] savePoints = { 0.25f, 0.5f, 0.75f };
     private HashSet<PlayerRef> interactingPlayers = new HashSet<PlayerRef>();
     private Renderer cachedRenderer;
@@ -32,6 +34,11 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
             // Add player to interacting set
             interactingPlayers.Add(player.Object.InputAuthority);
         }
+    }
+
+    public bool CanInteract(Player player)
+    {
+        return (playerRoleCanInteract & player.playerRole) != 0;
     }
 
     public override void FixedUpdateNetwork()

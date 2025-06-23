@@ -123,7 +123,7 @@ public class PlayerHealth : NetworkHealth
     }
 
     // Player-specific additions
-    public void SetMaxHealth(int newMaxHealth)
+    public void SetMaxHealth(float newMaxHealth)
     {
         MaxHealth = newMaxHealth;
         CurrentHealth = Mathf.Min(CurrentHealth, MaxHealth);
