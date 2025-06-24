@@ -12,6 +12,7 @@ public enum InputButton
     E,
     Alt,
     Q,
+    Crouch,
 }
 
 public struct NetInput : INetworkInput

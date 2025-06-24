@@ -9,6 +9,8 @@ public abstract class Player : NetworkBehaviour
     [Header("Player Settings")]
     [SerializeField] private float rotationSpeed = 20f;
     [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float crouchSpeedMultiplier = 0.5f;
+
     public PlayerRole playerRole = PlayerRole.OUTSIDER;
     public GameObject playerModel;
 
@@ -19,9 +21,11 @@ public abstract class Player : NetworkBehaviour
     private PlayerInputController _inputController;
     [HideInInspector] public PlayerAction playerAction;
     [HideInInspector] public SimpleCameraFollow simpleCameraFollow;
+    [HideInInspector] public SimpleAnimator simpleAnimator;
 
     [Networked] public Vector2 _fixedLookRotation { get; set; }
     [Networked] public float NetworkedLookSensitivity { get; set; } = 0.1f;
+    [Networked] public bool IsCrouching { get; set; }
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     // [Networked] public PlayerHealth Health { get; private set; }
 
@@ -34,6 +38,7 @@ public abstract class Player : NetworkBehaviour
         _inputController.Initialize(this);
         playerAction = GetComponent<PlayerAction>();
         simpleCameraFollow = transform.parent.GetComponentInChildren<SimpleCameraFollow>();
+        simpleAnimator = GetComponent<SimpleAnimator>();
         playerModel = transform.GetChild(0).gameObject;
     }
 
@@ -73,6 +78,7 @@ public abstract class Player : NetworkBehaviour
             if (!useLocked)
                 _fixedLookRotation = KCCUtility.GetClampedEulerLookRotation(_fixedLookRotation, input.LookDelta * NetworkedLookSensitivity, -35f, 80f);
 
+            UpdateCrouch(input, useLocked);
             UpdateRotation(input, useLocked);
             UpdateMoveDirection(input, useLocked);
             PreviousButtons = input.Buttons;
@@ -101,6 +107,16 @@ public abstract class Player : NetworkBehaviour
     }
 #endif
 
+    private void UpdateCrouch(NetInput input, bool useLocked)
+    {
+        if (!IsMoveable() || playerRole == PlayerRole.PONTIANAK) return;
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.Crouch))
+        {
+            IsCrouching = !IsCrouching;
+            simpleAnimator.SetCrouching(IsCrouching);
+        }
+    }
+
     private void UpdateMoveDirection(NetInput input, bool useLocked)
     {
         if (!IsMoveable())
@@ -108,8 +124,10 @@ public abstract class Player : NetworkBehaviour
             kcc.SetInputDirection(Vector3.zero);
             return;
         }
+        float speedMultiplier = IsCrouching ? crouchSpeedMultiplier : 1f;
+
         Vector3 moveDir = simpleCameraFollow.GetCameraDirection(input.Direction, useLocked);
-        moveDir *= moveSpeed;
+        moveDir *= moveSpeed * speedMultiplier;
         kcc.SetInputDirection(moveDir);
     }
 

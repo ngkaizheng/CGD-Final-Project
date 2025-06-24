@@ -26,6 +26,7 @@ public class SimpleAnimator : NetworkBehaviour
     [Networked] private int DieTick { get; set; } // Networked tick for die trigger
     [Networked] private bool IsDead { get; set; } // Networked death state
     [Networked] private bool isInteracting { get; set; }
+    [Networked] private bool isCrouching { get; set; } // Networked crouching state
     [Networked] private int InteractTick { get; set; } // Networked tick for interaction trigger
     public int lastProcessedAttackTick; // Track the last processed attack tick
     public int lastProcessedUseItemTick; // Track the last processed use item tick
@@ -58,6 +59,7 @@ public class SimpleAnimator : NetworkBehaviour
     private static readonly int IS_DEAD_PARAM_HASH = Animator.StringToHash("IsDead");
     private static readonly int INTERACT_TRIGGER_HASH = Animator.StringToHash("InteractTrigger");
     private static readonly int IS_INTERACTING_HASH = Animator.StringToHash("isInteracting");
+    private static readonly int IS_CROUCHING_HASH = Animator.StringToHash("isCrouching");
 
     #endregion
 
@@ -167,6 +169,7 @@ public class SimpleAnimator : NetworkBehaviour
         animator.SetBool(IS_GROUNDED_PARAM_HASH, isGrounded); // set grounded bool state based on kcc.FixedData.IsGrounded
         animator.SetBool(IS_DEAD_PARAM_HASH, IsDead);
         animator.SetBool(IS_INTERACTING_HASH, isInteracting);
+        animator.SetBool(IS_CROUCHING_HASH, isCrouching);
 
 
         if (isJump)
@@ -298,6 +301,14 @@ public class SimpleAnimator : NetworkBehaviour
             isInteracting = false; // Will cause transition back to Idle/Locomotion
         }
         Debug.Log($"[{Object.Id}] Set Interacting to {interacting}");
+    }
+
+    public void SetCrouching(bool crouching)
+    {
+        if (HasStateAuthority)
+        {
+            isCrouching = crouching;
+        }
     }
 
     #region Audio SFX

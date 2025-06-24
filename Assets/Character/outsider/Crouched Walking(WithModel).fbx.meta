@@ -3,7 +3,42 @@ guid: 3fa938b398425474182c7d91ab867468
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ihram_001_Diffuse
+    second: {fileID: 2800000, guid: 6e01b3febaa83664d855668a5d972025, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ihram_Diffuse
+    second: {fileID: 2800000, guid: 8a843f07cbc35ed4e97b3c8563943b6a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Iris_001_Diffuse
+    second: {fileID: 2800000, guid: 817b60464164ce84290fe0760e22f62e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Kopiah_001_Diffuse
+    second: {fileID: 2800000, guid: 0be4f04c3d772a1429675eca45483388, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Skin_001_Diffuse
+    second: {fileID: 2800000, guid: 14f300ec17e8bb64d9b6c8317a3c1104, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Slipper_001_Diffuse
+    second: {fileID: 2800000, guid: a3f59dbc11c99104fa12b5ca554f4d30, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Teeth_001_Diffuse
+    second: {fileID: 2800000, guid: 763bb811865ea8f44acac2eee9da714a, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
