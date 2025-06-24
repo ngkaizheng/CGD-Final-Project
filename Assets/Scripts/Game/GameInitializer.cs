@@ -6,6 +6,8 @@ public class GameInitializer : NetworkBehaviour
 {
     [SerializeField] private PlayerSpawner _playerSpawner;
 
+    public GameEvent gameInitEvent;
+
     public override void Spawned()
     {
         if (Runner.IsServer)
@@ -38,6 +40,7 @@ public class GameInitializer : NetworkBehaviour
         {
             _playerSpawner.SpawnPlayer(player);
         }
+        gameInitEvent.Raise();
     }
 
     private bool AllPlayersHaveData()

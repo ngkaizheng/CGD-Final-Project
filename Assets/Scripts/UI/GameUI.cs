@@ -12,6 +12,10 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject progressBarHolder; // The UI panel/holder for the progress bar
     [SerializeField] private Slider progressBarSlider;     // The slider component for the progress bar
 
+    [Header("Game Timer UI")]
+    [SerializeField] private GameObject gameTimerHolder; // The UI panel/holder for the game timer
+    [SerializeField] private TMP_Text gameTimerText; // The text for the game timer
+    [SerializeField] private string expiredText = "Expired";
     private static GameUI Instance;
 
     private void Awake()
@@ -24,6 +28,8 @@ public class GameUI : MonoBehaviour
         Instance = this;
 
         SetInteractPromptActive(false, null);
+        SetProgressBarActive(false);
+        SetGameTimerActive(false);
     }
 
     #region Interact Prompt Methods
@@ -65,6 +71,31 @@ public class GameUI : MonoBehaviour
         if (Instance == null || Instance.progressBarSlider == null) return;
 
         Instance.progressBarSlider.value = Mathf.Clamp01(value);
+    }
+    #endregion
+
+    #region Game Timer UI
+    public static void UpdateGameTimer(float seconds)
+    {
+        if (Instance == null || Instance.gameTimerText == null) return;
+
+        int minutes = Mathf.FloorToInt(seconds / 60f);
+        int secs = Mathf.FloorToInt(seconds % 60f);
+        Instance.gameTimerText.text = $"{minutes:00}:{secs:00}";
+    }
+
+    public static void SetGameTimerActive(bool active)
+    {
+        if (Instance == null || Instance.gameTimerText == null) return;
+
+        Instance.gameTimerHolder.SetActive(active);
+    }
+
+    public static void SetGameTimerExpired()
+    {
+        if (Instance == null || Instance.gameTimerText == null) return;
+
+        Instance.gameTimerText.text = Instance.expiredText;
     }
     #endregion
 }
