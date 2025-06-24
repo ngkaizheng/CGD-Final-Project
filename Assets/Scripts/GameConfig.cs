@@ -14,7 +14,7 @@ public static class GameConfig
     // UI settings
     public const string LOGIN_SCENE = "Login";
     public const string MAIN_MENU_SCENE = "MainMenu";
-    public const string GAME_SCENE = "Game"; // Replace with your actual game scene name
+    public const string GAME_SCENE = "GameEnv"; // Replace with your actual game scene name
 
     // Game settings
     public static float LOOK_SENSITIVITY = 0.1f; // Default look sensitivity
