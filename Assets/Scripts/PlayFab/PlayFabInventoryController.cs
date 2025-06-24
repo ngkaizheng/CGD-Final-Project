@@ -10,7 +10,7 @@ public class PlayFabInventoryController : MonoBehaviour
     public static PlayFabInventoryController Instance { get; private set; }
 
     [Header("All Skins Data")]
-    [SerializeField] private List<SkinData> allSkins = new List<SkinData>();
+    [SerializeField] private List<SkinData> allSkins = new List<SkinData>(); //Could change to use ResourceLoader if skins are in Resources folder
 
     // Stores which skins the player owns (using PlayFab Item IDs)
     private HashSet<string> ownedSkinIds = new HashSet<string>();

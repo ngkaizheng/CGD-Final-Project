@@ -52,6 +52,14 @@ public class StoreController : MonoBehaviour
         OnCurrencyBalanceUpdated.OnRaised.AddListener(OnGetBalanceSuccess);
     }
 
+    private void OnDestroy()
+    {
+        section1Button.onClick.RemoveListener(() => ShowSection(StoreSection.Outsider));
+        section2Button.onClick.RemoveListener(() => ShowSection(StoreSection.Pontianak));
+        OnInventoryLoaded.OnRaised.RemoveListener(PopulateAllSkinSections);
+        OnCurrencyBalanceUpdated.OnRaised.RemoveListener(OnGetBalanceSuccess);
+    }
+
     private void ShowSection(StoreSection section)
     {
         section1Content.SetActive(section == StoreSection.Outsider);

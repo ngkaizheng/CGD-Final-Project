@@ -30,6 +30,14 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button storeButton;
     [SerializeField] private Button storeBackButton;
 
+    [Header("Achievement Section")]
+    [SerializeField] private Button achievementButton;
+    [SerializeField] private Button achievementBackButton;
+
+    [Header("Leaderboard Section")]
+    [SerializeField] private Button leaderboardButton;
+    [SerializeField] private Button leaderboardBackButton;
+
     [Header("Settings Section")]
     [SerializeField] private Button settingsBackButton;
 
@@ -42,6 +50,8 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private GameObject multiplayerLayout;
     [SerializeField] private GameObject lobbyLayout;
     [SerializeField] private GameObject storeLayout;
+    [SerializeField] private GameObject achievementLayout;
+    [SerializeField] private GameObject leaderboardLayout;
 
     private LobbyLogic lobbyLogic;
     public static MainMenuController Instance { get; private set; }
@@ -77,6 +87,14 @@ public class MainMenuController : MonoBehaviour
         storeButton.onClick.AddListener(() => ShowSection(MenuState.Store));
         storeBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
 
+        // Achievement button
+        achievementButton.onClick.AddListener(() => ShowSection(MenuState.Achievement));
+        achievementBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
+
+        // Leaderboard button
+        leaderboardButton.onClick.AddListener(() => ShowSection(MenuState.Leaderboard));
+        leaderboardBackButton.onClick.AddListener(() => ShowSection(MenuState.MainMenu));
+
         // Profile button
         profileButton.onClick.AddListener(() => ProfileController.Instance.ShowProfilePanel());
     }
@@ -98,6 +116,10 @@ public class MainMenuController : MonoBehaviour
         startGameInLobbyButton.onClick.RemoveAllListeners();
         settingsBackButton.onClick.RemoveAllListeners();
         storeButton.onClick.RemoveAllListeners();
+        storeBackButton.onClick.RemoveAllListeners();
+        achievementButton.onClick.RemoveAllListeners();
+        achievementBackButton.onClick.RemoveAllListeners();
+        profileButton.onClick.RemoveAllListeners();
     }
     #endregion
 
@@ -110,10 +132,15 @@ public class MainMenuController : MonoBehaviour
         lobbyLayout.SetActive(state == MenuState.Lobby);
         settingsLayout.SetActive(state == MenuState.Settings);
         storeLayout.SetActive(state == MenuState.Store);
+        achievementLayout.SetActive(state == MenuState.Achievement);
+        leaderboardLayout.SetActive(state == MenuState.Leaderboard);
         ClearUI();
 
         if (state == MenuState.Store)
             PlayFabCurrencyController.Instance.GetCurrencyBalance();
+
+        if (state == MenuState.Leaderboard)
+            LeaderboardUI.Instance.ResetToDefaultView();
     }
 
     private async void ExitNetworkAndShowMainMenu()
@@ -221,5 +248,7 @@ public enum MenuState
     Multiplayer,
     Lobby,
     Settings,
-    Store
+    Store,
+    Achievement,
+    Leaderboard
 }
