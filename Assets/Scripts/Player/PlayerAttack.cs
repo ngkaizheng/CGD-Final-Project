@@ -11,10 +11,12 @@ public class PlayerAttack : NetworkBehaviour
     [Networked] public float AttackDamage { get; set; } = 100f;
     [Networked] private float AttackCooldown { get; set; } = 0f;
     [SerializeField] private float attackCooldownTime = 0.5f;
+    [SerializeField] private float freezeDuration = 1.8f;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource attackAudioSource; // Dedicated AudioSource for Attack SFX
     private SimpleAnimator simpleAnimator; // Reference to SimpleAnimator
+    private Player player; // Reference to Player component
 
 
     private void Awake()
@@ -22,6 +24,7 @@ public class PlayerAttack : NetworkBehaviour
         simpleAnimator = GetComponent<SimpleAnimator>();
         if (attackCollider != null)
             attackCollider.enabled = false;
+        player = GetComponent<Player>();
 
         // Initialize Attack AudioSource
         if (attackAudioSource == null)
@@ -46,10 +49,21 @@ public class PlayerAttack : NetworkBehaviour
     {
         if (HasStateAuthority && AttackCooldown <= 0f)
         {
+            if (player is Pontianak pontianak)
+            {
+                StartCoroutine(SetAttackingStateTemporarily(pontianak, freezeDuration));
+            }
             AttackCooldown = attackCooldownTime;
             simpleAnimator.TriggerAttackAnimation(); // Trigger attack animation
             RPC_PlayAttackSound();
         }
+    }
+
+    private IEnumerator SetAttackingStateTemporarily(Pontianak pontianak, float duration)
+    {
+        pontianak.isAttacking = true;
+        yield return new WaitForSeconds(duration);
+        pontianak.isAttacking = false;
     }
 
     // Called by animation event at the correct frame

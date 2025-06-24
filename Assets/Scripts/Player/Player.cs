@@ -164,7 +164,7 @@ public abstract class Player : NetworkBehaviour
         kcc.SetLookRotation(currentFacingRotation);
     }
 
-    private bool IsMoveable()
+    protected virtual bool IsMoveable()
     {
         if (playerAction.isInteracting)
             return false;

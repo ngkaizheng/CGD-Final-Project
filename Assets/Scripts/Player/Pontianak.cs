@@ -9,6 +9,7 @@ public class Pontianak : Player
     private Dictionary<InputButton, PlayerAbility> abilityMap = new Dictionary<InputButton, PlayerAbility>();
 
     public PlayerAttack playerAttack;
+    [Networked] public bool isAttacking { get; set; }
 
     protected override void Awake()
     {
@@ -69,5 +70,12 @@ public class Pontianak : Player
             BuildAbilityMap();
             Debug.Log($"Removed ability: {abilityToRemove.GetType().Name}");
         }
+    }
+
+    protected override bool IsMoveable()
+    {
+        if (isAttacking) // This is your Pontianak-specific flag
+            return false;
+        return base.IsMoveable();
     }
 }
