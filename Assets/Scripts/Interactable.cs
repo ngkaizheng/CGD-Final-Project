@@ -4,26 +4,33 @@ using Fusion;
 
 public class Interactable : NetworkBehaviour, IProgressInteractable
 {
-    [Networked, OnChangedRender(nameof(OnColorChanged))] public Color NetworkedColor { get; set; }
     [Networked] public float progress { get; set; } = 0.0f;
     [Networked] public float progressSpeed { get; set; } = 0.1f;
     [Networked] public bool progressCompleted { get; set; } = false;
     [Networked] private float lastSavePoint { get; set; } = 0f;
 
     public PlayerRole playerRoleCanInteract = PlayerRole.ALL;
+    public bool IsInteractable { get; set; } = true;
 
     private static readonly float[] savePoints = { 0.25f, 0.5f, 0.75f };
     private HashSet<PlayerRef> interactingPlayers = new HashSet<PlayerRef>();
-    private Renderer cachedRenderer;
+
+    [Header("Tree Top Settings")]
+    [SerializeField] private Rigidbody treeTopRigidbody;
+
+    [Networked, OnChangedRender(nameof(onTreeTopRigidbodyChanged))]
+    private bool isTreeTopKinematic { get; set; } = true;
 
     private void Awake()
     {
-        cachedRenderer = GetComponent<Renderer>();
+        if (treeTopRigidbody == null)
+        {
+            treeTopRigidbody = GetComponentInChildren<Rigidbody>();
+        }
     }
 
     public override void Spawned()
     {
-        ApplyColor();
     }
 
     public void OnInteract(Player player)
@@ -38,7 +45,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
 
     public bool CanInteract(Player player)
     {
-        return (playerRoleCanInteract & player.playerRole) != 0;
+        return IsInteractable && (playerRoleCanInteract & player.playerRole) != 0;
     }
 
     public override void FixedUpdateNetwork()
@@ -68,7 +75,8 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
                         progress = 1.0f;
                         progressCompleted = true;
                         lastSavePoint = 1.0f;
-                        NetworkedColor = Random.ColorHSV();
+                        isTreeTopKinematic = false;
+                        IsInteractable = false;
                     }
                 }
             }
@@ -85,6 +93,14 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         }
     }
 
+    private void onTreeTopRigidbodyChanged()
+    {
+        if (treeTopRigidbody != null)
+        {
+            treeTopRigidbody.isKinematic = isTreeTopKinematic;
+        }
+    }
+
     public float GetProgress()
     {
         return progress;
@@ -98,17 +114,5 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     public string GetPromptMessage()
     {
         return "Press E to interact";
-    }
-
-    private void OnColorChanged()
-    {
-        ApplyColor();
-    }
-    private void ApplyColor()
-    {
-        if (cachedRenderer != null)
-        {
-            cachedRenderer.material.color = NetworkedColor;
-        }
     }
 }

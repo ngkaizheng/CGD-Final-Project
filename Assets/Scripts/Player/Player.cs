@@ -17,7 +17,7 @@ public abstract class Player : NetworkBehaviour
     private Vector2 currentFacingRotation = Vector2.zero;
     private Vector2 targetFacingRotation = Vector2.zero;
 
-    private KCC kcc;
+    public KCC kcc;
     private PlayerInputController _inputController;
     [HideInInspector] public PlayerAction playerAction;
     [HideInInspector] public SimpleCameraFollow simpleCameraFollow;
@@ -173,12 +173,22 @@ public abstract class Player : NetworkBehaviour
     }
 
     #region Event Handlers
-    private void HandleDeath(PlayerRef killer)
-    {
-        Debug.Log($"{Object.InputAuthority} has died, killed by {killer}");
-        // Handle player death logic here, such as respawning or updating UI
-    }
+    // private void HandleDeath(PlayerRef killer)
+    // {
+    //     Debug.Log($"{Object.InputAuthority} has died, killed by {killer}");
+    //     // Handle player death logic here, such as respawning or updating UI
+    // }
     #endregion
 
+    // Disable collider and KCC when player is dead
+    public void HandleDeath()
+    {
+        kcc.enabled = false;
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+    }
 
 }

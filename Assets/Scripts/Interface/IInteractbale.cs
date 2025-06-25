@@ -8,4 +8,5 @@ public interface IInteractable
     bool CanInteract(Player player);
     string GetPromptMessage();
     void SetPromptVisible(bool visible);
+    bool IsInteractable { get; set; }
 }

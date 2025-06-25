@@ -13,6 +13,7 @@ public class GameController : NetworkBehaviour
     public GameEvent gameInitEvent; // Assign in inspector
 
     [Networked] public TickTimer GameTimer { get; set; }
+    [Networked] public TickTimer LastChanceTimer { get; set; }
 
     private void OnEnable()
     {
@@ -39,11 +40,10 @@ public class GameController : NetworkBehaviour
         // Timer will be started by OnGameInit
     }
 
-    private void OnGameInit()
+    private void OnGameInit() //Only Server is executing this function
     {
         if (Object.HasStateAuthority)
         {
-            GameUI.SetGameTimerActive(true);
             GameTimer = TickTimer.CreateFromSeconds(Runner, gameDurationSeconds);
             StartCoroutine(GameTimerCoroutine());
         }
@@ -51,15 +51,54 @@ public class GameController : NetworkBehaviour
 
     private IEnumerator GameTimerCoroutine()
     {
+        RPC_SetGameTimerActive(true);
         // Wait until the timer expires
         while (!GameTimer.Expired(Runner))
         {
             yield return null;
         }
         GameTimer = TickTimer.None;
-        GameUI.SetGameTimerExpired();
-        RPC_ShowEndGame();
+        RPC_SetGameTimerExpired();
+
+
+        if (Object.HasStateAuthority)
+            LastChanceTimer = TickTimer.CreateFromSeconds(Runner, 5f);
+
+        // Wait until last chance timer expires
+        while (!LastChanceTimer.Expired(Runner))
+        {
+            yield return null;
+        }
+        LastChanceTimer = TickTimer.None;
+
+        // Damage all Outsiders using InGamePlayerManager
+        foreach (var playerRef in InGamePlayerManager.Instance.outsiderDataDict)
+        {
+            // Get the Player object for this PlayerRef
+            var playerObj = Runner.GetPlayerObject(playerRef);
+            if (playerObj == null) continue;
+
+            var outsider = playerObj.GetComponentInChildren<Outsider>();
+            if (outsider != null && outsider.isAlive())
+            {
+                outsider.Health.TakeDamage(100, InGamePlayerManager.Instance.pontianakDataDict[0]);
+            }
+        }
+        // RPC_ShowEndGame();
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_SetGameTimerActive(bool isActive)
+    {
+        GameUI.SetGameTimerActive(isActive);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_SetGameTimerExpired()
+    {
+        GameUI.SetGameTimerExpired();
+    }
+
 
     // public override void Render()
     // {

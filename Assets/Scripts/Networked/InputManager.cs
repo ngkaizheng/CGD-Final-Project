@@ -32,6 +32,12 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             return; // Ensure we only process input when the runner is running and local player is set
         }
 
+        if (!_localPlayer.isAlive()) //Do not process input if player is dead
+        {
+            accumulatedInput = default;
+            return;
+        }
+
         // Debug.Log($"Processing input for player {_localPlayer.Object.InputAuthority} at Tick: {Runner.Tick}, IsForward: {Runner.IsForward}, IsSimulation: {Runner.IsResimulation}");
 
         Vector2 mousePos = Mouse.current.position.ReadValue();

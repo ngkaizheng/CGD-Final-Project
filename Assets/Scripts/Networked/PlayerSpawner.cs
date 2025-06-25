@@ -11,6 +11,7 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     [SerializeField] private NetworkObject gameInitializerPrefab;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
+    public NetworkDictionary<PlayerRef, Player> SpawnedPlayers { get; set; }
     private List<PlayerRef> joinOrder = new List<PlayerRef>();
     public bool isTesting = false;
 
@@ -73,7 +74,7 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
         {
             Runner.Despawn(playerObj);
             _spawnedPlayers.Remove(player);
-            joinOrder.Remove(player);
+            // joinOrder.Remove(player);
             Debug.Log($"Player {player} left the game. Remaining players: {_spawnedPlayers.Count}");
         }
     }

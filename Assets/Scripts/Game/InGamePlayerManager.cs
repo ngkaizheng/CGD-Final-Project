@@ -14,6 +14,10 @@ public class InGamePlayerManager : NetworkBehaviour
     [Header("Event")]
     [SerializeField] private PlayerKillEvent playerKilledEvent;
 
+    [Networked, Capacity(5)]
+    public NetworkLinkedList<PlayerRef> pontianakDataDict { get; }
+    [Networked, Capacity(5)]
+    public NetworkLinkedList<PlayerRef> outsiderDataDict { get; }
 
     [Networked, Capacity(8), OnChangedRender(nameof(OnPlayerDataChanged))]
     public NetworkDictionary<PlayerRef, InGamePlayerData> playerDataDict { get; }
@@ -88,6 +92,22 @@ public class InGamePlayerManager : NetworkBehaviour
     private void OnPlayerDataChanged()
     {
         // LeaderboardUI.Instance.UpdateLeaderboard();
+        //Store the player data  based on their roles in to dataDict
+        pontianakDataDict.Clear();
+        outsiderDataDict.Clear();
+        foreach (var kvp in playerDataDict)
+        {
+            var playerData = kvp.Value;
+            if (playerData == null) continue;
+            if (playerData.Role == PlayerRole.PONTIANAK)
+            {
+                pontianakDataDict.Add(kvp.Key);
+            }
+            else if (playerData.Role == PlayerRole.OUTSIDER)
+            {
+                outsiderDataDict.Add(kvp.Key);
+            }
+        }
     }
 
     //Shared Mode RPC to set player data
@@ -116,4 +136,6 @@ public class InGamePlayerManager : NetworkBehaviour
         _debugPlayerDataList = playerDataDict.Select(kv => kv.Value).ToList();
     }
 #endif
+
+
 }

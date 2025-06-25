@@ -17,6 +17,21 @@ public class PlayerHealth : NetworkHealth
 
     [Networked, OnChangedRender(nameof(OnKillInfoChanged))]
     private PlayerKillInfo LastKillInfo { get; set; }
+    private Player player;
+    [SerializeField] private AudioSource hurtAudioSource; // Dedicated AudioSource for Attack SFX
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+        if (hurtAudioSource == null)
+        {
+            hurtAudioSource = gameObject.AddComponent<AudioSource>();
+            hurtAudioSource.playOnAwake = false;
+            hurtAudioSource.spatialBlend = 1f; // 3D audio
+            hurtAudioSource.maxDistance = 15f; // Suitable for melee attack range
+            hurtAudioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        }
+    }
 
     protected override void OnDeath(PlayerRef killer)
     {
@@ -28,6 +43,7 @@ public class PlayerHealth : NetworkHealth
         {
             LastKillInfo = new PlayerKillInfo(killer, Object.InputAuthority);
             // GameController.Instance.PlayerDied(Object.InputAuthority);
+            RPC_Die();
         }
 
         // 2. Calculate death direction (0=Back, 1=Front, 2=Left, 3=Right)
@@ -41,6 +57,30 @@ public class PlayerHealth : NetworkHealth
         //     StartCoroutine(ShowDeathUIAfterDelay(1f));
         // }
     }
+
+    #region RPC_Die
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_Die()
+    {
+        PlayDieSound();
+        player.simpleAnimator.TriggerDieAnimation();
+        player.HandleDeath();
+
+        if (Runner.LocalPlayer == Object.InputAuthority)
+        {
+            // Show observer UI
+            ObserverUI.Instance.ShowObserverUI(true);
+        }
+    }
+
+    private void PlayDieSound()
+    {
+        hurtAudioSource.pitch = Random.Range(0.9f, 1.1f); // Random pitch for variation
+        AudioController.Instance.PlaySoundEffect(SoundEffect.DiePlayer, hurtAudioSource);
+        hurtAudioSource.pitch = 1f; // Reset pitch
+        Debug.Log($"[{Object.Id}] Played Die SFX");
+    }
+    #endregion
 
     public override void OnAliveStateChanged()
     {

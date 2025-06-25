@@ -40,6 +40,7 @@ public class GameInitializer : NetworkBehaviour
         {
             _playerSpawner.SpawnPlayer(player);
         }
+
         gameInitEvent.Raise();
     }
 

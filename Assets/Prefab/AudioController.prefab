@@ -57,6 +57,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d8dd53ad633aba747b294ddbd3114dc4, type: 3}
   - effect: 23
     clip: {fileID: 8300000, guid: cd6820361dc56b74ea43cf752e74ab57, type: 3}
+  - effect: 6
+    clip: {fileID: 8300000, guid: c2fcca86577ffbb4ea38d230d977028c, type: 3}
   musicTrackMappings:
   - track: 0
     clip: {fileID: 8300000, guid: 0e8889193915345498bbc6dac7c17813, type: 3}
