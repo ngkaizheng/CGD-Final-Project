@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Cinemachine;
 using Fusion;
 
-public class ObserverController : MonoBehaviour
+public class ObserverController : NetworkBehaviour
 {
     [Header("Events")]
     public GameEvent gameInitEvent; // Assign in inspector
@@ -35,10 +35,18 @@ public class ObserverController : MonoBehaviour
             gameInitEvent.OnRaised.RemoveListener(OnGameInit);
     }
 
-    private void OnGameInit()
+    private void OnGameInit() // Only Server is executing this function
+    {
+        RPC_InitObserverUI();
+    }
+
+    // RPC Init ObserverUI
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_InitObserverUI()
     {
         StoreRoleCameras();
         ObserverUI.Instance.Initialize();
+        Debug.Log("Observer UI Initialized with " + outsiderCameras.Count + " Outsider cameras and " + pontianakCameras.Count + " Pontianak cameras.");
     }
 
     private void StoreRoleCameras()
@@ -81,4 +89,13 @@ public struct PlayerCameraPair
 
     public bool IsValid => Camera != null && Player != null;
     public bool IsAlive => IsValid && Player.isAlive();
+
+    public bool IsEscaped
+    {
+        get
+        {
+            var outsider = Player as Outsider;
+            return outsider != null && outsider.IsEscaped;
+        }
+    }
 }

@@ -35,7 +35,7 @@ public class GameController : NetworkBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
         // Timer will be started by OnGameInit
     }
@@ -131,22 +131,45 @@ public class GameController : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_EndGame()
     {
-        StartCoroutine(EndGameRoutine());
+        // StartCoroutine(EndGameRoutine());
+        StartCoroutine(EndGame());
     }
 
-    private IEnumerator EndGameRoutine()
+    // private IEnumerator EndGameRoutine()
+    // {
+    //     if (!(Runner.IsServer || Runner.IsSharedModeMasterClient))
+    //     {
+    //         Runner.Shutdown();
+    //         SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
+    //         yield break;
+    //     }
+    //     else
+    //     {
+    //         yield return new WaitForSeconds(0.5f);
+    //         Runner.Shutdown();
+    //         SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
+    //     }
+    // }
+
+    public void EndGameCheck()
     {
-        if (!(Runner.IsServer || Runner.IsSharedModeMasterClient))
+        if (Runner.IsServer)
         {
-            Runner.Shutdown();
-            SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
-            yield break;
+            RPC_EndGame();
         }
         else
         {
-            yield return new WaitForSeconds(0.5f);
-            Runner.Shutdown();
-            SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
+            StartCoroutine(EndGame());
         }
+    }
+
+    public IEnumerator EndGame()
+    {
+        if (Runner.IsServer)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+        Runner.Shutdown();
+        SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
     }
 }

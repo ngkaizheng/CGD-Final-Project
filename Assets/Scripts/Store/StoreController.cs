@@ -36,12 +36,15 @@ public class StoreController : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
-
-    private void Start()
-    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         section1Button.onClick.AddListener(() => ShowSection(StoreSection.Outsider));
         section2Button.onClick.AddListener(() => ShowSection(StoreSection.Pontianak));
 
@@ -50,6 +53,18 @@ public class StoreController : MonoBehaviour
 
         // Player balance UI
         OnCurrencyBalanceUpdated.OnRaised.AddListener(OnGetBalanceSuccess);
+    }
+
+    private void Start()
+    {
+        // section1Button.onClick.AddListener(() => ShowSection(StoreSection.Outsider));
+        // section2Button.onClick.AddListener(() => ShowSection(StoreSection.Pontianak));
+
+        // OnInventoryLoaded.OnRaised.AddListener(PopulateAllSkinSections);
+        // ShowSection(StoreSection.Outsider);
+
+        // // Player balance UI
+        // OnCurrencyBalanceUpdated.OnRaised.AddListener(OnGetBalanceSuccess);
     }
 
     private void OnDestroy()

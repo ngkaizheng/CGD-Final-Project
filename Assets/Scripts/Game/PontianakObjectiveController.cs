@@ -63,7 +63,7 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
 
         // LivingPlayers.Remove(playerRef);
         PlayerTracker.Instance.OnPlayerDied(playerRef);
-        CheckGameOverCondition();
+        GameOverController.Instance.CheckGameOverCondition();
     }
 
     public void OnPlayerDied(PlayerRef playerRef)
@@ -72,33 +72,33 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
 
         // LivingPlayers.Remove(playerRef);
         PlayerTracker.Instance.OnPlayerDied(playerRef);
-        CheckGameOverCondition();
+        GameOverController.Instance.CheckGameOverCondition();
     }
 
-    private void CheckGameOverCondition()
-    {
-        if (!Runner.IsServer) return;
+    // private void CheckGameOverCondition()
+    // {
+    //     if (!Runner.IsServer) return;
 
-        // If no living players remain, game over
-        if (!PlayerTracker.Instance.IsAnyPlayerAlive())
-        {
-            Debug.Log("All outsiders have been eliminated!");
-            StartCoroutine(GameOverWithDelay());
-        }
-    }
+    //     // If no living players remain, game over
+    //     if (!PlayerTracker.Instance.IsAnyPlayerAlive())
+    //     {
+    //         Debug.Log("All outsiders have been eliminated!");
+    //         StartCoroutine(GameOverWithDelay());
+    //     }
+    // }
 
-    private IEnumerator GameOverWithDelay()
-    {
-        yield return new WaitForSeconds(gameOverDelay);
-        RPC_TriggerGameOver();
-    }
+    // private IEnumerator GameOverWithDelay()
+    // {
+    //     yield return new WaitForSeconds(gameOverDelay);
+    //     RPC_TriggerGameOver();
+    // }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_TriggerGameOver()
-    {
-        gameOverEvent.Raise();
-        Debug.Log("Game Over - Pontianak Team Wins!");
-    }
+    // [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    // private void RPC_TriggerGameOver()
+    // {
+    //     gameOverEvent.Raise();
+    //     Debug.Log("Game Over - Pontianak Team Wins!");
+    // }
 
     // For other systems to notify player death
     public void ReportPlayerDeath(PlayerRef playerRef)

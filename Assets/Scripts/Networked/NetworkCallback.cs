@@ -34,7 +34,8 @@ public class NetworkCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     void INetworkRunnerCallbacks.OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
         Debug.Log($"Disconnected from server: {reason}");
-        MainMenuController.Instance.HandleLeftRoom(isKicked: true);
+        if (MainMenuController.Instance != null)
+            MainMenuController.Instance.HandleLeftRoom(isKicked: true);
     }
 
     void INetworkRunnerCallbacks.OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
@@ -112,7 +113,11 @@ public class NetworkCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         }
         else
         {
-            MainMenuController.Instance.HandleLeftRoom(isKicked: true);
+            if (MainMenuController.Instance != null)
+            {
+                Debug.Log("Network shutdown, returning to main menu.");
+                MainMenuController.Instance.HandleLeftRoom(isKicked: true);
+            }
         }
     }
 

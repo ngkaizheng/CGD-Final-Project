@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayFabAchievementController : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class PlayFabAchievementController : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; // Add listener here
         }
         else
         {
@@ -27,9 +29,12 @@ public class PlayFabAchievementController : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        LoadPlayerAchievements();
+        if (scene.name == GameConfig.MAIN_MENU_SCENE)
+        {
+            LoadPlayerAchievements();
+        }
     }
 
     #region Load Player Achievements

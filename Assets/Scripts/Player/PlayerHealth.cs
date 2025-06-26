@@ -70,7 +70,8 @@ public class PlayerHealth : NetworkHealth
         if (Runner.LocalPlayer == Object.InputAuthority)
         {
             // Show observer UI
-            ObserverUI.Instance.ShowObserverUI(true);
+            // ObserverUI.Instance.ShowObserverUI(true);
+            EndGameUI.Instance.ShowPlayerDied();
         }
     }
 

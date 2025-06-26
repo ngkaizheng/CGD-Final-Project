@@ -11,9 +11,9 @@ public class ObserverUI : MonoBehaviour
     [SerializeField] private Button nextButton;
     [SerializeField] private GameObject observerPanel;
 
-    private List<PlayerRef> allPlayerRefs = new List<PlayerRef>();
-    private int currentIndex = 0;
-    private CinemachineCamera currentActiveCamera; // Track currently active camera
+    public List<PlayerRef> allPlayerRefs = new List<PlayerRef>();
+    public int currentIndex = 0;
+    public CinemachineCamera currentActiveCamera; // Track currently active camera
 
     public static ObserverUI Instance { get; private set; }
 
@@ -74,6 +74,7 @@ public class ObserverUI : MonoBehaviour
             if (IsValidCameraTarget(allPlayerRefs[testIndex]))
             {
                 currentIndex = testIndex;
+                Debug.Log($"[ObserverUI] Switched to previous player at index {currentIndex}.");
                 ShowCurrentCamera();
                 return;
             }
@@ -90,6 +91,7 @@ public class ObserverUI : MonoBehaviour
             if (IsValidCameraTarget(allPlayerRefs[testIndex]))
             {
                 currentIndex = testIndex;
+                Debug.Log($"[ObserverUI] Switched to next player at index {currentIndex}.");
                 ShowCurrentCamera();
                 return;
             }
@@ -98,23 +100,32 @@ public class ObserverUI : MonoBehaviour
 
     private bool IsValidCameraTarget(PlayerRef playerRef)
     {
-        // First try to get outsider camera
         var outsiderPair = ObserverController.Instance.GetOutsiderCameraPair(playerRef);
-        if (outsiderPair.IsValid && outsiderPair.IsAlive) return true;
+        if (outsiderPair.IsValid && outsiderPair.IsAlive && !outsiderPair.IsEscaped)
+        {
+            Debug.Log($"[ObserverUI] PlayerRef {playerRef} is a valid outsider camera target.");
+            return true;
+        }
 
-        // Fallback to pontianak camera if no valid outsider
         var pontianakPair = ObserverController.Instance.GetPontianakCameraPair(playerRef);
-        return pontianakPair.IsValid && pontianakPair.IsAlive;
+        bool validPontianak = pontianakPair.IsValid && pontianakPair.IsAlive;
+        if (validPontianak)
+            Debug.Log($"[ObserverUI] PlayerRef {playerRef} is a valid pontianak camera target.");
+        return validPontianak;
     }
 
     private bool ShouldShowOutsiders()
     {
-        // Check if any outsiders are still alive
         foreach (var playerRef in InGamePlayerManager.Instance.outsiderDataDict)
         {
             var pair = ObserverController.Instance.GetOutsiderCameraPair(playerRef);
-            if (pair.IsValid && pair.IsAlive) return true;
+            if (pair.IsValid && pair.IsAlive && !pair.IsEscaped)
+            {
+                Debug.Log("[ObserverUI] At least one outsider is alive and not escaped.");
+                return true;
+            }
         }
+        Debug.Log("[ObserverUI] No living outsiders found, will fallback to pontianak.");
         return false;
     }
 
@@ -128,12 +139,14 @@ public class ObserverUI : MonoBehaviour
         {
             // Only show living outsider cameras
             var outsiderPair = ObserverController.Instance.GetOutsiderCameraPair(allPlayerRefs[currentIndex]);
-            if (outsiderPair.IsValid && outsiderPair.IsAlive)
+            if (outsiderPair.IsValid && outsiderPair.IsAlive && !outsiderPair.IsEscaped)
             {
+                Debug.Log($"[ObserverUI] Showing outsider camera for PlayerRef {allPlayerRefs[currentIndex]}.");
                 SetActiveCamera(outsiderPair.Camera);
                 return;
             }
             // If not valid, find next living outsider
+            Debug.Log("[ObserverUI] Current outsider camera invalid, searching for next.");
             OnNextClicked();
         }
         else
@@ -142,13 +155,16 @@ public class ObserverUI : MonoBehaviour
             var pontianakPair = ObserverController.Instance.GetPontianakCameraPair(allPlayerRefs[currentIndex]);
             if (pontianakPair.IsValid && pontianakPair.IsAlive)
             {
+                Debug.Log($"[ObserverUI] Showing pontianak camera for PlayerRef {allPlayerRefs[currentIndex]}.");
                 SetActiveCamera(pontianakPair.Camera);
                 return;
             }
             // If not valid, find next living pontianak
+            Debug.Log("[ObserverUI] Current pontianak camera invalid, searching for next.");
             OnNextClicked();
         }
     }
+
 
     private void SetActiveCamera(CinemachineCamera newCamera)
     {

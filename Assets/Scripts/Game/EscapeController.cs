@@ -52,7 +52,7 @@ public class EscapeController : NetworkBehaviour
             playerEscapedEvent.Raise();
             PlayerTracker.Instance.OnPlayerEscaped(player.Object.InputAuthority);
 
-            CheckGameOverCondition();
+            GameOverController.Instance.CheckGameOverCondition();
         }
 
         // // Enable observer UI
@@ -63,30 +63,30 @@ public class EscapeController : NetworkBehaviour
         // Notify all clients
     }
 
-    private void CheckGameOverCondition()
-    {
-        if (!Runner.IsServer) return;
+    // private void CheckGameOverCondition()
+    // {
+    //     if (!Runner.IsServer) return;
 
-        // If no living players remain, game over
-        if (!PlayerTracker.Instance.IsAnyPlayerAlive())
-        {
-            Debug.Log("No living players remain! Game over.");
-            StartCoroutine(GameOverWithDelay());
-        }
-    }
+    //     // If no living players remain, game over
+    //     if (!PlayerTracker.Instance.IsAnyPlayerAlive())
+    //     {
+    //         Debug.Log("No living players remain! Game over.");
+    //         StartCoroutine(GameOverWithDelay());
+    //     }
+    // }
 
-    private IEnumerator GameOverWithDelay()
-    {
-        yield return new WaitForSeconds(gameOverDelay);
-        RPC_TriggerGameOver();
-    }
+    // private IEnumerator GameOverWithDelay()
+    // {
+    //     yield return new WaitForSeconds(gameOverDelay);
+    //     RPC_TriggerGameOver();
+    // }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_TriggerGameOver()
-    {
-        gameOverEvent.Raise();
-        Debug.Log("Game Over - Pontianak Team Wins!");
-    }
+    // [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    // private void RPC_TriggerGameOver()
+    // {
+    //     gameOverEvent.Raise();
+    //     Debug.Log("Game Over - Pontianak Team Wins!");
+    // }
 
     // [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     // private void RPC_GrantEscapeRewards([RpcTarget] PlayerRef playerRef)
@@ -112,6 +112,9 @@ public class EscapeController : NetworkBehaviour
 
             // Currency
             PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
+
+            // Show End Game UI
+            EndGameUI.Instance.ShowPlayerEscaped();
         }
         else
         {
