@@ -17,6 +17,7 @@ public class AchievementItemUI : MonoBehaviour
 
         achievementNameText.text = data.achievementName;
         achievementIconImage.sprite = data.achievementIcon;
+        achievementDescriptionText.text = data.achievementDescription;
 
         bool isUnlocked = PlayFabAchievementController.Instance.IsAchievementUnlocked(data.achievementId);
 
