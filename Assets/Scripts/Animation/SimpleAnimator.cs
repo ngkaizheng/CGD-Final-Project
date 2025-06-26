@@ -11,6 +11,7 @@ public class SimpleAnimator : NetworkBehaviour
     // private PlayerAttack playerAttack; // Reference to PlayerAttack
     private Player player; // Reference to Player (for health/damage)
     private Animator animator;
+    private bool isOutsider;
     [SerializeField] private AudioSource movementAudioSource; // Dedicated AudioSource for Jump and Footstep SFX
 
 
@@ -97,6 +98,7 @@ public class SimpleAnimator : NetworkBehaviour
         }
         // playerAttack = GetComponent<PlayerAttack>();
         player = GetComponent<Player>();
+        isOutsider = player.playerRole == PlayerRole.OUTSIDER;
         animator = GetComponentInChildren<Animator>();
 
         // Initialize movement AudioSource
@@ -169,7 +171,8 @@ public class SimpleAnimator : NetworkBehaviour
         animator.SetBool(IS_GROUNDED_PARAM_HASH, isGrounded); // set grounded bool state based on kcc.FixedData.IsGrounded
         animator.SetBool(IS_DEAD_PARAM_HASH, IsDead);
         animator.SetBool(IS_INTERACTING_HASH, isInteracting);
-        animator.SetBool(IS_CROUCHING_HASH, isCrouching);
+        if (isOutsider)
+            animator.SetBool(IS_CROUCHING_HASH, isCrouching);
 
 
         if (isJump)
@@ -375,6 +378,16 @@ public class SimpleAnimator : NetworkBehaviour
     }
 
     #endregion
+
+    private bool HasAnimatorParameter(string paramName)
+    {
+        foreach (var param in animator.parameters)
+        {
+            if (param.name == paramName)
+                return true;
+        }
+        return false;
+    }
 }
 
 // SoundEffect[] hurtSounds = new SoundEffect[]

@@ -10,7 +10,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     [Networked] private float lastSavePoint { get; set; } = 0f;
 
     public PlayerRole playerRoleCanInteract = PlayerRole.ALL;
-    public bool IsInteractable { get; set; } = true;
+    [Networked] public bool IsInteractable { get; set; } = true;
 
     private static readonly float[] savePoints = { 0.25f, 0.5f, 0.75f };
     private HashSet<PlayerRef> interactingPlayers = new HashSet<PlayerRef>();

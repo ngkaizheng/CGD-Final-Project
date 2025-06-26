@@ -8,31 +8,11 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
 
     [Header("Config")]
     [SerializeField] private float gameOverDelay = 3f;
+    [Networked] public int killCount { get; set; } = 0;
 
     [Header("Events")]
     // [SerializeField] private GameEvent gameInitEvent;
     [SerializeField] private GameEvent gameOverEvent;
-
-    // [Networked, Capacity(8)]
-    // public NetworkLinkedList<PlayerRef> LivingPlayers { get; } = default;
-
-    // private void Awake()
-    // {
-    //     gameInitEvent.OnRaised.AddListener(OnGameInit);
-    // }
-
-    // private void OnDestroy()
-    // {
-    //     gameInitEvent.OnRaised.RemoveListener(OnGameInit);
-    // }
-
-    // private void OnGameInit() //Only Server is executing this function
-    // {
-    //     if (Runner.IsServer)
-    //     {
-    //         InitializeLivingPlayers();
-    //     }
-    // }
 
     public override void Spawned()
     {
@@ -44,25 +24,12 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
         Instance = this;
     }
 
-    // private void InitializeLivingPlayers()
-    // {
-    //     LivingPlayers.Clear();
-    //     foreach (var playerRef in Runner.ActivePlayers)
-    //     {
-    //         var player = Runner.GetPlayerObject(playerRef)?.GetComponentInChildren<Outsider>();
-    //         if (player != null && player.isAlive())
-    //         {
-    //             LivingPlayers.Add(playerRef);
-    //         }
-    //     }
-    // }
-
     public void PlayerLeft(PlayerRef playerRef)
     {
         if (!Runner.IsServer) return;
 
         // LivingPlayers.Remove(playerRef);
-        PlayerTracker.Instance.OnPlayerDied(playerRef);
+        PlayerTracker.Instance.OnPlayerLeft(playerRef);
         GameOverController.Instance.CheckGameOverCondition();
     }
 
@@ -73,32 +40,8 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
         // LivingPlayers.Remove(playerRef);
         PlayerTracker.Instance.OnPlayerDied(playerRef);
         GameOverController.Instance.CheckGameOverCondition();
+        killCount++;
     }
-
-    // private void CheckGameOverCondition()
-    // {
-    //     if (!Runner.IsServer) return;
-
-    //     // If no living players remain, game over
-    //     if (!PlayerTracker.Instance.IsAnyPlayerAlive())
-    //     {
-    //         Debug.Log("All outsiders have been eliminated!");
-    //         StartCoroutine(GameOverWithDelay());
-    //     }
-    // }
-
-    // private IEnumerator GameOverWithDelay()
-    // {
-    //     yield return new WaitForSeconds(gameOverDelay);
-    //     RPC_TriggerGameOver();
-    // }
-
-    // [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    // private void RPC_TriggerGameOver()
-    // {
-    //     gameOverEvent.Raise();
-    //     Debug.Log("Game Over - Pontianak Team Wins!");
-    // }
 
     // For other systems to notify player death
     public void ReportPlayerDeath(PlayerRef playerRef)
@@ -117,5 +60,10 @@ public class PontianakObjectiveController : NetworkBehaviour, IPlayerLeft
     private void RPC_ReportPlayerDeath(PlayerRef playerRef)
     {
         OnPlayerDied(playerRef);
+    }
+
+    public int GetKillCount()
+    {
+        return killCount;
     }
 }

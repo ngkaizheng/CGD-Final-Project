@@ -72,6 +72,7 @@ public class PlayerHealth : NetworkHealth
             // Show observer UI
             // ObserverUI.Instance.ShowObserverUI(true);
             EndGameUI.Instance.ShowPlayerDied();
+            AchievementController.Instance.OnFirstOutsiderPlayed.Raise();
         }
     }
 

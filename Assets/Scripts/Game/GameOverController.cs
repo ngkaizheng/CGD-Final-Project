@@ -42,8 +42,22 @@ public class GameOverController : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_TriggerGameOver()
     {
-        gameOverEvent.Raise();
         Debug.Log("Game Over - No living players remain!");
+        gameOverEvent.Raise();
         EndGameUI.Instance.ShowGameOver();
+
+        // Check role and grant appropriate achievement
+        if (PlayerTracker.Instance.IsPlayerPontianak(Runner.LocalPlayer))
+        {
+            AchievementController.Instance.OnFirstPontianakPlayed.Raise();
+            if (PontianakObjectiveController.Instance.GetKillCount() >= 1)
+            {
+                AchievementController.Instance.OnFirstPontianakHunt.Raise();
+            }
+        }
+        // else
+        // {
+        //     AchievementController.Instance.OnFirstOutsiderPlayed.Raise();
+        // }
     }
 }

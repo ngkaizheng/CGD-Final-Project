@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d292b386364ead42b282c292e5ecc5e, type: 3}
   m_Name: Pawang Huta 2
   m_EditorClassIdentifier: 
-  achievementIdEnum: 1
-  achievementName: Pawang Huta 2
-  achievementDescription: Pawang HutaPawang Huta 2
+  achievementIdEnum: 6
+  achievementName: FirstOutsiderEscape
+  achievementDescription: First Escape as Outsider
   achievementIcon: {fileID: 21300000, guid: 1cf0f00ccb11e3342b1cf04f88897da7, type: 3}
   isHidden: 0
   rewardAmount: 0

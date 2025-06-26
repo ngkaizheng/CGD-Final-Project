@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d292b386364ead42b282c292e5ecc5e, type: 3}
-  m_Name: Pawang Huta
+  m_Name: FirstPontianakPlayed
   m_EditorClassIdentifier: 
-  achievementId: Pawang Huta
-  achievementName: Pawang Huta
-  achievementDescription: Pawang HutaPawang Huta
-  achievementIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  achievementIdEnum: 5
+  achievementName: Pontianak Pro
+  achievementDescription: First Play As Pontianak
+  achievementIcon: {fileID: 21300000, guid: 1cf0f00ccb11e3342b1cf04f88897da7, type: 3}
   isHidden: 0
   rewardAmount: 0

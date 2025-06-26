@@ -76,9 +76,10 @@ public class PlayFabAchievementController : MonoBehaviour
 
         var request = new PurchaseItemRequest
         {
+            StoreId = "AchievementsStore",
             ItemId = achievementId,
             VirtualCurrency = GameConfig.CURRENCY_CODE,
-            Price = 0, // Achievements are free
+            // Price = 0, // Achievements are free
             CatalogVersion = "Achievements"
         };
 

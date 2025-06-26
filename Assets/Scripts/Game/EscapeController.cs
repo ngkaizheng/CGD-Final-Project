@@ -109,6 +109,7 @@ public class EscapeController : NetworkBehaviour
             Debug.Log("Player escaped! Granting rewards...");
             // Achievement
             AchievementController.Instance?.OnFirstOutsiderEscape.Raise();
+            AchievementController.Instance?.OnFirstOutsiderPlayed.Raise();
 
             // Currency
             PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);

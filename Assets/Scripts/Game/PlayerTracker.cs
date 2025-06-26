@@ -12,6 +12,8 @@ public class PlayerTracker : NetworkBehaviour
     [Networked, Capacity(8)]
     public NetworkLinkedList<PlayerRef> EscapedPlayers { get; } = default;
 
+    [Networked, Capacity(8)]
+    public NetworkDictionary<PlayerRef, bool> PlayerRoles { get; } // False for Outsider, True for Pontianak
     [Header("Events")]
     [SerializeField] private GameEvent gameInitEvent;
 
@@ -49,13 +51,34 @@ public class PlayerTracker : NetworkBehaviour
     {
         LivingPlayers.Clear();
         EscapedPlayers.Clear();
+        PlayerRoles.Clear();
 
         foreach (var playerRef in Runner.ActivePlayers)
         {
-            var player = Runner.GetPlayerObject(playerRef)?.GetComponentInChildren<Outsider>();
-            if (player != null && player.isAlive())
+            // var player = Runner.GetPlayerObject(playerRef)?.GetComponentInChildren<Outsider>();
+            // if (player != null && player.isAlive())
+            // {
+            //     LivingPlayers.Add(playerRef);
+            // }
+            // Check for Outsider
+            var playerObj = Runner.GetPlayerObject(playerRef);
+            if (playerObj != null)
             {
-                LivingPlayers.Add(playerRef);
+                // Check for Outsider
+                var outsider = playerObj.GetComponentInChildren<Outsider>();
+                if (outsider != null && outsider.isAlive())
+                {
+                    LivingPlayers.Add(playerRef);
+                    PlayerRoles.Set(playerRef, false); // true for Outsider
+                    continue;
+                }
+                // Check for Pontianak
+                var pontianak = playerObj.GetComponentInChildren<Pontianak>();
+                if (pontianak != null && pontianak.isAlive())
+                {
+                    // LivingPlayers.Add(playerRef); // No need for Pontianak
+                    PlayerRoles.Set(playerRef, true); // false for Pontianak
+                }
             }
         }
     }
@@ -63,6 +86,12 @@ public class PlayerTracker : NetworkBehaviour
     public void OnPlayerDied(PlayerRef playerRef)
     {
         LivingPlayers.Remove(playerRef);
+    }
+
+    public void OnPlayerLeft(PlayerRef playerRef)
+    {
+        LivingPlayers.Remove(playerRef);
+        PlayerRoles.Remove(playerRef);
     }
 
     public void OnPlayerEscaped(PlayerRef playerRef)
@@ -74,6 +103,11 @@ public class PlayerTracker : NetworkBehaviour
     public bool IsAnyPlayerAlive()
     {
         return LivingPlayers.Count > 0;
+    }
+
+    public bool IsPlayerPontianak(PlayerRef playerRef)
+    {
+        return PlayerRoles.ContainsKey(playerRef) && PlayerRoles[playerRef];
     }
 
     public int GetTotalOutsiders(NetworkRunner runner)
