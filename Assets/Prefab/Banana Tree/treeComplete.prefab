@@ -71,11 +71,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07f5b4d5341d444a8777d0461ce3381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NetworkedColor: {r: 0, g: 0, b: 0, a: 0}
   _progress: 0
   _progressSpeed: 0.1
   _progressCompleted: 0
   playerRoleCanInteract: 1
+  treeTopRigidbody: {fileID: 0}
+  treeChoppedEvent: {fileID: 11400000, guid: 906e290a924a55c489660c2d2f44a04c, type: 2}
 --- !u!114 &1978237159086292438
 MonoBehaviour:
   m_ObjectHideFlags: 0

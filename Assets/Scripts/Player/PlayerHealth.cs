@@ -43,6 +43,7 @@ public class PlayerHealth : NetworkHealth
         {
             LastKillInfo = new PlayerKillInfo(killer, Object.InputAuthority);
             // GameController.Instance.PlayerDied(Object.InputAuthority);
+            PontianakObjectiveController.Instance.ReportPlayerDeath(Object.InputAuthority);
             RPC_Die();
         }
 

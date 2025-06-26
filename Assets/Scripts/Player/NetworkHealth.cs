@@ -42,4 +42,11 @@ public abstract class NetworkHealth : NetworkBehaviour, IDamageable
     protected abstract void OnDeath(PlayerRef killer);
 
     public abstract void OnAliveStateChanged();
+
+    //Set isAlive function
+    public virtual void SetIsAlive(bool isAlive)
+    {
+        IsAlive = isAlive;
+    }
+
 }

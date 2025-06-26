@@ -1,0 +1,135 @@
+using UnityEngine;
+using Fusion;
+using System.Collections;
+
+public class EscapeController : NetworkBehaviour
+{
+    [Header("Config")]
+    [SerializeField] private int currencyReward = 50;
+    [SerializeField] private float gameOverDelay = 3f;
+
+    [Header("Events")]
+    [SerializeField] private GameEvent objectiveCompleteEvent;
+    [SerializeField] private GameEvent playerEscapedEvent;
+    [SerializeField] private GameEvent gameOverEvent;
+
+    [Header("References")]
+    [SerializeField] private GameObject visualEffect;
+    [SerializeField] private EscapeDoor escapeDoor;
+
+
+    public static EscapeController Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        escapeDoor.SetDoorActive(false);
+        // if (visualEffect != null)
+        // {
+        //     visualEffect.SetActive(false);
+        // }
+        objectiveCompleteEvent.OnRaised.AddListener(OnObjectiveComplete);
+    }
+
+    public void HandlePlayerEscape(Player player)
+    {
+        // Only server handles the actual escape logic
+        if (Runner.IsServer)
+        {
+            // Mark player as escaped
+            player.GetComponent<Outsider>()?.SetIsEscaped(true);
+
+            // Disable player controls
+            player.HandleDeath();
+
+            RPC_GrantEscapeRewards(player.Object.InputAuthority);
+
+            playerEscapedEvent.Raise();
+            PlayerTracker.Instance.OnPlayerEscaped(player.Object.InputAuthority);
+
+            CheckGameOverCondition();
+        }
+
+        // // Enable observer UI
+        // if (player.Object.InputAuthority == Runner.LocalPlayer)
+        // {
+        //     ObserverUI.Instance?.ShowObserverUI(true);
+        // }
+        // Notify all clients
+    }
+
+    private void CheckGameOverCondition()
+    {
+        if (!Runner.IsServer) return;
+
+        // If no living players remain, game over
+        if (!PlayerTracker.Instance.IsAnyPlayerAlive())
+        {
+            Debug.Log("No living players remain! Game over.");
+            StartCoroutine(GameOverWithDelay());
+        }
+    }
+
+    private IEnumerator GameOverWithDelay()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+        RPC_TriggerGameOver();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_TriggerGameOver()
+    {
+        gameOverEvent.Raise();
+        Debug.Log("Game Over - Pontianak Team Wins!");
+    }
+
+    // [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    // private void RPC_GrantEscapeRewards([RpcTarget] PlayerRef playerRef)
+    // {
+    //     if (playerRef == Runner.LocalPlayer)
+    //     {
+    //         Debug.Log("Player escaped! Granting rewards...");
+    //         // Achievement
+    //         AchievementController.Instance?.OnFirstOutsiderEscape.Raise();
+
+    //         // Currency
+    //         PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
+    //     }
+    // }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_GrantEscapeRewards(PlayerRef playerRef)
+    {
+        if (playerRef == Runner.LocalPlayer)
+        {
+            Debug.Log("Player escaped! Granting rewards...");
+            // Achievement
+            AchievementController.Instance?.OnFirstOutsiderEscape.Raise();
+
+            // Currency
+            PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
+        }
+        else
+        {
+            Debug.Log($"Player {playerRef} escaped! Rewards granted to local player only.");
+        }
+    }
+
+    private void OnObjectiveComplete()
+    {
+        SetEscapeActive(true);
+    }
+
+    public void SetEscapeActive(bool active)
+    {
+        escapeDoor.SetDoorActive(active);
+        // if (visualEffect != null)
+        // {
+        //     visualEffect.SetActive(active);
+        // }
+    }
+}

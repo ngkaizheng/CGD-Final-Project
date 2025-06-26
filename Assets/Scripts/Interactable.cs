@@ -14,12 +14,15 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
 
     private static readonly float[] savePoints = { 0.25f, 0.5f, 0.75f };
     private HashSet<PlayerRef> interactingPlayers = new HashSet<PlayerRef>();
+    [Networked, OnChangedRender(nameof(onTreeTopRigidbodyChanged))]
+    private bool isTreeTopKinematic { get; set; } = true;
 
     [Header("Tree Top Settings")]
     [SerializeField] private Rigidbody treeTopRigidbody;
 
-    [Networked, OnChangedRender(nameof(onTreeTopRigidbodyChanged))]
-    private bool isTreeTopKinematic { get; set; } = true;
+    [Header("Events")]
+    [SerializeField] private GameEvent treeChoppedEvent;
+
 
     private void Awake()
     {
@@ -98,6 +101,12 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         if (treeTopRigidbody != null)
         {
             treeTopRigidbody.isKinematic = isTreeTopKinematic;
+
+            // When tree falls, notify objective system
+            if (!isTreeTopKinematic && Runner.IsServer)
+            {
+                treeChoppedEvent.Raise();
+            }
         }
     }
 
