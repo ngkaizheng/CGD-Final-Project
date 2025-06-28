@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Fusion;
 using UnityEngine;
+using TMPro;
 
 public class LobbyUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private Transform _playerListContainer;
     [SerializeField] private GameObject _playerListItemPrefab;
+    [SerializeField] private TMP_Text _sessionNameText;
 
     [Header("Event Listening")]
     [SerializeField] private LobbyPlayerListDataEvent _playerListChangedEvent;
@@ -69,11 +71,13 @@ public class LobbyUI : MonoBehaviour
                 player,
                 isLocalPlayer,
                 isHost,
-                role: PlayerRole.OUTSIDER
+                role: player.Role
             // player.PlayerRef.ToString(),
             );
             displayIndex++;
         }
+
+        SetSessionName(Runner.SessionInfo.Name);
     }
     private void UpdatePlayerListItem(LobbyPlayerData playerData)
     {
@@ -87,6 +91,16 @@ public class LobbyUI : MonoBehaviour
                 playerData.SelectedSkinId.ToString(),
                 playerData.Role
             );
+        }
+    }
+    #endregion
+
+    #region Session Name Management
+    public void SetSessionName(string sessionName)
+    {
+        if (_sessionNameText != null)
+        {
+            _sessionNameText.text = sessionName;
         }
     }
     #endregion

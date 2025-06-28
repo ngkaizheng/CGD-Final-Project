@@ -87,10 +87,20 @@ public class GameController : NetworkBehaviour
         // RPC_ShowEndGame();
     }
 
+    private void InitializeUIForLocalPlayer()
+    {
+        if (Runner.TryGetPlayerObject(Runner.LocalPlayer, out var playerObj))
+        {
+            var playerData = playerObj.GetComponentInChildren<Player>();
+            ObjectiveUI.SetActiveForRole(playerData.playerRole);
+        }
+    }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_SetGameTimerActive(bool isActive)
     {
         GameUI.SetGameTimerActive(isActive);
+        InitializeUIForLocalPlayer();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

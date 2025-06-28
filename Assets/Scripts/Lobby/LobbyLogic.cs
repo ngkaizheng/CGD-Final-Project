@@ -48,7 +48,7 @@ public class LobbyLogic : MonoBehaviour
         _runner = Instantiate(_networkRunnerPrefab);
         var result = await _runner.StartGame(new StartGameArgs
         {
-            GameMode = GameMode.AutoHostOrClient,
+            GameMode = GameMode.Client,
             MatchmakingMode = MatchmakingMode.FillRoom
         });
 

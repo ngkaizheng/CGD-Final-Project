@@ -14,6 +14,9 @@ public class GameSettings : MonoBehaviour
     [SerializeField] private TMP_Text lookSensitivityText;  // Reference to the text displaying look sensitivity value
     [SerializeField] private Button toggleSettingsButton;  // Button to toggle settings panel visibility
 
+    [Header("Button")]
+    [SerializeField] private Button activeButton;  // Button to activate the settings panel
+
     // Keys for PlayerPrefs
     public static string MusicVolumeKey = "MusicVolume";
     public static string SFXVolumeKey = "SFXVolume";
@@ -66,6 +69,8 @@ public class GameSettings : MonoBehaviour
 
         // Add listener to toggle settings panel visibility
         toggleSettingsButton.onClick.AddListener(ToggleSettingsPanel);
+        if (activeButton != null)
+            activeButton.onClick.AddListener(ToggleSettingsPanel);
 
         InitializeResolutionDropdown();
         // Initialize fullscreen toggle

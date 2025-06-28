@@ -2736,6 +2736,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'AudioController '
       objectReference: {fileID: 0}
+    - target: {fileID: 5318821106284732542, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
+      propertyPath: musicTrackMappings.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b5052261759d1ca47b5537f984015bae, type: 3}
     - target: {fileID: 6148304391976806146, guid: 93e6e91d43570914994e2034bd5167fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3113,6 +3117,7 @@ MonoBehaviour:
   lookSensitivitySlider: {fileID: 1835830206}
   lookSensitivityText: {fileID: 1835830205}
   toggleSettingsButton: {fileID: 1917392233}
+  activeButton: {fileID: 0}
 --- !u!1 &720643132
 GameObject:
   m_ObjectHideFlags: 0

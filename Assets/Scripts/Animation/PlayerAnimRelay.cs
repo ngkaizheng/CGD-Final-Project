@@ -58,4 +58,17 @@ public class PlayerAnimRelay : MonoBehaviour
             Debug.LogWarning($"[{gameObject.name}] PlayerAnimRelay: SimpleAnimator reference is null, cannot call OnJumpLand!");
         }
     }
+
+    public void OnInteract()
+    {
+        if (simpleAnimator != null)
+        {
+            Debug.Log($"[{gameObject.name}] PlayerAnimRelay: Forwarding OnInteract to SimpleAnimator.");
+            simpleAnimator.OnInteract();
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] PlayerAnimRelay: SimpleAnimator reference is null, cannot call OnInteract!");
+        }
+    }
 }

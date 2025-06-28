@@ -27,6 +27,10 @@ public class SceneMusicController : MonoBehaviour
         {
             AudioController.Instance.FadeInMusic(MusicTrack.MainMenuBGM, 1f);
         }
+        else if (scene.name == GameConfig.GAME_SCENE)
+        {
+            AudioController.Instance.FadeInMusic(MusicTrack.GameBGM, 1f);
+        }
     }
 
 }

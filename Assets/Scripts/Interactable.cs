@@ -7,7 +7,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     [Networked] public float progress { get; set; } = 0.0f;
     [Networked] public float progressSpeed { get; set; } = 0.1f;
     [Networked] public bool progressCompleted { get; set; } = false;
-    [Networked] private float lastSavePoint { get; set; } = 0f;
+    [Networked, OnChangedRender(nameof(OnSavePointChanged))] private float lastSavePoint { get; set; } = 0f;
 
     public PlayerRole playerRoleCanInteract = PlayerRole.ALL;
     [Networked] public bool IsInteractable { get; set; } = true;
@@ -20,6 +20,9 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     [Header("Tree Top Settings")]
     [SerializeField] private Rigidbody treeTopRigidbody;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioSource;
+
     [Header("Events")]
     [SerializeField] private GameEvent treeChoppedEvent;
 
@@ -29,6 +32,14 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         if (treeTopRigidbody == null)
         {
             treeTopRigidbody = GetComponentInChildren<Rigidbody>();
+        }
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1f; // 3D audio
+            audioSource.maxDistance = 15f; // Suitable for melee attack range
+            audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
         }
     }
 
@@ -102,11 +113,21 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         {
             treeTopRigidbody.isKinematic = isTreeTopKinematic;
 
+            AudioController.Instance.PlaySoundEffect(SoundEffect.TreeFall, audioSource);
             // When tree falls, notify objective system
             if (!isTreeTopKinematic && Runner.IsServer)
             {
                 treeChoppedEvent.Raise();
             }
+        }
+    }
+
+    private void OnSavePointChanged()
+    {
+        //Play sound effect when save point changes
+        if (lastSavePoint > 0f && lastSavePoint <= 1f)
+        {
+            AudioController.Instance.PlaySoundEffect(SoundEffect.UpdateSavePoint, audioSource);
         }
     }
 

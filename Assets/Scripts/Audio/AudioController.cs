@@ -372,6 +372,10 @@ public enum SoundEffect
     Footstep_Player5,
     JumpLand,
     PontianakHaunt,
+    GateUnlock,
+    TreeFall,
+    Interact,
+    UpdateSavePoint,
 }
 
 // Enum for music tracks
@@ -381,7 +385,8 @@ public enum MusicTrack
     MainMenuBGM,
     LobbyTheme,
     BattleTheme,
-    AmbientLoop
+    AmbientLoop,
+    GameBGM,
     // Add more as needed
 }
 

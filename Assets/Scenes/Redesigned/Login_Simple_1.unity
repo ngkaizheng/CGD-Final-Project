@@ -3572,8 +3572,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294638335
-  m_fontColor: {r: 1, g: 0.9803922, b: 0.9803922, a: 1}
+    rgba: 2163931903
+  m_fontColor: {r: 1, g: 0.9803922, b: 0.9803922, a: 0.5019608}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3886,6 +3886,7 @@ MonoBehaviour:
   lookSensitivitySlider: {fileID: 1835830206}
   lookSensitivityText: {fileID: 1835830205}
   toggleSettingsButton: {fileID: 1917392233}
+  activeButton: {fileID: 0}
 --- !u!1 &720643132
 GameObject:
   m_ObjectHideFlags: 0

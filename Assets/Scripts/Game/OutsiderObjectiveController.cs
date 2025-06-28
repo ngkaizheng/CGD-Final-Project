@@ -10,6 +10,9 @@ public class OutsiderObjectiveController : NetworkBehaviour
     // [SerializeField] private Collider escapeGateCollider;
     [SerializeField] private int spawnTreeEachOutsider = 3; // Number of trees each outsider needs to chop
 
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource objectiveCompleteAudioSource; // Dedicated AudioSource for Objective Complete SFX
+
     [Header("Events")]
     [SerializeField] private GameEvent gameInitEvent;
     [SerializeField] private GameEvent treeChoppedEvent;
@@ -23,6 +26,14 @@ public class OutsiderObjectiveController : NetworkBehaviour
     private void Awake()
     {
         gameInitEvent.OnRaised.AddListener(OnGameInit);
+        if (objectiveCompleteAudioSource == null)
+        {
+            objectiveCompleteAudioSource = gameObject.AddComponent<AudioSource>();
+            objectiveCompleteAudioSource.playOnAwake = false;
+            objectiveCompleteAudioSource.spatialBlend = 1f; // 3D audio
+            objectiveCompleteAudioSource.maxDistance = 100f; // Suitable for melee attack range
+            objectiveCompleteAudioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        }
     }
 
     private void OnDestroy()
@@ -57,6 +68,8 @@ public class OutsiderObjectiveController : NetworkBehaviour
         TreesRequired = outsiderCount * spawnTreeEachOutsider;
         TreesChopped = 0;
 
+        RPC_OnTreeChopped();
+
         Debug.Log($"Initialized objectives: {TreesRequired} trees required ({outsiderCount} outsiders)");
     }
 
@@ -67,6 +80,7 @@ public class OutsiderObjectiveController : NetworkBehaviour
         TreesChopped++;
         Debug.Log($"Tree chopped! Progress: {TreesChopped}/{TreesRequired}");
 
+        RPC_OnTreeChopped();
         if (TreesChopped >= TreesRequired)
         {
             RPC_HandleObjectiveComplete();
@@ -85,7 +99,15 @@ public class OutsiderObjectiveController : NetworkBehaviour
         // }
 
         // Play sound/effects
+        AudioController.Instance.PlaySoundEffect(SoundEffect.GateUnlock, objectiveCompleteAudioSource);
+
         objectiveCompleteEvent.Raise();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_OnTreeChopped()
+    {
+        ObjectiveUI.UpdateOutsiderObjective(TreesChopped, TreesRequired);
     }
 
     // For UI to display progress

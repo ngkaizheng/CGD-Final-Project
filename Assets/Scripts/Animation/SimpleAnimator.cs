@@ -377,6 +377,28 @@ public class SimpleAnimator : NetworkBehaviour
         Debug.Log($"[{Object.Id}] Played Jump Land SFX");
     }
 
+    public void OnInteract()
+    {
+        if (!HasStateAuthority || IsDead) return;
+
+        RPC_PlayInteractSound();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_PlayInteractSound()
+    {
+        if (!Object.IsValid || movementAudioSource == null)
+        {
+            Debug.LogWarning($"[{Object.Id}] Cannot play Interact SFX: Object invalid or movementAudioSource is null!");
+            return;
+        }
+
+        movementAudioSource.pitch = Random.Range(0.9f, 1.1f); // Random pitch for variation
+        AudioController.Instance.PlaySoundEffect(SoundEffect.Interact, movementAudioSource);
+        movementAudioSource.pitch = 1f; // Reset pitch
+        Debug.Log($"[{Object.Id}] Played Interact SFX");
+    }
+
     #endregion
 
     private bool HasAnimatorParameter(string paramName)

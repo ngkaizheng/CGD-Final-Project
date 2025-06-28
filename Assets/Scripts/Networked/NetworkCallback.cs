@@ -111,6 +111,10 @@ public class NetworkCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("Host migration in progress, waiting for new host...");
         }
+        else if (shutdownReason == ShutdownReason.GameNotFound)
+        {
+            Debug.Log("Game not found, returning to main menu.");
+        }
         else
         {
             if (MainMenuController.Instance != null)

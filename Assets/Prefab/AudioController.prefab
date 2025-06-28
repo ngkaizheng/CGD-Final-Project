@@ -59,10 +59,20 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: cd6820361dc56b74ea43cf752e74ab57, type: 3}
   - effect: 6
     clip: {fileID: 8300000, guid: c2fcca86577ffbb4ea38d230d977028c, type: 3}
+  - effect: 24
+    clip: {fileID: 8300000, guid: c466d55320a2c5444abff28ce707a3e2, type: 3}
+  - effect: 25
+    clip: {fileID: 8300000, guid: 049941e48bee3fa4b879130c86e84ef5, type: 3}
+  - effect: 26
+    clip: {fileID: 8300000, guid: 0a5a732252172194ea1afc43da5ba110, type: 3}
+  - effect: 27
+    clip: {fileID: 8300000, guid: 4465c2a7f2430c4478f80b6eca40c780, type: 3}
   musicTrackMappings:
   - track: 0
     clip: {fileID: 8300000, guid: 0e8889193915345498bbc6dac7c17813, type: 3}
   - track: 1
     clip: {fileID: 8300000, guid: a5a42c1f293a625478b7b3f1edf88496, type: 3}
+  - track: 5
+    clip: {fileID: 8300000, guid: cd6820361dc56b74ea43cf752e74ab57, type: 3}
   musicVolume: 1
   sfxVolume: 1

@@ -162,7 +162,7 @@ public class MainMenuController : MonoBehaviour
     private async void CreateRoom()
     {
         //Random a room ID
-        string roomId = $"Room{Random.Range(1000, 9999)}";
+        string roomId = $"{Random.Range(100000, 999999)}";
         var result = await lobbyLogic.CreateRoom(roomId);
         if (result.Ok)
         {
@@ -200,6 +200,10 @@ public class MainMenuController : MonoBehaviour
         if (result.Ok)
         {
             ShowSection(MenuState.Lobby);
+        }
+        else if (result.ShutdownReason == Fusion.ShutdownReason.GameNotFound)
+        {
+            CreateRoom();
         }
         else
         {
