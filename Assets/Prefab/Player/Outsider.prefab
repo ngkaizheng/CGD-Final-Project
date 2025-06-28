@@ -325,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4654754803681093532
 Transform:
   m_ObjectHideFlags: 0
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3585130168434963561}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
@@ -688,10 +688,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5110635103318997054}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
+  m_LinearDamping: 0
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -781,13 +781,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 20
   moveSpeed: 1
+  crouchSpeedMultiplier: 0.5
   playerRole: 1
   playerModel: {fileID: 0}
+  kcc: {fileID: 0}
   playerAction: {fileID: 0}
   simpleCameraFollow: {fileID: 0}
+  simpleAnimator: {fileID: 0}
   __fixedLookRotation: {x: 0, y: 0}
   _NetworkedLookSensitivity: 0.1
+  _IsCrouching: 0
   _Health: {fileID: 0}
+  _IsEscaped: 0
 --- !u!114 &92493818707982778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -806,6 +811,7 @@ MonoBehaviour:
     _value: 0
   _respawnDelay: 3
   _spawnPoints: []
+  hurtAudioSource: {fileID: 0}
 --- !u!114 &4445129843061796646
 MonoBehaviour:
   m_ObjectHideFlags: 0

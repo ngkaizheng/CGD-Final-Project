@@ -15,6 +15,6 @@ MonoBehaviour:
   achievementIdEnum: 7
   achievementName: FirstPontianakHunt
   achievementDescription: First Kill as Pontianak
-  achievementIcon: {fileID: 21300000, guid: 0b74b8b1da154de4ea5e2531d1223bb4, type: 3}
+  achievementIcon: {fileID: 21300000, guid: 867a65d7f35f4514c9442d2909e3e429, type: 3}
   isHidden: 0
   rewardAmount: 0

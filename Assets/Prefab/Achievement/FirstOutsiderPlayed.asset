@@ -15,6 +15,6 @@ MonoBehaviour:
   achievementIdEnum: 4
   achievementName: Pawang Huta
   achievementDescription: 'First Play As Outsider '
-  achievementIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  achievementIcon: {fileID: 21300000, guid: 7d03c5421ce840c4b8fc45df076e4f6e, type: 3}
   isHidden: 0
   rewardAmount: 0

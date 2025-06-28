@@ -15,6 +15,6 @@ MonoBehaviour:
   achievementIdEnum: 5
   achievementName: Pontianak Pro
   achievementDescription: First Play As Pontianak
-  achievementIcon: {fileID: 21300000, guid: 1cf0f00ccb11e3342b1cf04f88897da7, type: 3}
+  achievementIcon: {fileID: 21300000, guid: 59e1bf266d36e3e4b94692ef0c17a9c2, type: 3}
   isHidden: 0
   rewardAmount: 0
