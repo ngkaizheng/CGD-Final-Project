@@ -110,6 +110,7 @@ public class PlayerInputController : NetworkBehaviour
     {
         // Check for left click attack
         if (pontianak == null) return;
+        if (pontianak.isUsingAbility) return;
 
         if (input.Buttons.WasPressed(previousButtons, InputButton.LeftClick))
         {

@@ -10,6 +10,8 @@ public class HauntAbility : PlayerAbility
     [SerializeField] private float damage = 0f;
     [SerializeField] private float revealDuration = 5f;
     [SerializeField] private LayerMask affectedLayerMasks; // Use LayerMask array
+    [SerializeField] private float freezeDuration = 2.8f;
+    private Dictionary<GameObject, Coroutine> _activeXRayEffects = new Dictionary<GameObject, Coroutine>();
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource audioSource;
@@ -26,6 +28,9 @@ public class HauntAbility : PlayerAbility
     [Networked, Capacity(8)] NetworkLinkedList<PlayerRef> HauntedPlayers => default;
     [Networked, Capacity(8)] NetworkLinkedList<Outsider> HauntedOutsiders => default;
 
+    private SimpleAnimator simpleAnimator;
+    private Pontianak pontianak; // Reference to Pontianak component
+
     protected override void Awake()
     {
         base.Awake();
@@ -36,6 +41,8 @@ public class HauntAbility : PlayerAbility
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 1f; // 3D audio
         }
+        simpleAnimator = GetComponentInParent<SimpleAnimator>();
+        pontianak = GetComponentInParent<Pontianak>();
     }
 
     protected override void ExecuteAbility()
@@ -71,6 +78,7 @@ public class HauntAbility : PlayerAbility
                 RPC_ApplyHauntEffects(outsider.Object.InputAuthority);
             }
         }
+        StartCoroutine(SetUsingAbilityState(pontianak, freezeDuration));
 
         RPC_HauntEffectsForAll();
 
@@ -79,11 +87,20 @@ public class HauntAbility : PlayerAbility
         RPC_PontianakFeedback();
     }
 
+    private IEnumerator SetUsingAbilityState(Pontianak pontianak, float duration)
+    {
+        pontianak.isUsingAbility = true;
+        yield return new WaitForSeconds(duration);
+        pontianak.isUsingAbility = false;
+    }
+
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_HauntEffectsForAll()
     {
         // Prevent server/client mode issues
         // if (Object.HasStateAuthority && !Object.HasInputAuthority) return;
+        simpleAnimator.TriggerScreamAnimation();
 
         Debug.Log("Applying haunt effects for all players!");
         CameraShaker.Instance.ShakeOnce(shakeAmplitude, shakeFrequency, shakeDuration);
@@ -131,33 +148,85 @@ public class HauntAbility : PlayerAbility
         }
     }
 
+    // private IEnumerator ApplyXRayEffect(GameObject playerObj)
+    // {
+    //     var renderers = playerObj.GetComponentsInChildren<Renderer>();
+    //     var originalLayers = new int[renderers.Length];
+    //     // var originalMaterials = new Material[renderers.Length];
+
+    //     // Store original state and apply X-ray
+    //     for (int i = 0; i < renderers.Length; i++)
+    //     {
+    //         originalLayers[i] = renderers[i].gameObject.layer;
+    //         // originalMaterials[i] = renderers[i].material;
+
+    //         renderers[i].gameObject.layer = LayerMask.NameToLayer("X-Ray");
+    //         // renderers[i].material = xRayMaterial;
+    //     }
+
+    //     // Wait for duration
+    //     yield return new WaitForSeconds(revealDuration);
+
+    //     // Restore original state
+    //     for (int i = 0; i < renderers.Length; i++)
+    //     {
+    //         if (renderers[i] != null) // Check if object still exists
+    //         {
+    //             renderers[i].gameObject.layer = originalLayers[i];
+    //             // renderers[i].material = originalMaterials[i];
+    //         }
+    //     }
+    // }
     private IEnumerator ApplyXRayEffect(GameObject playerObj)
     {
+        // Cancel previous effect if it exists
+        if (_activeXRayEffects.TryGetValue(playerObj, out var existingCoroutine))
+        {
+            StopCoroutine(existingCoroutine);
+            _activeXRayEffects.Remove(playerObj);
+        }
+
         var renderers = playerObj.GetComponentsInChildren<Renderer>();
         var originalLayers = new int[renderers.Length];
-        // var originalMaterials = new Material[renderers.Length];
 
-        // Store original state and apply X-ray
+        // Store original state
         for (int i = 0; i < renderers.Length; i++)
         {
             originalLayers[i] = renderers[i].gameObject.layer;
-            // originalMaterials[i] = renderers[i].material;
-
             renderers[i].gameObject.layer = LayerMask.NameToLayer("X-Ray");
-            // renderers[i].material = xRayMaterial;
         }
 
-        // Wait for duration
-        yield return new WaitForSeconds(revealDuration);
+        // Start new effect and track it
+        var coroutine = StartCoroutine(RestoreLayersAfterDelay(playerObj, renderers, originalLayers, revealDuration));
+        _activeXRayEffects.Add(playerObj, coroutine);
 
-        // Restore original state
+        yield return coroutine;
+    }
+
+    private IEnumerator RestoreLayersAfterDelay(GameObject playerObj, Renderer[] renderers, int[] originalLayers, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Restore original layers
         for (int i = 0; i < renderers.Length; i++)
         {
-            if (renderers[i] != null) // Check if object still exists
+            if (renderers[i] != null)
             {
                 renderers[i].gameObject.layer = originalLayers[i];
-                // renderers[i].material = originalMaterials[i];
             }
         }
+
+        // Clean up
+        _activeXRayEffects.Remove(playerObj);
+    }
+    private void OnDestroy()
+    {
+        // Stop all active X-Ray effects when the ability is destroyed
+        foreach (var coroutine in _activeXRayEffects.Values)
+        {
+            if (coroutine != null)
+                StopCoroutine(coroutine);
+        }
+        _activeXRayEffects.Clear();
     }
 }

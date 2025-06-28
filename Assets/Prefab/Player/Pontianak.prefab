@@ -782,6 +782,7 @@ MonoBehaviour:
   - {fileID: 5730733272610065273}
   playerAttack: {fileID: 0}
   _isAttacking: 0
+  _isUsingAbility: 0
 --- !u!114 &92493818707982778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,6 +1003,7 @@ MonoBehaviour:
   affectedLayerMasks:
     serializedVersion: 2
     m_Bits: 128
+  freezeDuration: 2.8
   audioSource: {fileID: 0}
   shakeAmplitude: 0.5
   shakeFrequency: 50

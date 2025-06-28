@@ -29,6 +29,7 @@ public class SimpleAnimator : NetworkBehaviour
     [Networked] private bool isInteracting { get; set; }
     [Networked] private bool isCrouching { get; set; } // Networked crouching state
     [Networked] private int InteractTick { get; set; } // Networked tick for interaction trigger
+    [Networked] private int ScreamTick { get; set; } // Networked tick for scream trigger
     public int lastProcessedAttackTick; // Track the last processed attack tick
     public int lastProcessedUseItemTick; // Track the last processed use item tick
     public int lastProcessedHurtTick; // Track the last processed hurt tick
@@ -61,6 +62,7 @@ public class SimpleAnimator : NetworkBehaviour
     private static readonly int INTERACT_TRIGGER_HASH = Animator.StringToHash("InteractTrigger");
     private static readonly int IS_INTERACTING_HASH = Animator.StringToHash("isInteracting");
     private static readonly int IS_CROUCHING_HASH = Animator.StringToHash("isCrouching");
+    private static readonly int IS_USING_ABILITY_HASH = Animator.StringToHash("Scream");
 
     #endregion
 
@@ -255,6 +257,13 @@ public class SimpleAnimator : NetworkBehaviour
             lastProcessedInteractTick = InteractTick;
             Debug.Log($"[{Object.Id}] Setting Interact trigger on tick {Runner.Tick}");
         }
+
+        if (ScreamTick > 0 && ScreamTick > lastProcessedInteractTick)
+        {
+            animator.SetTrigger(IS_USING_ABILITY_HASH);
+            lastProcessedInteractTick = ScreamTick;
+            Debug.Log($"[{Object.Id}] Setting Scream trigger on tick {Runner.Tick}");
+        }
     }
 
     public void TriggerAttackAnimation()
@@ -292,6 +301,16 @@ public class SimpleAnimator : NetworkBehaviour
             Debug.Log($"[{Object.Id}] Triggered Die animation (StateAuthority) on tick {Runner.Tick}");
         }
     }
+    public void TriggerScreamAnimation()
+    {
+        if (!IsDead && HasStateAuthority)
+        {
+            ScreamTick = Runner.Tick; // Set scream tick
+            animator.SetTrigger(IS_USING_ABILITY_HASH); // Trigger the scream animation
+            Debug.Log($"[{Object.Id}] Triggered Scream animation (StateAuthority) on tick {Runner.Tick}");
+        }
+    }
+
     public void SetInteracting(bool interacting)
     {
         if (interacting && !isInteracting)

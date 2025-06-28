@@ -10,6 +10,7 @@ public class Pontianak : Player
 
     public PlayerAttack playerAttack;
     [Networked] public bool isAttacking { get; set; }
+    [Networked] public bool isUsingAbility { get; set; }
 
     protected override void Awake()
     {
@@ -74,7 +75,7 @@ public class Pontianak : Player
 
     protected override bool IsMoveable()
     {
-        if (isAttacking) // This is your Pontianak-specific flag
+        if (isAttacking || isUsingAbility) // This is your Pontianak-specific flag
             return false;
         return base.IsMoveable();
     }

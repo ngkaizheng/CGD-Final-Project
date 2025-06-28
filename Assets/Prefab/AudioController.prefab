@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145630843869682450}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -953.29694, y: -648.4311, z: 0.6024929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -56,17 +56,23 @@ MonoBehaviour:
   - effect: 21
     clip: {fileID: 8300000, guid: d8dd53ad633aba747b294ddbd3114dc4, type: 3}
   - effect: 23
-    clip: {fileID: 8300000, guid: cd6820361dc56b74ea43cf752e74ab57, type: 3}
+    clip: {fileID: 8300000, guid: 5c30a5d9703678d4d9a0ed847fec8186, type: 3}
   - effect: 6
-    clip: {fileID: 8300000, guid: c2fcca86577ffbb4ea38d230d977028c, type: 3}
+    clip: {fileID: 8300000, guid: 59cf03acd314e6642a9d6fb335888a10, type: 3}
   - effect: 24
     clip: {fileID: 8300000, guid: c466d55320a2c5444abff28ce707a3e2, type: 3}
   - effect: 25
-    clip: {fileID: 8300000, guid: 049941e48bee3fa4b879130c86e84ef5, type: 3}
+    clip: {fileID: 8300000, guid: 3d9f440044542134aa3fa1260a5b09de, type: 3}
   - effect: 26
-    clip: {fileID: 8300000, guid: 0a5a732252172194ea1afc43da5ba110, type: 3}
+    clip: {fileID: 8300000, guid: 51621f424e4328143ad7e8feeb126723, type: 3}
+  - effect: 26
+    clip: {fileID: 8300000, guid: 5ecd2bf46bb8e8d4f9f899ca69110781, type: 3}
+  - effect: 26
+    clip: {fileID: 8300000, guid: 350936c6dec11e54491aafe8a202b1ac, type: 3}
+  - effect: 26
+    clip: {fileID: 8300000, guid: cd5bda22b99be004ba2bbda0056feba8, type: 3}
   - effect: 27
-    clip: {fileID: 8300000, guid: 4465c2a7f2430c4478f80b6eca40c780, type: 3}
+    clip: {fileID: 8300000, guid: 90c4930e0fab53a49ad534dba4b0acd2, type: 3}
   musicTrackMappings:
   - track: 0
     clip: {fileID: 8300000, guid: 0e8889193915345498bbc6dac7c17813, type: 3}
