@@ -25,6 +25,7 @@ public class MainMenuController : MonoBehaviour
     [Header("Lobby Section")]
     [SerializeField] private Button lobbyBackButton;
     [SerializeField] private Button startGameInLobbyButton;
+    [SerializeField] private TMP_Text startGameInLobbyButtonText;
 
     [Header("Store Section")]
     [SerializeField] private Button storeButton;
@@ -141,6 +142,12 @@ public class MainMenuController : MonoBehaviour
 
         if (state == MenuState.Leaderboard)
             LeaderboardUI.Instance.ResetToDefaultView();
+
+        if (state == MenuState.Lobby)
+        {
+            bool isHost = LobbyManager.Instance != null && LobbyManager.Instance.Runner != null && LobbyManager.Instance.Runner.IsServer;
+            UpdateLobbyStartButtonText(isHost);
+        }
     }
 
     private async void ExitNetworkAndShowMainMenu()
@@ -242,6 +249,33 @@ public class MainMenuController : MonoBehaviour
         roomIdInputField.text = "";
         roomInputFieldStatusText.text = "";
         multiplayerMainStatusText.text = "";
+    }
+    #endregion
+
+    #region Lobby Methods
+    public void UpdateLobbyStartButtonText(bool isHost)
+    {
+        if (isHost)
+        {
+            startGameInLobbyButtonText.text = "START";
+        }
+        else
+        {
+            // Get the local player's ready status
+            bool isReady = false;
+            if (LobbyManager.Instance != null && LobbyManager.Instance.Runner != null)
+            {
+                foreach (var player in LobbyManager.Instance.Players)
+                {
+                    if (player.PlayerRef == LobbyManager.Instance.Runner.LocalPlayer)
+                    {
+                        isReady = player.IsReady;
+                        break;
+                    }
+                }
+            }
+            startGameInLobbyButtonText.text = isReady ? "READY" : "NOT READY";
+        }
     }
     #endregion
 }

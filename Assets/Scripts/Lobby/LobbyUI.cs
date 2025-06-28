@@ -77,6 +77,13 @@ public class LobbyUI : MonoBehaviour
             displayIndex++;
         }
 
+        // Update the start button text
+        if (MainMenuController.Instance != null)
+        {
+            bool isHost = Runner != null && Runner.IsServer;
+            MainMenuController.Instance.UpdateLobbyStartButtonText(isHost);
+        }
+
         SetSessionName(Runner.SessionInfo.Name);
     }
     private void UpdatePlayerListItem(LobbyPlayerData playerData)
@@ -91,6 +98,14 @@ public class LobbyUI : MonoBehaviour
                 playerData.SelectedSkinId.ToString(),
                 playerData.Role
             );
+
+            // Update the start button if this is the local player
+            if (Runner != null && playerData.PlayerRef == Runner.LocalPlayer &&
+                MainMenuController.Instance != null)
+            {
+                bool isHost = Runner.IsServer;
+                MainMenuController.Instance.UpdateLobbyStartButtonText(isHost);
+            }
         }
     }
     #endregion
