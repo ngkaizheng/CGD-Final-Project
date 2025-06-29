@@ -29,10 +29,10 @@ public class EscapeController : NetworkBehaviour
         }
         Instance = this;
         escapeDoor.SetDoorActive(false);
-        // if (visualEffect != null)
-        // {
-        //     visualEffect.SetActive(false);
-        // }
+        if (visualEffect != null)
+        {
+            visualEffect.SetActive(true);
+        }
         objectiveCompleteEvent.OnRaised.AddListener(OnObjectiveComplete);
     }
 
@@ -45,7 +45,8 @@ public class EscapeController : NetworkBehaviour
             player.GetComponent<Outsider>()?.SetIsEscaped(true);
 
             // Disable player controls
-            player.HandleDeath();
+            // player.HandleDeath();
+            player.RPC_Escape();
 
             RPC_GrantEscapeRewards(player.Object.InputAuthority);
 
@@ -101,6 +102,7 @@ public class EscapeController : NetworkBehaviour
     //         PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
     //     }
     // }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_GrantEscapeRewards(PlayerRef playerRef)
     {
@@ -131,9 +133,9 @@ public class EscapeController : NetworkBehaviour
     public void SetEscapeActive(bool active)
     {
         escapeDoor.SetDoorActive(active);
-        // if (visualEffect != null)
-        // {
-        //     visualEffect.SetActive(active);
-        // }
+        if (visualEffect != null)
+        {
+            visualEffect.SetActive(!active);
+        }
     }
 }

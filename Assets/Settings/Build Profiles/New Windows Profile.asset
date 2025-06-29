@@ -25,7 +25,7 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/Redesigned/MainMenu.unity
   - m_enabled: 1
-    m_path: Assets/Scenes/GameEnv.unity
+    m_path: Assets/Scenes/GameEnv2.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:
@@ -216,7 +216,7 @@ MonoBehaviour:
     - line: '|   CreateWallpaper: 0'
     - line: '|   androidSplitApplicationBinary: 0'
     - line: '|   keepLoadedShadersAlive: 0'
-    - line: '|   StripUnusedMeshComponents: 0'
+    - line: '|   StripUnusedMeshComponents: 1'
     - line: '|   strictShaderVariantMatching: 0'
     - line: '|   VertexChannelCompressionMask: 4054'
     - line: '|   iPhoneSdkVersion: 988'
@@ -561,6 +561,9 @@ MonoBehaviour:
     - line: '|   - m_BuildTarget: AndroidPlayer'
     - line: '|     m_APIs: 150000000b000000'
     - line: '|     m_Automatic: 0'
+    - line: '|   - m_BuildTarget: WindowsStandaloneSupport'
+    - line: '|     m_APIs: 02000000'
+    - line: '|     m_Automatic: 0'
     - line: '|   m_BuildTargetVRSettings: []'
     - line: '|   m_DefaultShaderChunkSizeInMB: 16'
     - line: '|   m_DefaultShaderChunkCount: 0'
@@ -575,6 +578,9 @@ MonoBehaviour:
     - line: '|   m_BuildTargetGroupLightmapEncodingQuality:'
     - line: '|   - serializedVersion: 2'
     - line: '|     m_BuildTarget: Android'
+    - line: '|     m_EncodingQuality: 1'
+    - line: '|   - serializedVersion: 2'
+    - line: '|     m_BuildTarget: Standalone'
     - line: '|     m_EncodingQuality: 1'
     - line: '|   m_BuildTargetGroupHDRCubemapEncodingQuality: []'
     - line: '|   m_BuildTargetGroupLightmapSettings: []'
@@ -845,12 +851,12 @@ MonoBehaviour:
     - line: '|   webGLMemoryLinearGrowthStep: 16'
     - line: '|   webGLMemoryGeometricGrowthStep: 0.2'
     - line: '|   webGLMemoryGeometricGrowthCap: 96'
+    - line: '|   webGLEnableWebGPU: 0'
     - line: '|   webGLPowerPreference: 2'
     - line: '|   webGLWebAssemblyTable: 0'
     - line: '|   webGLWebAssemblyBigInt: 0'
     - line: '|   webGLCloseOnQuit: 0'
     - line: '|   webWasm2023: 0'
-    - line: '|   webEnableSubmoduleStrippingCompatibility: 0'
     - line: '|   scriptingDefineSymbols:'
     - line: '|     Android: UNITY_POST_PROCESSING_STACK_V2'
     - line: '|     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2'
@@ -981,7 +987,6 @@ MonoBehaviour:
     - line: '|   insecureHttpOption: 0'
     - line: '|   androidVulkanDenyFilterList: []'
     - line: '|   androidVulkanAllowFilterList: []'
-    - line: '|   androidVulkanDeviceFilterListAsset: {instanceID: 0}'
     - line: '| '
   references:
     version: 2

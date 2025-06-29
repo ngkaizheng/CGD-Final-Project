@@ -183,6 +183,8 @@ public class ObserverUI : MonoBehaviour
     public void ShowObserverUI(bool show)
     {
         observerPanel.SetActive(show);
+        if (show)
+            OnNextClicked();
     }
     #endregion
 }

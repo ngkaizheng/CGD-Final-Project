@@ -79,7 +79,7 @@ public class GameController : NetworkBehaviour
             if (playerObj == null) continue;
 
             var outsider = playerObj.GetComponentInChildren<Outsider>();
-            if (outsider != null && outsider.isAlive())
+            if (outsider != null && outsider.isAlive() && !outsider.IsEscaped)
             {
                 outsider.Health.TakeDamage(100, InGamePlayerManager.Instance.pontianakDataDict[0]);
             }

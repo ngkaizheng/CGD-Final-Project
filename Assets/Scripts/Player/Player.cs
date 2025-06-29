@@ -191,4 +191,20 @@ public abstract class Player : NetworkBehaviour
         }
     }
 
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Escape()
+    {
+        HandleEscape();
+    }
+
+    public void HandleEscape()
+    {
+        HandleDeath();
+        //Disable model
+        if (playerModel != null)
+        {
+            playerModel.SetActive(false);
+        }
+    }
+
 }
