@@ -93,6 +93,7 @@ public class GameController : NetworkBehaviour
         {
             var playerData = playerObj.GetComponentInChildren<Player>();
             ObjectiveUI.SetActiveForRole(playerData.playerRole);
+            HauntCooldownUI.SetActiveForRole(playerData.playerRole);
         }
     }
 

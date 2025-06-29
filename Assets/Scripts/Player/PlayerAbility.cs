@@ -42,4 +42,10 @@ public abstract class PlayerAbility : NetworkBehaviour
 
     // For UI to display cooldown
     public virtual string GetAbilityName() => GetType().Name;
+
+    //Get the cooldown duration in seconds
+    public virtual float GetCooldownDuration()
+    {
+        return cooldown;
+    }
 }

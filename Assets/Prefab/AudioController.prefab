@@ -60,7 +60,7 @@ MonoBehaviour:
   - effect: 6
     clip: {fileID: 8300000, guid: 59cf03acd314e6642a9d6fb335888a10, type: 3}
   - effect: 24
-    clip: {fileID: 8300000, guid: c466d55320a2c5444abff28ce707a3e2, type: 3}
+    clip: {fileID: 8300000, guid: 6048c82d16f24c54bb0f7dd361de159a, type: 3}
   - effect: 25
     clip: {fileID: 8300000, guid: 3d9f440044542134aa3fa1260a5b09de, type: 3}
   - effect: 26

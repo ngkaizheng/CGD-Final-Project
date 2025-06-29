@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc7c449a9c59b24e8db36cbbbfccc5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 3
+  cooldown: 10
   inputButton: 7
   radius: 20
   damage: 0

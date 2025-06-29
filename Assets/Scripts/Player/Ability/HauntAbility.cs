@@ -43,6 +43,8 @@ public class HauntAbility : PlayerAbility
         }
         simpleAnimator = GetComponentInParent<SimpleAnimator>();
         pontianak = GetComponentInParent<Pontianak>();
+
+        HauntCooldownUI.Instance.Initialize(this);
     }
 
     protected override void ExecuteAbility()

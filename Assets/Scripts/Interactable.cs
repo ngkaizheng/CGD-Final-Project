@@ -127,7 +127,13 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         //Play sound effect when save point changes
         if (lastSavePoint > 0f && lastSavePoint <= 1f)
         {
-            AudioController.Instance.PlaySoundEffect(SoundEffect.UpdateSavePoint, audioSource);
+            foreach (var playerRef in interactingPlayers)
+            {
+                if (playerRef == Runner.LocalPlayer)
+                {
+                    AudioController.Instance.PlaySoundEffect(SoundEffect.UpdateSavePoint, audioSource);
+                }
+            }
         }
     }
 
