@@ -1151,10 +1151,6 @@ PrefabInstance:
       value: 3094120197
       objectReference: {fileID: 0}
     - target: {fileID: 4527531835717143207, guid: 0788dd531156cdd4dbe042e9bda9eda2, type: 3}
-      propertyPath: gameInitEvent
-      value: 
-      objectReference: {fileID: 11400000, guid: 55e29cb5d48048849a822af6eac1d613, type: 2}
-    - target: {fileID: 4527531835717143207, guid: 0788dd531156cdd4dbe042e9bda9eda2, type: 3}
       propertyPath: _playerSpawner
       value: 
       objectReference: {fileID: 1713080708}
@@ -1201,10 +1197,6 @@ PrefabInstance:
     - target: {fileID: 8051128727714850866, guid: 0788dd531156cdd4dbe042e9bda9eda2, type: 3}
       propertyPath: m_Name
       value: GameInitializer
-      objectReference: {fileID: 0}
-    - target: {fileID: 8051128727714850866, guid: 0788dd531156cdd4dbe042e9bda9eda2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

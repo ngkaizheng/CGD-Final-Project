@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerSpawner: {fileID: 0}
+  gameInitEvent: {fileID: 11400000, guid: 55e29cb5d48048849a822af6eac1d613, type: 2}
+  gameInitToEveryoneEvent: {fileID: 11400000, guid: a8d2a17a208cb034c938f70528429f5c, type: 2}
 --- !u!114 &2113981517796412921
 MonoBehaviour:
   m_ObjectHideFlags: 0

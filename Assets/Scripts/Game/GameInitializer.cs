@@ -7,6 +7,7 @@ public class GameInitializer : NetworkBehaviour
     [SerializeField] private PlayerSpawner _playerSpawner;
 
     public GameEvent gameInitEvent;
+    public GameEvent gameInitToEveryoneEvent;
 
     public override void Spawned()
     {
@@ -42,6 +43,7 @@ public class GameInitializer : NetworkBehaviour
         }
 
         gameInitEvent.Raise();
+        RPC_InitializeGameToEveryone();
     }
 
     private bool AllPlayersHaveData()
@@ -52,5 +54,19 @@ public class GameInitializer : NetworkBehaviour
                 return false;
         }
         return true;
+    }
+
+    //RPC
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_InitializeGameToEveryone()
+    {
+        if (gameInitToEveryoneEvent != null)
+        {
+            gameInitToEveryoneEvent.Raise();
+        }
+        else
+        {
+            Debug.LogWarning("Game Init Event is not assigned!");
+        }
     }
 }

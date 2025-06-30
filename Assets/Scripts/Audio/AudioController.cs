@@ -376,6 +376,7 @@ public enum SoundEffect
     TreeFall,
     Interact,
     UpdateSavePoint,
+    HeartBeat,
 }
 
 // Enum for music tracks

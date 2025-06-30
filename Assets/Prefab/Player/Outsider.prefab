@@ -1232,6 +1232,80 @@ Transform:
   - {fileID: 15207817115486952}
   m_Father: {fileID: 5333966318276838150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2089088250997701504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5674621155982711990}
+  - component: {fileID: 8714016683859108464}
+  m_Layer: 0
+  m_Name: OutsiderHeartbeatController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5674621155982711990
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089088250997701504}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 349101762861393825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8714016683859108464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089088250997701504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd20d75a160337d4cb2ee06b1b784691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbeatSound: 28
+  maxHeartbeatDistance: 40
+  minHeartbeatInterval: 0.5
+  maxHeartbeatInterval: 1.25
+  distanceToIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9904747
+      inSlope: -0.9898371
+      outSlope: -0.9898371
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99583334
+      value: 0.004761905
+      inSlope: -0.9898371
+      outSlope: -0.9898371
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  audioSource: {fileID: 0}
+  gameInitToEveryoneEvent: {fileID: 11400000, guid: a8d2a17a208cb034c938f70528429f5c, type: 2}
 --- !u!1 &2118019351350453257
 GameObject:
   m_ObjectHideFlags: 0
@@ -3216,6 +3290,7 @@ Transform:
   - {fileID: 3570066284044775744}
   - {fileID: 5714512664334030509}
   - {fileID: 2272543853535953343}
+  - {fileID: 5674621155982711990}
   m_Father: {fileID: 6587103893577072855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &532001350306606386

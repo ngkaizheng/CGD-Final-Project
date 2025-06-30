@@ -8,6 +8,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
     [Networked] public float progressSpeed { get; set; } = 0.1f;
     [Networked] public bool progressCompleted { get; set; } = false;
     [Networked, OnChangedRender(nameof(OnSavePointChanged))] private float lastSavePoint { get; set; } = 0f;
+    private HashSet<PlayerRef> savePointInteractingPlayers = new HashSet<PlayerRef>();
 
     public PlayerRole playerRoleCanInteract = PlayerRole.ALL;
     [Networked] public bool IsInteractable { get; set; } = true;
@@ -81,6 +82,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
                         if (progress >= sp && lastSavePoint < sp)
                         {
                             lastSavePoint = sp;
+                            savePointInteractingPlayers = new HashSet<PlayerRef>(interactingPlayers);
                         }
                     }
 
@@ -127,7 +129,7 @@ public class Interactable : NetworkBehaviour, IProgressInteractable
         //Play sound effect when save point changes
         if (lastSavePoint > 0f && lastSavePoint <= 1f)
         {
-            foreach (var playerRef in interactingPlayers)
+            foreach (var playerRef in savePointInteractingPlayers)
             {
                 if (playerRef == Runner.LocalPlayer)
                 {
