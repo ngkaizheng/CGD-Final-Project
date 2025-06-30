@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 20
-  moveSpeed: 1
+  moveSpeed: 1.6
   crouchSpeedMultiplier: 0.5
   playerRole: 2
   modelParent: {fileID: 5394077052507861013}
