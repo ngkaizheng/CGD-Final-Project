@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
@@ -10,8 +11,10 @@ public abstract class Player : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 20f;
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float crouchSpeedMultiplier = 0.5f;
-
     public PlayerRole playerRole = PlayerRole.OUTSIDER;
+
+    [Header("Model References")]
+    [SerializeField] private Transform modelParent;
     public GameObject playerModel;
 
     private Vector2 currentFacingRotation = Vector2.zero;
@@ -39,7 +42,8 @@ public abstract class Player : NetworkBehaviour
         playerAction = GetComponent<PlayerAction>();
         simpleCameraFollow = transform.parent.GetComponentInChildren<SimpleCameraFollow>();
         simpleAnimator = GetComponent<SimpleAnimator>();
-        playerModel = transform.GetChild(0).gameObject;
+        playerModel = modelParent.GetChild(0).gameObject;
+        // playerModel.SetActive(false); // Initially disable the model
     }
 
     public override void Spawned()
@@ -66,6 +70,21 @@ public abstract class Player : NetworkBehaviour
             }
 
         }
+
+        // // Change skin based on LobbyPlayerData
+        // if (Object.HasStateAuthority)
+        // {
+        //     // Get skin ID from lobby data
+        //     var lobbyData = FindObjectsByType<LobbyPlayerData>(FindObjectsSortMode.None).FirstOrDefault(p => p.PlayerRef == Object.InputAuthority);
+        //     if (lobbyData != null)
+        //     {
+        //         SpawnModel(lobbyData.SelectedSkinId.ToString());
+        //     }
+        //     else
+        //     {
+        //         playerModel.SetActive(true);
+        //     }
+        // }
     }
 
     public override void FixedUpdateNetwork()
@@ -206,5 +225,36 @@ public abstract class Player : NetworkBehaviour
             playerModel.SetActive(false);
         }
     }
+
+    #region Model Management
+    // private void SpawnModel(string skinId)
+    // {
+    //     // Get skin data from inventory
+    //     var skinData = PlayFabInventoryController.Instance.GetSkinData(skinId);
+    //     if (skinData == null)
+    //     {
+    //         Debug.LogWarning($"No skin data found for ID: {skinId}");
+    //         return;
+    //     }
+    //     playerModel.SetActive(false); // Disable existing model if any
+    //     // Spawn the correct model directly
+    //     var spawnedNetworkObject = Runner.Spawn(
+    //         skinData.modelPrefab,
+    //         position: Vector3.zero,
+    //         rotation: Quaternion.identity,
+    //         inputAuthority: Object.InputAuthority,
+    //         onBeforeSpawned: (runner, networkObject) =>
+    //         {
+    //             networkObject.transform.SetParent(modelParent, true);
+    //         }
+    //     );
+    //     var playerAnimRelay = spawnedNetworkObject.GetComponent<PlayerAnimRelay>();
+    //     if (playerAnimRelay != null)
+    //         playerAnimRelay.Init();
+    //     playerModel = spawnedNetworkObject.gameObject;
+    //     playerModel.SetActive(true); // Enable the new model
+
+    // }
+    #endregion
 
 }

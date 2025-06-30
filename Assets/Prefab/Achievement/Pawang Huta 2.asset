@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pawang Huta 2
   m_EditorClassIdentifier: 
   achievementIdEnum: 6
-  achievementName: FirstOutsiderEscape
+  achievementName: Larian Pertama
   achievementDescription: First Escape as Outsider
   achievementIcon: {fileID: 21300000, guid: d75faa4fab47ab44e941bde21fc7caac, type: 3}
   isHidden: 0

@@ -41,6 +41,11 @@ public class LobbyPlayerData : NetworkBehaviour
             {
                 RPC_SetSelectedSkin(ownedSkins[0].itemId);
             }
+            //Debug log foreach owned skin
+            foreach (var skin in ownedSkins)
+            {
+                Debug.Log($"Owned Skin: {skin.itemId} for Role: {Role}");
+            }
         }
     }
 

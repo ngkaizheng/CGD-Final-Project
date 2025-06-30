@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Outsider3 SkinData
   m_EditorClassIdentifier: 
   itemId: skin_outsider_03
-  skinName: Outsider 3
-  skinDescription: Good
+  skinName: Red Skin
+  skinDescription: A bold, defiant look. This survivor doesn't hide
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  role: 1
   price: 50
+  modelPrefab: {fileID: 6231004053146279042, guid: 65709c018798ae042b3c2914dacc585a, type: 3}

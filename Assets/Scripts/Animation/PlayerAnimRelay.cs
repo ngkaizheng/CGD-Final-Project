@@ -7,13 +7,28 @@ public class PlayerAnimRelay : MonoBehaviour
 
     private void Awake()
     {
-        playerAttack = GetComponentInParent<PlayerAttack>();
+        playerAttack = transform.root.GetComponentInChildren<PlayerAttack>();
         // if (playerAttack == null)
         // {
         //     Debug.LogError($"[{gameObject.name}] AnimationEventRelay: PlayerAttack component not found in parents!");
         // }
 
-        simpleAnimator = GetComponentInParent<SimpleAnimator>();
+        simpleAnimator = transform.root.GetComponentInChildren<SimpleAnimator>();
+        // if (simpleAnimator == null)
+        // {
+        //     Debug.LogError($"[{gameObject.name}] PlayerAnimRelay: SimpleAnimator component not found in parents!");
+        // }
+    }
+
+    public void Init()
+    {
+        playerAttack = transform.root.GetComponentInChildren<PlayerAttack>();
+        // if (playerAttack == null)
+        // {
+        //     Debug.LogError($"[{gameObject.name}] AnimationEventRelay: PlayerAttack component not found in parents!");
+        // }
+
+        simpleAnimator = transform.root.GetComponentInChildren<SimpleAnimator>();
         if (simpleAnimator == null)
         {
             Debug.LogError($"[{gameObject.name}] PlayerAnimRelay: SimpleAnimator component not found in parents!");

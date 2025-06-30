@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Outsider2 SkinData
   m_EditorClassIdentifier: 
   itemId: skin_outsider_02
-  skinName: Skin Name 2
-  skinDescription: Good
+  skinName: Green Skin
+  skinDescription: A camouflaged outfit, blending better with nature
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  role: 1
   price: 50
+  modelPrefab: {fileID: 6231004053146279042, guid: f917e409e9fd8ce4a95fd4623a51b189, type: 3}

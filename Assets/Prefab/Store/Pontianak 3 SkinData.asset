@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Pontianak 3 SkinData
   m_EditorClassIdentifier: 
   itemId: skin_pontianak_03
-  skinName: Pontianak 3
-  skinDescription: Bad
+  skinName: Red Skin
+  skinDescription: Drenched in blood-red cloth, she becomes the embodiment of vengeance.
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
-  role: 1
+  role: 2
   price: 50
+  modelPrefab: {fileID: 392793480201983819, guid: 8ede1e1eb7636684c8b77d8dcbb2fb2c, type: 3}

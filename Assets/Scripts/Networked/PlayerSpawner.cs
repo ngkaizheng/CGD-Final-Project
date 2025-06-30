@@ -1,6 +1,7 @@
 using UnityEngine;
 using Fusion;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
 {
@@ -52,12 +53,28 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
         //     Debug.Log($"Player {player} joined as {((joinOrder.Count == 2 && joinOrder[1] == player) ? "Pontianak" : "Outsider")}. Total players: {_spawnedPlayers.Count}");
         // }
 
+        // if (Runner.IsServer)
+        // {
+        //     var playerData = InGamePlayerManager.Instance.GetPlayerData(player);
+        //     var prefab = playerData.Role == PlayerRole.PONTIANAK
+        //         ? pontianakPrefab
+        //         : outsiderPrefab;
+
+        //     SpawnPoint[] spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
+        //     Transform spawnPoint = spawnPoints.Length > 0
+        //         ? spawnPoints[Random.Range(0, spawnPoints.Length)].transform
+        //         : null;
+
+        //     SpawnPlayer(player, prefab, spawnPoint);
+        // }
+
         if (Runner.IsServer)
         {
-            var playerData = InGamePlayerManager.Instance.GetPlayerData(player);
-            var prefab = playerData.Role == PlayerRole.PONTIANAK
-                ? pontianakPrefab
-                : outsiderPrefab;
+            // var playerData = InGamePlayerManager.Instance.GetPlayerData(player);
+            // var prefab = playerData.Role == PlayerRole.PONTIANAK
+            //     ? pontianakPrefab
+            //     : outsiderPrefab;
+            var prefab = GetPlayerPrefab(player);
 
             SpawnPoint[] spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
             Transform spawnPoint = spawnPoints.Length > 0
@@ -67,6 +84,30 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
             SpawnPlayer(player, prefab, spawnPoint);
         }
     }
+
+    private NetworkObject GetPlayerPrefab(PlayerRef player)
+    {
+        var lobbyData = FindObjectsByType<LobbyPlayerData>(FindObjectsSortMode.None).FirstOrDefault(p => p.PlayerRef == player);
+        if (lobbyData != null)
+        {
+            var skinData = PlayFabInventoryController.Instance.GetSkinData(lobbyData.SelectedSkinId.ToString());
+            Debug.Log("GetPlayerPrefab: " + skinData);
+            return skinData.modelPrefab;
+        }
+        Debug.Log("GetPlayerPrefab: No LobbyPlayerData found for player " + player);
+
+        var playerRole = PlayerRole.OUTSIDER;
+        if (InGamePlayerManager.Instance != null)
+        {
+            var playerData = InGamePlayerManager.Instance.GetPlayerData(player);
+            playerRole = playerData?.Role ?? PlayerRole.OUTSIDER;
+        }
+
+        // Fallback to default prefab
+        Debug.LogWarning($"Could not determine role for player {player}, using default prefab");
+        return playerRole == PlayerRole.PONTIANAK ? pontianakPrefab : outsiderPrefab;
+    }
+
 
     public void PlayerLeft(PlayerRef player)
     {

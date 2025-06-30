@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5984020267889511369
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 532001350306606386, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: SortKey
+      value: 2112938510
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: Animator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: StateHashes.Array.size
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: TriggerHashes.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[11]'
+      value: 2129511116
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[12]'
+      value: -601051122
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[21]'
+      value: 874305384
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[22]'
+      value: -1946446899
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[23]'
+      value: 453253753
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'StateHashes.Array.data[24]'
+      value: -1178244933
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154085129848594448, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: 'TriggerHashes.Array.data[6]'
+      value: 629534904
+      objectReference: {fileID: 0}
+    - target: {fileID: 4487395390167171488, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_Name
+      value: Pontianakk_Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 6231004053146279042, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: SortKey
+      value: 943766155
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103893577072855, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 4333082101230589760, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5394077052507861013, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1200132908530439561}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+--- !u!4 &1860019883003870172 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5394077052507861013, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+  m_PrefabInstance: {fileID: 5984020267889511369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8431738462647756075
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1860019883003870172}
+    m_Modifications:
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7993862247734110744, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+      propertyPath: m_Name
+      value: PontianakRedSkin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+--- !u!4 &1200132908530439561 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7324040401988923554, guid: 81e48816c0bb42549b90929379a37822, type: 3}
+  m_PrefabInstance: {fileID: 8431738462647756075}
+  m_PrefabAsset: {fileID: 0}

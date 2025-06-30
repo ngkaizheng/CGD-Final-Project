@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Pontianak 2 SkinData
   m_EditorClassIdentifier: 
   itemId: skin_pontianak_02
-  skinName: Pontianak 2
-  skinDescription: Bad
+  skinName: Green Skin
+  skinDescription: Zombify Pontianak
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
-  role: 1
+  role: 2
   price: 50
+  modelPrefab: {fileID: 269349013754054338, guid: bc3c0fd19456b784f942e6b08ae2df44, type: 3}

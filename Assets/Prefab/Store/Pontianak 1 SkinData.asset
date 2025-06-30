@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Pontianak 1 SkinData
   m_EditorClassIdentifier: 
   itemId: skin_pontianak_01
-  skinName: Pontianak 1
-  skinDescription: Good
+  skinName: Default Skin
+  skinDescription: The original horror
   skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
-  role: 1
+  role: 2
   price: 50
+  modelPrefab: {fileID: 6231004053146279042, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
