@@ -168,16 +168,19 @@ public class MainMenuController : MonoBehaviour
     #region Multiplayer Methods
     private async void CreateRoom()
     {
+        BlockerController.Instance.Show();
         //Random a room ID
         string roomId = $"{Random.Range(100000, 999999)}";
         var result = await lobbyLogic.CreateRoom(roomId);
         if (result.Ok)
         {
             ShowSection(MenuState.Lobby);
+            BlockerController.Instance.Hide();
         }
         else
         {
             multiplayerMainStatusText.text = $"Failed to create room: {result.ErrorMessage}";
+            BlockerController.Instance.Hide();
         }
     }
 
@@ -189,24 +192,29 @@ public class MainMenuController : MonoBehaviour
             roomInputFieldStatusText.text = "Please enter a valid room ID.";
             return;
         }
+        BlockerController.Instance.Show();
 
         var result = await lobbyLogic.JoinRoom(roomId);
         if (result.Ok)
         {
             ShowSection(MenuState.Lobby);
+            BlockerController.Instance.Hide();
         }
         else
         {
             multiplayerMainStatusText.text = $"Failed to join room: {result.ErrorMessage}";
+            BlockerController.Instance.Hide();
         }
     }
 
     private async void QuickPlay()
     {
+        BlockerController.Instance.Show();
         var result = await lobbyLogic.QuickPlay();
         if (result.Ok)
         {
             ShowSection(MenuState.Lobby);
+            BlockerController.Instance.Hide();
         }
         else if (result.ShutdownReason == Fusion.ShutdownReason.GameNotFound)
         {
@@ -215,14 +223,18 @@ public class MainMenuController : MonoBehaviour
         else
         {
             multiplayerMainStatusText.text = $"Quick play failed: {result.ErrorMessage}";
+            BlockerController.Instance.Hide();
         }
     }
 
     public async void HandleLeftRoom(bool isKicked = false)
     {
+        BlockerController.Instance.Show();
+
         await lobbyLogic.LeaveRoom();
         ShowSection(MenuState.MainMenu);
         // Optional: Show kick notification
+        BlockerController.Instance.Hide();
     }
 
     private void StartGameOrReadyInLobby()

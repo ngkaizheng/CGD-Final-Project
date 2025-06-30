@@ -48,6 +48,7 @@ public class LoginUI : MonoBehaviour
     public void OnLoginButtonClicked()
     {
         PlayFabLoginController.Instance.LoginWithEmail(emailInput.text, passwordInput.text);
+        BlockerController.Instance.Show();
     }
 
     public void OnSignUpButtonClicked()
@@ -57,6 +58,7 @@ public class LoginUI : MonoBehaviour
             return;
         }
         PlayFabLoginController.Instance.SignUpWithEmail(signUpEmailInput.text, signUpPasswordInput.text, displayNameInput.text);
+        BlockerController.Instance.Show();
     }
 
     public void OnSettingsButtonClicked()

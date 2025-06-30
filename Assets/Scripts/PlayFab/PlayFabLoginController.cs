@@ -19,6 +19,7 @@ public class PlayFabLoginController : MonoBehaviour
     [ReadOnly] public string entityId;
     [ReadOnly] public string entityType;
 
+
     /// <summary>
     /// Callback for login related events.
     /// This can be used to update UI or trigger other actions when login status changes.
@@ -29,6 +30,9 @@ public class PlayFabLoginController : MonoBehaviour
     /// This can be used to update UI or trigger other actions when sign-up status changes.
     /// </summary>
     public Action<string> OnSignUpStatusUpdated;
+    private AsyncOperation preloadOperation;
+    public bool isPreloading = false;
+
     public static PlayFabLoginController Instance;
 
     private void Awake()
@@ -47,6 +51,12 @@ public class PlayFabLoginController : MonoBehaviour
 
     private void Start()
     {
+        if (!isPreloading)
+        {
+            preloadOperation = SceneManager.LoadSceneAsync(GameConfig.MAIN_MENU_SCENE);
+            preloadOperation.allowSceneActivation = false;
+            isPreloading = true;
+        }
     }
 
     private void OnDestroy()
@@ -85,7 +95,14 @@ public class PlayFabLoginController : MonoBehaviour
 
             PlayFabUserController.Instance.SetUserInfo(email, result.InfoResultPayload.PlayerProfile.DisplayName, playFabId);
 
-            StartCoroutine(LoadLoginSceneAsync());
+            if (preloadOperation != null)
+            {
+                preloadOperation.allowSceneActivation = true;
+            }
+            else
+            {
+                StartCoroutine(LoadLoginSceneAsync());
+            }
         },
         error =>
         {
@@ -123,11 +140,13 @@ public class PlayFabLoginController : MonoBehaviour
             entityType = result.EntityToken.Entity.Type;
 
             OnSignUpStatusUpdated?.Invoke("Sign up successful! You can now log in.");
+            BlockerController.Instance.Hide();
         },
         error =>
         {
             Debug.LogWarning($"Sign up failed: {error.GenerateErrorReport()}");
             OnSignUpStatusUpdated?.Invoke(error.ErrorMessage);
+            BlockerController.Instance.Hide();
         });
     }
     #endregion
@@ -137,7 +156,7 @@ public class PlayFabLoginController : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(GameConfig.MAIN_MENU_SCENE);
         asyncLoad.allowSceneActivation = false;
 
-        int countdown = 3;
+        int countdown = 0;
         float timer = 0f;
         float interval = 1f;
 
