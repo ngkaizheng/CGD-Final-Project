@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ad00b03739c374c4d9f0c14002915d33, type: 3}
       propertyPath: m_Name
-      value: T-Pose
+      value: PontianakGreenSkin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad00b03739c374c4d9f0c14002915d33, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5968415569615717987}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad00b03739c374c4d9f0c14002915d33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7923278688061430640}
   m_SourcePrefab: {fileID: 100100000, guid: ad00b03739c374c4d9f0c14002915d33, type: 3}
 --- !u!1 &5866417970668043510 stripped
 GameObject:
@@ -87,3 +90,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-7923278688061430640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866417970668043510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b5beb8db138704bb77b9c838975f55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
