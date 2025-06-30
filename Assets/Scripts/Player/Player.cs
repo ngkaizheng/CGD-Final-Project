@@ -89,6 +89,14 @@ public abstract class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if (Runner.LocalPlayer == Object.InputAuthority)
+        {
+            if (NetworkedLookSensitivity != GameConfig.LOOK_SENSITIVITY)
+            {
+                RPC_UpdateLookSensitivity(GameConfig.LOOK_SENSITIVITY);
+            }
+        }
+
         if (GetInput(out NetInput input))
         {
             // if (!isAlive()) return;
@@ -191,12 +199,16 @@ public abstract class Player : NetworkBehaviour
         return true;
     }
 
-    #region Event Handlers
-    // private void HandleDeath(PlayerRef killer)
-    // {
-    //     Debug.Log($"{Object.InputAuthority} has died, killed by {killer}");
-    //     // Handle player death logic here, such as respawning or updating UI
-    // }
+    #region Look Sensitivity
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_UpdateLookSensitivity(float sensitivity)
+    {
+        if (HasStateAuthority)
+        {
+            NetworkedLookSensitivity = sensitivity;
+            Debug.Log($"[{Object.Id}] Server set NetworkedLookSensitivity: {NetworkedLookSensitivity}");
+        }
+    }
     #endregion
 
     // Disable collider and KCC when player is dead
