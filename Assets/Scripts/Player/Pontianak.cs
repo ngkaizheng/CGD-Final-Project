@@ -75,7 +75,8 @@ public class Pontianak : Player
 
     protected override bool IsMoveable()
     {
-        if (isAttacking || isUsingAbility) // This is your Pontianak-specific flag
+        // if (isAttacking || isUsingAbility) // This is your Pontianak-specific flag
+        if (isUsingAbility)
             return false;
         return base.IsMoveable();
     }

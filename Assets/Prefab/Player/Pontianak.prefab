@@ -610,9 +610,9 @@ MonoBehaviour:
   Animator: {fileID: 7518930866660245043}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 0000000084ca1cc0f9c6230b0abf574fe17cdfb2c7df733b2c1cfbc6702be2124398c725b27b73d9a8ea49339f56d7ad87fd1954b7fd861e35b2ca9b74822bd6f0a1fd397d6055655ed056c3bcc283d8a653b932
-  TriggerHashes: 000000000d286c4000cb88ae24abbf6737b935019ef7857b
-  TotalWords: 4
+  StateHashes: 0000000084ca1cc0f9c6230b0abf574fe17cdfb2c7df733b2c1cfbc6702be2124398c725b27b73d9a8ea4933ccc2ed7e0eb02cdcb7fd861e35b2ca9b74822bd6f0a1fd397d6055655ed056c3bcc283d8a653b93268d71c34cd93fb8b791a041bbb68c5b9c01206a9bcea54dbfe28d710
+  TriggerHashes: 000000000d286c4000cb88ae24abbf6737b935019ef7857bb8f08525
+  TotalWords: 5
 --- !u!114 &4003382285346127378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 20
-  moveSpeed: 1.6
+  moveSpeed: 1.1
   crouchSpeedMultiplier: 0.5
   playerRole: 2
   modelParent: {fileID: 5394077052507861013}
