@@ -53,6 +53,7 @@ public class GameOverController : NetworkBehaviour
             if (PontianakObjectiveController.Instance.GetKillCount() >= 1)
             {
                 AchievementController.Instance.OnFirstPontianakHunt.Raise();
+                PlayFabLeaderboardController.Instance.UpdateKillsLeaderboard(PontianakObjectiveController.Instance.GetKillCount());
             }
         }
         // else

@@ -44,17 +44,17 @@ public class PlayFabLeaderboardController : MonoBehaviour
         PlayFabClientAPI.UpdatePlayerStatistics(request, OnKillsUpdated, OnLeaderboardError);
     }
 
-    public void UpdateEscapeTimeLeaderboard(float escapeTimeSeconds)
+    public void UpdateEscapeTimeLeaderboard(int escapeTimeMiliSeconds)
     {
         // Convert to milliseconds for more precise ranking
-        int escapeTimeMs = Mathf.RoundToInt(escapeTimeSeconds * 1000);
+        // int escapeTimeMs = Mathf.RoundToInt(escapeTimeSeconds * 1000);
 
         var request = new UpdatePlayerStatisticsRequest
         {
             Statistics = new List<StatisticUpdate> {
                 new StatisticUpdate {
                     StatisticName = escapeLeaderboardId,
-                    Value = escapeTimeMs
+                    Value = escapeTimeMiliSeconds
                 }
             }
         };

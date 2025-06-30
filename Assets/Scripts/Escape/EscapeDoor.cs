@@ -14,7 +14,8 @@ public class EscapeDoor : NetworkBehaviour
         Player player = other.GetComponentInParent<Player>();
         if (player != null && player.isAlive() && player.playerRole == PlayerRole.OUTSIDER)
         {
-            EscapeController.Instance.HandlePlayerEscape(player);
+            int timeUsed = GameController.Instance.GetCurrentTimeUsedMilliseconds();
+            EscapeController.Instance.HandlePlayerEscape(player, timeUsed);
         }
     }
 

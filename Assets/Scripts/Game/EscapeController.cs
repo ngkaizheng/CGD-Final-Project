@@ -36,7 +36,7 @@ public class EscapeController : NetworkBehaviour
         objectiveCompleteEvent.OnRaised.AddListener(OnObjectiveComplete);
     }
 
-    public void HandlePlayerEscape(Player player)
+    public void HandlePlayerEscape(Player player, int timeUsed)
     {
         // Only server handles the actual escape logic
         if (Runner.IsServer)
@@ -48,7 +48,7 @@ public class EscapeController : NetworkBehaviour
             // player.HandleDeath();
             player.RPC_Escape();
 
-            RPC_GrantEscapeRewards(player.Object.InputAuthority);
+            RPC_GrantEscapeRewards(player.Object.InputAuthority, timeUsed);
 
             playerEscapedEvent.Raise();
             PlayerTracker.Instance.OnPlayerEscaped(player.Object.InputAuthority);
@@ -104,17 +104,20 @@ public class EscapeController : NetworkBehaviour
     // }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_GrantEscapeRewards(PlayerRef playerRef)
+    private void RPC_GrantEscapeRewards(PlayerRef playerRef, int timeUsed)
     {
         if (playerRef == Runner.LocalPlayer)
         {
-            Debug.Log("Player escaped! Granting rewards...");
+            Debug.Log($"Player escaped in {timeUsed}ms!");
             // Achievement
             AchievementController.Instance?.OnFirstOutsiderEscape.Raise();
             AchievementController.Instance?.OnFirstOutsiderPlayed.Raise();
 
             // Currency
             PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
+
+            // Update leaderboard
+            PlayFabLeaderboardController.Instance.UpdateEscapeTimeLeaderboard(timeUsed);
 
             // Show End Game UI
             EndGameUI.Instance.ShowPlayerEscaped();

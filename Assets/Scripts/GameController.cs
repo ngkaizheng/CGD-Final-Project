@@ -8,7 +8,7 @@ public class GameController : NetworkBehaviour
     public static GameController Instance { get; private set; }
 
     [Header("Game Timer")]
-    [SerializeField] private float gameDurationSeconds = 60f; // 1 minute
+    [SerializeField] public float gameDurationSeconds = 60f; // 1 minute
 
     public GameEvent gameInitEvent; // Assign in inspector
 
@@ -183,4 +183,17 @@ public class GameController : NetworkBehaviour
         Runner.Shutdown();
         SceneManager.LoadScene(GameConfig.MAIN_MENU_SCENE);
     }
+
+    #region Time Used
+    public int GetCurrentTimeUsedMilliseconds()
+    {
+        if (GameTimer.IsRunning)
+        {
+            float remainingTime = (float)GameTimer.RemainingTime(Runner);
+            float timeUsedSeconds = gameDurationSeconds - remainingTime;
+            return Mathf.RoundToInt(timeUsedSeconds * 1000); // Convert to milliseconds
+        }
+        return 0;
+    }
+    #endregion
 }
