@@ -85,12 +85,22 @@ public class PlayerAction : NetworkBehaviour
             this.isInteracting = true;
             Debug.Log($"Interacting with {closestInteractable}");
             closestInteractable.OnInteract(player);
+
+            if (player is Outsider outsider && Runner.IsServer)
+            {
+                outsider.RPC_SetAxeActive(true);
+            }
         }
         else if (this.isInteracting)
         {
             Debug.Log("Interact Action Released");
             player.GetComponent<SimpleAnimator>().SetInteracting(false);
             this.isInteracting = false;
+
+            if (player is Outsider outsider && Runner.IsServer)
+            {
+                outsider.RPC_SetAxeActive(false);
+            }
         }
     }
 }

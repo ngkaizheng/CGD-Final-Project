@@ -892,7 +892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 10
   inputButton: 7
-  radius: 20
+  radius: 50
   damage: 0
   revealDuration: 5
   affectedLayerMasks:

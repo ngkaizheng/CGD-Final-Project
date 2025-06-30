@@ -7,6 +7,9 @@ public class Outsider : Player
     [Networked] public PlayerHealth Health { get; private set; }
     [Networked] public bool IsEscaped { get; set; } = false;
 
+    [Header("Interaction Item")]
+    [SerializeField] private GameObject axeObj; // Reference to the axe prefab in inspector
+
     protected override void Awake()
     {
         base.Awake();
@@ -16,6 +19,8 @@ public class Outsider : Player
     {
         base.Spawned();
         Health = GetComponent<PlayerHealth>();
+
+        axeObj.SetActive(false);
     }
 
     public override void FixedUpdateNetwork()
@@ -34,4 +39,15 @@ public class Outsider : Player
     {
         IsEscaped = isEscaped;
     }
+
+    #region Axe Interaction
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetAxeActive(bool isActive)
+    {
+        if (axeObj != null)
+        {
+            axeObj.gameObject.SetActive(isActive);
+        }
+    }
+    #endregion
 }
