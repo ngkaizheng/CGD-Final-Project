@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d8f10f91efba874d8a912fdece02e81, type: 3}
-  m_Name: Outsider2 SkinData
+  m_Name: Pontianak_SkinData_01
   m_EditorClassIdentifier: 
-  itemId: skin_outsider_02
-  skinName: Green Skin
-  skinDescription: A camouflaged outfit, blending better with nature
-  skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
-  role: 1
+  itemId: skin_pontianak_01
+  skinName: Default Skin
+  skinDescription: The original horror
+  skinIcon: {fileID: 21300000, guid: 8a5b66c5435fc9145af628c59a71ceb1, type: 3}
+  role: 2
   price: 50
-  modelPrefab: {fileID: 6231004053146279042, guid: f917e409e9fd8ce4a95fd4623a51b189, type: 3}
+  modelPrefab: {fileID: 6231004053146279042, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}

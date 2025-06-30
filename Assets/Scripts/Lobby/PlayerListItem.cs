@@ -20,7 +20,7 @@ public class PlayerListItem : MonoBehaviour
     [Header("Ready")]
     [Tooltip("Icon to indicate if the player is ready.")]
     [SerializeField] private Button readyButton;
-    [SerializeField] private Sprite readyIcon;
+    [SerializeField] private GameObject readyDisplay;
 
     [Header("Kick")]
     [Tooltip("Button to kick the player from the lobby. Only visible for host.")]
@@ -122,7 +122,7 @@ public class PlayerListItem : MonoBehaviour
                 readyButton.onClick.RemoveAllListeners();
                 readyButton.onClick.AddListener(OnReadyButtonClicked);
             }
-            readyButton.image.sprite = readyIcon;
+            // readyButton.image.sprite = readyIcon;
             UpdateReadyButton(playerData.IsReady);
         }
 
@@ -260,6 +260,7 @@ public class PlayerListItem : MonoBehaviour
         {
             readyButton.image.color = isReady ? UISettings.EnabledColor : UISettings.DisabledColor;
             readyButton.GetComponentInChildren<TMP_Text>().text = isReady ? "Ready" : "Not Ready";
+            readyDisplay.SetActive(isReady);
         }
     }
 

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d8f10f91efba874d8a912fdece02e81, type: 3}
-  m_Name: Pontianak 1 SkinData
+  m_Name: Pontianak_SkinData_03
   m_EditorClassIdentifier: 
-  itemId: skin_pontianak_01
-  skinName: Default Skin
-  skinDescription: The original horror
-  skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  itemId: skin_pontianak_03
+  skinName: Red Skin
+  skinDescription: Drenched in blood-red cloth, she becomes the embodiment of vengeance.
+  skinIcon: {fileID: 21300000, guid: f315adc24a7ebae479b6bdd45751aa4c, type: 3}
   role: 2
   price: 50
-  modelPrefab: {fileID: 6231004053146279042, guid: 78832bfd1dc23c946af002a8b66e3fb4, type: 3}
+  modelPrefab: {fileID: 392793480201983819, guid: 8ede1e1eb7636684c8b77d8dcbb2fb2c, type: 3}

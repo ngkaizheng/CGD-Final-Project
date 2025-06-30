@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d8f10f91efba874d8a912fdece02e81, type: 3}
-  m_Name: Outsider1 SkinData
+  m_Name: Outsider_SkinData_01
   m_EditorClassIdentifier: 
   itemId: skin_outsider_01
   skinName: Default Skin
   skinDescription: The standard look of a survivor lost in the darkness
-  skinIcon: {fileID: 21300000, guid: 18a86088d535cd44d8c8b898844bc93a, type: 3}
+  skinIcon: {fileID: 21300000, guid: 09a86e4e736682b4c971b0c06d5acd3d, type: 3}
   role: 1
   price: 50
   modelPrefab: {fileID: 6231004053146279042, guid: 81953c22ee18c264ba64900d650aac76, type: 3}

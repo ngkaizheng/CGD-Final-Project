@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d8f10f91efba874d8a912fdece02e81, type: 3}
-  m_Name: Outsider3 SkinData
+  m_Name: Outsider_SkinData_03
   m_EditorClassIdentifier: 
   itemId: skin_outsider_03
   skinName: Red Skin
   skinDescription: A bold, defiant look. This survivor doesn't hide
-  skinIcon: {fileID: 21300000, guid: 5295c54b217373a47acffa7277f0dde6, type: 3}
+  skinIcon: {fileID: 21300000, guid: 7f43e0e30282b734999380a140521c7c, type: 3}
   role: 1
   price: 50
   modelPrefab: {fileID: 6231004053146279042, guid: 65709c018798ae042b3c2914dacc585a, type: 3}
