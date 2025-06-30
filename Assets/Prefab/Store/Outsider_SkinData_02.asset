@@ -18,4 +18,4 @@ MonoBehaviour:
   skinIcon: {fileID: 21300000, guid: f70a156211d92834fa33cfa22a3e7fb4, type: 3}
   role: 1
   price: 50
-  modelPrefab: {fileID: 6231004053146279042, guid: f917e409e9fd8ce4a95fd4623a51b189, type: 3}
+  modelPrefab: {fileID: 39239579109349302, guid: 51360cd90f1d05c4dbb74ecec1b01758, type: 3}
