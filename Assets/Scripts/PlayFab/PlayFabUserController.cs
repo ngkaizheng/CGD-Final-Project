@@ -54,11 +54,13 @@ public class PlayFabUserController : MonoBehaviour
     {
         Debug.Log($"Display name updated to: {result.DisplayName}");
         DisplayName = result.DisplayName;
+        BlockerController.Instance.Hide();
     }
 
     private void OnDisplayNameUpdateError(PlayFabError error)
     {
         Debug.LogError($"Failed to update display name: {error.GenerateErrorReport()}");
         // You can add error UI here
+        BlockerController.Instance.Hide();
     }
 }

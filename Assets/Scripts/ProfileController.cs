@@ -38,9 +38,8 @@ public class ProfileController : MonoBehaviour
     private void OnUpdateButtonClicked()
     {
         string newDisplayName = displayNameInput.text;
-        // TODO: Add PlayFab API call to update display name here
 
-        // Update local user info if needed
+        BlockerController.Instance.Show();
         PlayFabUserController.Instance.UpdateDisplayname(newDisplayName);
     }
 
