@@ -116,6 +116,7 @@ public class PlayFabLoginController : MonoBehaviour
                 Debug.LogWarning($"Login error: {error.GenerateErrorReport()}");
                 OnLoginStatusUpdated?.Invoke(error.ErrorMessage);
             }
+            BlockerController.Instance.Hide();
         });
     }
     #endregion
