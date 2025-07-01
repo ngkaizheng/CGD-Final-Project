@@ -10,6 +10,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private Transform _playerListContainer;
     [SerializeField] private GameObject _playerListItemPrefab;
     [SerializeField] private TMP_Text _sessionNameText;
+    [SerializeField] private TMP_Text _statusText;
 
     [Header("Event Listening")]
     [SerializeField] private LobbyPlayerListDataEvent _playerListChangedEvent;
@@ -33,9 +34,9 @@ public class LobbyUI : MonoBehaviour
     #region Update Player List Management
     private void UpdatePlayerList(NetworkLinkedList<LobbyPlayerData> players)
     {
-        foreach (var kvp in _playerListItems.ToList()) // ToList() to avoid modification during iteration
+        foreach (var kvp in _playerListItems.ToList())
         {
-            if (!players.Any(p => p.PlayerRef == kvp.Key)) // <- O(n) lookup
+            if (!players.Any(p => p.PlayerRef == kvp.Key))
             {
                 Destroy(kvp.Value.gameObject);
                 _playerListItems.Remove(kvp.Key);
@@ -60,19 +61,11 @@ public class LobbyUI : MonoBehaviour
             bool isLocalPlayer = player.PlayerRef == Runner.LocalPlayer;
             bool isHost = Runner != null && Runner.IsServer;
 
-            // Always update the display ID and name to keep them in sync
-            // listItem.Initialize(
-            //     $"P{displayIndex}",
-            //     player,
-            //     isLocalPlayer,
-            //     isHost
-            // );
             listItem.Initialize(
                 player,
                 isLocalPlayer,
                 isHost,
                 role: player.Role
-            // player.PlayerRef.ToString(),
             );
             displayIndex++;
         }
@@ -85,6 +78,8 @@ public class LobbyUI : MonoBehaviour
         }
 
         SetSessionName(Runner.SessionInfo.Name);
+
+        UpdateStatusMessage();
     }
     private void UpdatePlayerListItem(LobbyPlayerData playerData)
     {
@@ -107,6 +102,20 @@ public class LobbyUI : MonoBehaviour
                 MainMenuController.Instance.UpdateLobbyStartButtonText(isHost);
             }
         }
+        UpdateStatusMessage();
+    }
+    #endregion
+
+    #region Status Message Management
+    private void UpdateStatusMessage()
+    {
+        // if (!Runner.IsServer || _statusText == null) return;
+
+        var status = LobbyManager.Instance.GetGameStartStatus();
+        _statusText.text = status.statusMessage;
+        _statusText.color = (status.allReady && status.pontianakCount == 1 && status.outsiderCount >= 1)
+            ? Color.green
+            : Color.yellow;
     }
     #endregion
 

@@ -14,6 +14,7 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     [SerializeField] private NetworkObject _lobbyPlayerPrefab;
     [SerializeField] private LobbyPlayerListDataEvent _onPlayerListChanged;
 
+    public bool isTesting = false;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
         Players.Add(playerObj.GetComponent<LobbyPlayerData>());
     }
 
+    #region PlayerJoined Left
     public void PlayerJoined(PlayerRef player)
     {
         if (Runner.IsServer)
@@ -70,7 +72,9 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
             }
         }
     }
+    #endregion
 
+    #region StartGame
     public void StartGame()
     {
         if (Runner.IsServer && Players.Count > 0)
@@ -79,46 +83,11 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
             Debug.Log("Starting game with " + Players.Count + " players.");
             SceneRef gameScene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath($"Assets/Scenes/{GameConfig.GAME_SCENE}.unity"));
             Runner.LoadScene(gameScene, LoadSceneMode.Single);
-            // StartCoroutine(StartGameWithCountdown());
         }
     }
+    #endregion
 
-    private IEnumerator StartGameWithCountdown()
-    {
-        int countdown = 3;
-        float timer = 0f;
-        float interval = 1f;
-
-        // Show countdown: 3, 2, 1
-        while (countdown > 0)
-        {
-            Debug.Log(countdown); // Replace with your UI update if needed
-                                  // TODO: Update your countdown UI here
-
-            timer = 0f;
-            while (timer < interval)
-            {
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            countdown--;
-        }
-
-        // After countdown, load the game scene
-        Debug.Log("Loading game scene...");
-        // TODO: Update your UI to show "Loading..." here
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(GameConfig.GAME_SCENE); // Replace with your game scene name/key
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
-        {
-            yield return null;
-        }
-
-        asyncLoad.allowSceneActivation = true;
-    }
-
+    #region  OnStartGameOrReadyClicked
     public void OnStartGameOrReadyClicked()
     {
         if (Runner.IsServer)
@@ -135,20 +104,101 @@ public class LobbyManager : NetworkBehaviour, IPlayerJoined, IPlayerLeft
             TogglePlayerReady();
         }
     }
+    #endregion
 
+    #region CheckAllPlayersReady
+    // public bool CheckAllPlayersReady()
+    // {
+    //     if (!Runner.IsServer) return false;
+
+    //     foreach (var player in Players)
+    //     {
+    //         if (!player.IsReady)
+    //         {
+    //             return false;
+    //         }
+    //     }
+
+    //     if (isTesting)
+    //         return true;
+
+    //     // Check role distribution
+    //     int pontianakCount = 0;
+    //     int outsiderCount = 0;
+
+    //     foreach (var player in Players)
+    //     {
+    //         switch (player.Role)
+    //         {
+    //             case PlayerRole.PONTIANAK:
+    //                 pontianakCount++;
+    //                 break;
+    //             case PlayerRole.OUTSIDER:
+    //                 outsiderCount++;
+    //                 break;
+    //         }
+    //     }
+
+    //     if (pontianakCount != 1)
+    //     {
+    //         Debug.Log($"Need exactly one Pontianak to start (current: {pontianakCount}).");
+    //         return false;
+    //     }
+
+    //     if (outsiderCount < 1)
+    //     {
+    //         Debug.Log($"Need at least one Outsider to start (current: {outsiderCount}).");
+    //         return false;
+    //     }
+    //     return true;
+    // }
     public bool CheckAllPlayersReady()
     {
         if (!Runner.IsServer) return false;
+        if (isTesting) return true;
+
+        var status = GetGameStartStatus();
+        return status.allReady && status.pontianakCount == 1 && status.outsiderCount >= 1;
+    }
+
+    public (bool allReady, int pontianakCount, int outsiderCount, string statusMessage) GetGameStartStatus()
+    {
+        bool allReady = true;
+        int pontianakCount = 0;
+        int outsiderCount = 0;
+        string statusMessage = "";
 
         foreach (var player in Players)
         {
-            if (!player.IsReady)
+            if (!player.IsReady) allReady = false;
+
+            switch (player.Role)
             {
-                return false;
+                case PlayerRole.PONTIANAK: pontianakCount++; break;
+                case PlayerRole.OUTSIDER: outsiderCount++; break;
             }
         }
-        return true;
+
+        if (!allReady)
+        {
+            statusMessage = "Waiting for all players to be ready...";
+        }
+        else if (pontianakCount != 1)
+        {
+            statusMessage = $"Need exactly 1 Pontianak (current: {pontianakCount})";
+        }
+        else if (outsiderCount < 1)
+        {
+            statusMessage = $"Need at least 1 Outsider (current: {outsiderCount})";
+        }
+        else
+        {
+            statusMessage = "Ready to start game!";
+        }
+
+        return (allReady, pontianakCount, outsiderCount, statusMessage);
     }
+    #endregion
 
     public void TogglePlayerReady()
     {
