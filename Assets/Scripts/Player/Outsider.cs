@@ -21,6 +21,15 @@ public class Outsider : Player
         Health = GetComponent<PlayerHealth>();
 
         axeObj.SetActive(false);
+
+        if (Object.InputAuthority == Runner.LocalPlayer)
+        {
+            GetComponentInChildren<OutsiderHeartbeatController>().enabled = true;
+        }
+        else
+        {
+            GetComponentInChildren<OutsiderHeartbeatController>().enabled = false;
+        }
     }
 
     public override void FixedUpdateNetwork()

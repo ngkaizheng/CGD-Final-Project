@@ -70,7 +70,6 @@ public abstract class Player : NetworkBehaviour
             {
                 Debug.LogWarning("InputManager not found in the scene.");
             }
-
         }
 
         // // Change skin based on LobbyPlayerData
