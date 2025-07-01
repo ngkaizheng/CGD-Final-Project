@@ -10,6 +10,9 @@ public class PlayerTracker : NetworkBehaviour
     public NetworkLinkedList<PlayerRef> LivingPlayers { get; } = default;
 
     [Networked, Capacity(8)]
+    public NetworkLinkedList<PlayerRef> DeadPlayers { get; } = default;
+
+    [Networked, Capacity(8)]
     public NetworkLinkedList<PlayerRef> EscapedPlayers { get; } = default;
 
     [Networked, Capacity(8)]
@@ -86,6 +89,7 @@ public class PlayerTracker : NetworkBehaviour
     public void OnPlayerDied(PlayerRef playerRef)
     {
         LivingPlayers.Remove(playerRef);
+        DeadPlayers.Add(playerRef);
     }
 
     public void OnPlayerLeft(PlayerRef playerRef)

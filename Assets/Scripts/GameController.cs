@@ -14,6 +14,7 @@ public class GameController : NetworkBehaviour
 
     [Networked] public TickTimer GameTimer { get; set; }
     [Networked] public TickTimer LastChanceTimer { get; set; }
+    [Networked] public bool IsTimeUp { get; set; }
 
     private void OnEnable()
     {
@@ -85,6 +86,7 @@ public class GameController : NetworkBehaviour
             }
         }
         // RPC_ShowEndGame();
+        IsTimeUp = true;
     }
 
     private void InitializeUIForLocalPlayer()

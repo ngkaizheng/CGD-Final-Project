@@ -19,9 +19,12 @@ public static class GameConfig
     // Game settings
     public static float LOOK_SENSITIVITY = 0.1f; // Default look sensitivity
 
-
     // Currency Code Playfab
     public const string CURRENCY_CODE = "HC";
+
+    public static int BASE_ESCAPE_REWARD = 30;
+    public static int BASE_HUNT_REWARD = 15;
+    public static int BASE_PLAY_REWARD = 20;
 }
 
 public static class UISettings

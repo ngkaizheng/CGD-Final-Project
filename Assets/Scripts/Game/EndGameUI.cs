@@ -24,6 +24,9 @@ public class EndGameUI : MonoBehaviour
     [SerializeField] private GameObject killSection;
     [SerializeField] private TMP_Text killCountText;
 
+    private bool _hasEscaped;
+    private int _escapeReward;
+    private float _escapeTime;
     public static EndGameUI Instance { get; private set; }
 
     private void Awake()
@@ -56,10 +59,16 @@ public class EndGameUI : MonoBehaviour
         if (rewardSection != null) rewardSection.SetActive(false);
         if (timeUsedSection != null) timeUsedSection.SetActive(false);
         if (killSection != null) killSection.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void ShowPlayerEscaped(int reward, float timeUsedSeconds)
     {
+        _hasEscaped = true;
+        _escapeReward = reward;
+        _escapeTime = timeUsedSeconds;
         ShowEndGameUI(true, "Escaped!", "You successfully escaped!");
 
         if (rewardSection != null)
@@ -80,20 +89,60 @@ public class EndGameUI : MonoBehaviour
     public void ShowPlayerDied()
     {
         ShowEndGameUI(true, "You Died", "You have been eliminated.");
+        if (rewardSection != null)
+        {
+            rewardSection.SetActive(true);
+            if (rewardText != null)
+                rewardText.text = $"{GameConfig.BASE_PLAY_REWARD}";
+        }
     }
 
-    public void ShowGameOver(PlayerRole role, int killCount = 0, string reason = "")
+    public void ShowGameOver(PlayerRole role, int killCount = 0, int reward = 0, string reason = "")
     {
         ShowEndGameUI(true, "Game Over", reason);
 
         if (observerButton != null)
             observerButton.gameObject.SetActive(false);
 
-        if (role == PlayerRole.PONTIANAK && killSection != null)
+        if (role == PlayerRole.OUTSIDER)
         {
-            killSection.SetActive(true);
-            if (killCountText != null)
+            if (_hasEscaped) // Escape Outsider reward UI
+            {
+                if (rewardSection != null)
+                {
+                    rewardSection.SetActive(true);
+                    rewardText.text = $"{_escapeReward}";
+                }
+
+                if (timeUsedSection != null)
+                {
+                    timeUsedSection.SetActive(true);
+                    timeUsedText.text = $"{_escapeTime:F2}s";
+                }
+            }
+            else // Die Outsider reward UI
+            {
+                if (rewardSection != null)
+                {
+                    rewardSection.SetActive(true);
+                    rewardText.text = $"{GameConfig.BASE_PLAY_REWARD}";
+                }
+            }
+        }
+
+        if (role == PlayerRole.PONTIANAK)
+        {
+            if (killSection != null)
+            {
+                killSection.SetActive(true);
                 killCountText.text = $"{killCount}";
+            }
+
+            if (rewardSection != null)
+            {
+                rewardSection.SetActive(true);
+                rewardText.text = $"{reward}";
+            }
         }
     }
 

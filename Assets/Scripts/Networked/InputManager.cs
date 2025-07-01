@@ -38,7 +38,21 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             return;
         }
 
-        // Debug.Log($"Processing input for player {_localPlayer.Object.InputAuthority} at Tick: {Runner.Tick}, IsForward: {Runner.IsForward}, IsSimulation: {Runner.IsResimulation}");
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame))
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
         if (mousePos.x >= 0 && mousePos.x <= Screen.width &&
@@ -60,9 +74,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             accumulatedInput.LookDirection = Vector2.zero;
         }
 
-        Keyboard keyboard = Keyboard.current;
         Mouse mouse = Mouse.current;
-        if (mouse != null)
+        if (mouse != null & Cursor.lockState == CursorLockMode.Locked)
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
@@ -179,8 +192,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     void INetworkRunnerCallbacks.OnSceneLoadDone(NetworkRunner runner)
     {
         // StartCoroutine(EnableInputAfterDelay());
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         // Debug.Log("Scene load done, cursor locked, starting input enable delay.");
     }
     private IEnumerator EnableInputAfterDelay()

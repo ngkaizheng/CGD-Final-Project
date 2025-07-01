@@ -45,6 +45,8 @@ public class GameOverController : NetworkBehaviour
         Debug.Log("Game Over - No living players remain!");
         gameOverEvent.Raise();
 
+        string reason = CheckEndGameReason();
+
         // Check role and grant appropriate achievement
         if (PlayerTracker.Instance.IsPlayerPontianak(Runner.LocalPlayer))
         {
@@ -55,15 +57,55 @@ public class GameOverController : NetworkBehaviour
                 AchievementController.Instance.OnFirstPontianakHunt.Raise();
                 PlayFabLeaderboardController.Instance.UpdateKillsLeaderboard(killCount);
             }
-            EndGameUI.Instance.ShowGameOver(PlayerRole.PONTIANAK, killCount);
+
+            var accumulatedReward = (killCount * GameConfig.BASE_HUNT_REWARD) + GameConfig.BASE_PLAY_REWARD;
+            PlayFabCurrencyController.Instance.GrantCurrency(accumulatedReward);
+
+            EndGameUI.Instance.ShowGameOver(PlayerRole.PONTIANAK, killCount, accumulatedReward, reason: reason);
         }
         else
         {
-            EndGameUI.Instance.ShowGameOver(PlayerRole.OUTSIDER);
+            EndGameUI.Instance.ShowGameOver(PlayerRole.OUTSIDER, reason: reason);
         }
-        // else
-        // {
-        //     AchievementController.Instance.OnFirstOutsiderPlayed.Raise();
-        // }
+    }
+
+    private string CheckEndGameReason()
+    {
+        int totalOutsiders = PlayerTracker.Instance.GetTotalOutsiders(Runner);
+        int escapedOutsiders = PlayerTracker.Instance.EscapedPlayers.Count;
+        int deadOutsiders = PlayerTracker.Instance.DeadPlayers.Count;
+        string reason;
+        if (GameController.Instance.IsTimeUp)
+        {
+            reason = "The cursed night has ended - ";
+            if (escapedOutsiders > 0)
+            {
+                reason += $"{escapedOutsiders} villagers escaped to safety.";
+            }
+            else
+            {
+                reason += "no villagers survived the night.";
+            }
+        }
+        else
+        {
+            if (escapedOutsiders == totalOutsiders)
+            {
+                reason = "All villagers have escaped! The Pontianak hunt nothing.";
+            }
+            else if (escapedOutsiders > 0)
+            {
+                reason = $"The night ends with {escapedOutsiders} survivors and {deadOutsiders} victims.";
+            }
+            else
+            {
+                reason = "A silent village... no villagers survived the Pontianak's wrath.";
+            }
+        }
+        return reason;
     }
 }
+// else
+// {
+//     AchievementController.Instance.OnFirstOutsiderPlayed.Raise();
+// }

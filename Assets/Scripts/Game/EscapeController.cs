@@ -4,9 +4,9 @@ using System.Collections;
 
 public class EscapeController : NetworkBehaviour
 {
-    [Header("Config")]
-    [SerializeField] private int currencyReward = 50;
-    [SerializeField] private float gameOverDelay = 3f;
+    // [Header("Config")]
+    // [SerializeField] private int currencyReward = 50;
+    // [SerializeField] private float gameOverDelay = 3f;
 
     [Header("Events")]
     [SerializeField] private GameEvent objectiveCompleteEvent;
@@ -113,14 +113,15 @@ public class EscapeController : NetworkBehaviour
             AchievementController.Instance?.OnFirstOutsiderEscape.Raise();
             AchievementController.Instance?.OnFirstOutsiderPlayed.Raise();
 
+            var accumulatedReward = GameConfig.BASE_PLAY_REWARD + GameConfig.BASE_ESCAPE_REWARD;
             // Currency
-            PlayFabCurrencyController.Instance?.GrantCurrency(currencyReward);
+            PlayFabCurrencyController.Instance?.GrantCurrency(accumulatedReward);
 
             // Update leaderboard
             PlayFabLeaderboardController.Instance.UpdateEscapeTimeLeaderboard(timeUsed);
 
             // Show End Game UI
-            EndGameUI.Instance.ShowPlayerEscaped(currencyReward, timeUsed / 1000f);
+            EndGameUI.Instance.ShowPlayerEscaped(accumulatedReward, timeUsed / 1000f);
         }
         else
         {

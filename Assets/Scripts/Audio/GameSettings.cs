@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Ensure you have TextMeshPro installed and imported
+using TMPro;
+using UnityEngine.SceneManagement; // Ensure you have TextMeshPro installed and imported
 
 public class GameSettings : MonoBehaviour
 {
@@ -43,6 +44,20 @@ public class GameSettings : MonoBehaviour
             Destroy(gameObject);
         }
         settingsPanel.SetActive(false);
+
+        SceneManager.sceneLoaded += OnSceneLoaded; // Subscribe to scene loaded event
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == GameConfig.GAME_SCENE)
+        {
+            activeButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            activeButton.gameObject.SetActive(false);
+        }
     }
 
     private void Start()
@@ -239,6 +254,15 @@ public class GameSettings : MonoBehaviour
         {
             settingsPanel.SetActive(!settingsPanel.activeSelf);
         }
+    }
+    public bool ToggleSettingsPanelBool()
+    {
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(!settingsPanel.activeSelf);
+            return settingsPanel.activeSelf;
+        }
+        return false;
     }
     #endregion
 

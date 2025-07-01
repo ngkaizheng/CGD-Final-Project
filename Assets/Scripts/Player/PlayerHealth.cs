@@ -69,8 +69,7 @@ public class PlayerHealth : NetworkHealth
 
         if (Runner.LocalPlayer == Object.InputAuthority)
         {
-            // Show observer UI
-            // ObserverUI.Instance.ShowObserverUI(true);
+            PlayFabCurrencyController.Instance.GrantCurrency(GameConfig.BASE_PLAY_REWARD);
             EndGameUI.Instance.ShowPlayerDied();
             AchievementController.Instance.OnFirstOutsiderPlayed.Raise();
         }

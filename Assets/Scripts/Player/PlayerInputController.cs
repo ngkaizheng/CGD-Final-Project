@@ -2,6 +2,7 @@ using System;
 using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputController : NetworkBehaviour
 {
@@ -117,4 +118,36 @@ public class PlayerInputController : NetworkBehaviour
             pontianak.playerAttack.PerformAttack();
         }
     }
+
+    #region Local Input Handling
+    private void Update()
+    {
+        HandleLocalInput();
+    }
+    public void HandleLocalInput()
+    {
+        // This method can be used to handle local input if needed
+        // For example, you can check for keyboard input here
+        // and call the appropriate methods on the player or pontianak.
+        if (GameSettings.Instance != null)
+        {
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                bool isActive = GameSettings.Instance.ToggleSettingsPanelBool();
+                Debug.Log("Settings panel toggled: " + isActive);
+                if (isActive)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    Debug.Log("Cursor locked and hidden");
+                }
+            }
+        }
+    }
+    #endregion
 }
