@@ -14,10 +14,20 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
     private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
     public NetworkDictionary<PlayerRef, Player> SpawnedPlayers { get; set; }
     private List<PlayerRef> joinOrder = new List<PlayerRef>();
+    private List<Transform> usedSpawnPoints = new List<Transform>();
+    private List<Transform> allSpawnPoints = new List<Transform>(); // Cache all spawn points
+
+
     public bool isTesting = false;
 
     public override void Spawned()
     {
+        // Cache all spawn points once when the spawner is spawned
+        if (allSpawnPoints.Count == 0)
+        {
+            var spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
+            allSpawnPoints = spawnPoints.Select(sp => sp.transform).ToList();
+        }
     }
 
     public void PlayerJoined(PlayerRef player)
@@ -76,10 +86,21 @@ public class PlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
             //     : outsiderPrefab;
             var prefab = GetPlayerPrefab(player);
 
-            SpawnPoint[] spawnPoints = Runner.SimulationUnityScene.GetComponents<SpawnPoint>(false);
-            Transform spawnPoint = spawnPoints.Length > 0
-                ? spawnPoints[Random.Range(0, spawnPoints.Length)].transform
-                : null;
+            var availableSpawnPoints = allSpawnPoints
+                .Where(sp => !usedSpawnPoints.Contains(sp))
+                .ToList();
+
+            Transform spawnPoint = null;
+            if (availableSpawnPoints.Count > 0)
+            {
+                spawnPoint = availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count)];
+                usedSpawnPoints.Add(spawnPoint);
+            }
+            else if (allSpawnPoints.Count > 0)
+            {
+                // All spawn points used, fallback to random
+                spawnPoint = allSpawnPoints[Random.Range(0, allSpawnPoints.Count)];
+            }
 
             SpawnPlayer(player, prefab, spawnPoint);
         }

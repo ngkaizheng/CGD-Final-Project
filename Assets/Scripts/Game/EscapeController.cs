@@ -120,7 +120,7 @@ public class EscapeController : NetworkBehaviour
             PlayFabLeaderboardController.Instance.UpdateEscapeTimeLeaderboard(timeUsed);
 
             // Show End Game UI
-            EndGameUI.Instance.ShowPlayerEscaped();
+            EndGameUI.Instance.ShowPlayerEscaped(currencyReward, timeUsed / 1000f);
         }
         else
         {

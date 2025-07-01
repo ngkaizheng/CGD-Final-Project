@@ -12,6 +12,18 @@ public class EndGameUI : MonoBehaviour
     [SerializeField] private Button observerButton;
     [SerializeField] private Button mainMenuButton;
 
+    [Header("Reward Section")]
+    [SerializeField] private GameObject rewardSection;
+    [SerializeField] private TMP_Text rewardText;
+
+    [Header("Time Used Section")]
+    [SerializeField] private GameObject timeUsedSection;
+    [SerializeField] private TMP_Text timeUsedText;
+
+    [Header("Kill Section")]
+    [SerializeField] private GameObject killSection;
+    [SerializeField] private TMP_Text killCountText;
+
     public static EndGameUI Instance { get; private set; }
 
     private void Awake()
@@ -39,11 +51,30 @@ public class EndGameUI : MonoBehaviour
             if (titleText != null) titleText.text = title;
             if (descriptionText != null) descriptionText.text = description;
         }
+
+        // Hide all extra sections by default
+        if (rewardSection != null) rewardSection.SetActive(false);
+        if (timeUsedSection != null) timeUsedSection.SetActive(false);
+        if (killSection != null) killSection.SetActive(false);
     }
 
-    public void ShowPlayerEscaped()
+    public void ShowPlayerEscaped(int reward, float timeUsedSeconds)
     {
         ShowEndGameUI(true, "Escaped!", "You successfully escaped!");
+
+        if (rewardSection != null)
+        {
+            rewardSection.SetActive(true);
+            if (rewardText != null)
+                rewardText.text = $"{reward}";
+        }
+
+        if (timeUsedSection != null)
+        {
+            timeUsedSection.SetActive(true);
+            if (timeUsedText != null)
+                timeUsedText.text = $"{timeUsedSeconds:F2}s";
+        }
     }
 
     public void ShowPlayerDied()
@@ -51,11 +82,19 @@ public class EndGameUI : MonoBehaviour
         ShowEndGameUI(true, "You Died", "You have been eliminated.");
     }
 
-    public void ShowGameOver(string reason = "")
+    public void ShowGameOver(PlayerRole role, int killCount = 0, string reason = "")
     {
         ShowEndGameUI(true, "Game Over", reason);
+
         if (observerButton != null)
             observerButton.gameObject.SetActive(false);
+
+        if (role == PlayerRole.PONTIANAK && killSection != null)
+        {
+            killSection.SetActive(true);
+            if (killCountText != null)
+                killCountText.text = $"{killCount}";
+        }
     }
 
     private void OnObserverClicked()

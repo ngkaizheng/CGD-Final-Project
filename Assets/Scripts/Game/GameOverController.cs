@@ -44,17 +44,22 @@ public class GameOverController : NetworkBehaviour
     {
         Debug.Log("Game Over - No living players remain!");
         gameOverEvent.Raise();
-        EndGameUI.Instance.ShowGameOver();
 
         // Check role and grant appropriate achievement
         if (PlayerTracker.Instance.IsPlayerPontianak(Runner.LocalPlayer))
         {
+            var killCount = PontianakObjectiveController.Instance.GetKillCount();
             AchievementController.Instance.OnFirstPontianakPlayed.Raise();
-            if (PontianakObjectiveController.Instance.GetKillCount() >= 1)
+            if (killCount >= 1)
             {
                 AchievementController.Instance.OnFirstPontianakHunt.Raise();
-                PlayFabLeaderboardController.Instance.UpdateKillsLeaderboard(PontianakObjectiveController.Instance.GetKillCount());
+                PlayFabLeaderboardController.Instance.UpdateKillsLeaderboard(killCount);
             }
+            EndGameUI.Instance.ShowGameOver(PlayerRole.PONTIANAK, killCount);
+        }
+        else
+        {
+            EndGameUI.Instance.ShowGameOver(PlayerRole.OUTSIDER);
         }
         // else
         // {
