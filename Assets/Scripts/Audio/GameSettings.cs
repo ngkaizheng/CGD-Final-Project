@@ -50,9 +50,12 @@ public class GameSettings : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == GameConfig.GAME_SCENE)
+        if (scene.name == GameConfig.GAME_SCENE || scene.name == GameConfig.MAIN_MENU_SCENE)
         {
-            activeButton.gameObject.SetActive(true);
+            if (activeButton != null)
+            {
+                activeButton.gameObject.SetActive(true);
+            }
         }
         else
         {

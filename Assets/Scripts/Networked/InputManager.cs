@@ -192,8 +192,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     void INetworkRunnerCallbacks.OnSceneLoadDone(NetworkRunner runner)
     {
         // StartCoroutine(EnableInputAfterDelay());
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
         // Debug.Log("Scene load done, cursor locked, starting input enable delay.");
     }
     private IEnumerator EnableInputAfterDelay()

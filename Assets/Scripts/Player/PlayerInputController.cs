@@ -65,7 +65,7 @@ public class PlayerInputController : NetworkBehaviour
         // {
         //     // _playerTexture.NextTexture();
         // }
-        CheckJump(input, previousButtons);
+        // CheckJump(input, previousButtons);
         CheckInteract(input, previousButtons);
         CheckAbilities(input, previousButtons);
         CheckAttack(input, previousButtons);

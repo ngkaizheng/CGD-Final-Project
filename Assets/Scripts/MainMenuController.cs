@@ -10,7 +10,7 @@ public class MainMenuController : MonoBehaviour
     #region Variables
     [Header("Main Menu Section")]
     [SerializeField] private Button startGameButton;
-    [SerializeField] private Button settingsButton;
+    // [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
 
     [Header("Multiplayer Section")]
@@ -68,7 +68,7 @@ public class MainMenuController : MonoBehaviour
 
         // Main menu buttons
         startGameButton.onClick.AddListener(() => ShowSection(MenuState.Multiplayer));
-        settingsButton.onClick.AddListener(() => GameSettings.Instance.ToggleSettingsPanel());
+        // settingsButton.onClick.AddListener(() => GameSettings.Instance.ToggleSettingsPanel());
         exitButton.onClick.AddListener(ExitGame);
 
         // Multiplayer buttons
@@ -107,7 +107,7 @@ public class MainMenuController : MonoBehaviour
     private void OnDestroy()
     {
         startGameButton.onClick.RemoveAllListeners();
-        settingsButton.onClick.RemoveAllListeners();
+        // settingsButton.onClick.RemoveAllListeners();
         exitButton.onClick.RemoveAllListeners();
         createRoomButton.onClick.RemoveAllListeners();
         joinRoomButton.onClick.RemoveAllListeners();
