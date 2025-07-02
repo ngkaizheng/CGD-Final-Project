@@ -10,18 +10,18 @@ public class CameraController : MonoBehaviour
     [Header("Camera Settings")]
     [SerializeField] public CinemachineCamera virtualCamera;
 
-    public static CameraController Instance { get; private set; }
+    // public static CameraController Instance { get; private set; }
 
     [SerializeField] private Vignette vignette;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        // if (Instance != null && Instance != this)
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
+        // Instance = this;
 
         // Cache the Vignette reference
         CacheVignette();

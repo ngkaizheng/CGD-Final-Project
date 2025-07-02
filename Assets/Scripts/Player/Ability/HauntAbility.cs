@@ -116,7 +116,22 @@ public class HauntAbility : PlayerAbility
     {
         Debug.Log($"You have been haunted! (to player {target})");
         // Add VFX, SFX, UI, etc. for the haunted player here
-        StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve, shakeDuration));
+        //Find its own player object
+        var playerObject = Runner.GetPlayerObject(target);
+        if (playerObject == null)
+        {
+            Debug.LogWarning($"Player object for {target} not found!");
+            return;
+        }
+        var camController = playerObject.GetComponentInChildren<CameraController>();
+        if (camController == null)
+        {
+            Debug.LogWarning($"CameraController for player {target} not found!");
+            return;
+        }
+        StartCoroutine(camController.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve));
+
+        // StartCoroutine(CameraController.Instance.ChangeVignetteIntensity(0f, 0.6f, revealDuration, fadeOutDuration, shakeCurve, shakeDuration));
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
