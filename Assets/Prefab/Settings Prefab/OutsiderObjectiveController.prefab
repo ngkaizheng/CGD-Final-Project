@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82ed4e7be6409448b29b99f6674cb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnTreeEachOutsider: 1
+  spawnTreeEachOutsider: 3
   objectiveCompleteAudioSource: {fileID: 0}
   gameInitEvent: {fileID: 11400000, guid: 55e29cb5d48048849a822af6eac1d613, type: 2}
   treeChoppedEvent: {fileID: 11400000, guid: 906e290a924a55c489660c2d2f44a04c, type: 2}

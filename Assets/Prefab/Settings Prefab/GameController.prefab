@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb6768e9cd5c8240aad5008f52db25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameDurationSeconds: 60
+  gameDurationSeconds: 300
   gameInitEvent: {fileID: 11400000, guid: 55e29cb5d48048849a822af6eac1d613, type: 2}
+  _IsTimeUp: 0
+  _IsGameEnding: 0
 --- !u!114 &7844134417639862805
 MonoBehaviour:
   m_ObjectHideFlags: 0
