@@ -92,6 +92,10 @@ public class LeaderboardUI : MonoBehaviour
     {
         valueHeaderText.text = "Time";
         ClearLeaderboard();
+
+        // Sort entries by StatValue ascending (lowest time first)
+        entries.Sort((a, b) => a.StatValue.CompareTo(b.StatValue));
+
         foreach (var entry in entries)
         {
             float seconds = entry.StatValue / 1000f;

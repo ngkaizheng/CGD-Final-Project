@@ -55,6 +55,8 @@ public class PlayFabUserController : MonoBehaviour
         Debug.Log($"Display name updated to: {result.DisplayName}");
         DisplayName = result.DisplayName;
         BlockerController.Instance.Hide();
+        ProfileController.Instance.statusText.text = "Display name updated successfully!";
+        ProfileController.Instance.statusText.color = Color.green;
     }
 
     private void OnDisplayNameUpdateError(PlayFabError error)
@@ -62,5 +64,7 @@ public class PlayFabUserController : MonoBehaviour
         Debug.LogError($"Failed to update display name: {error.GenerateErrorReport()}");
         // You can add error UI here
         BlockerController.Instance.Hide();
+        ProfileController.Instance.statusText.text = "Name not available. Please try again.";
+        ProfileController.Instance.statusText.color = Color.red;
     }
 }

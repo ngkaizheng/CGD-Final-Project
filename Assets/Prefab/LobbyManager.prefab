@@ -48,7 +48,7 @@ MonoBehaviour:
   _Players: []
   _lobbyPlayerPrefab: {fileID: 8581489957324220057, guid: 8ccb51ab6687fdf49a7cdc578c0cd29e, type: 3}
   _onPlayerListChanged: {fileID: 11400000, guid: 774cc87b079df3f41be0a09863c9ae6a, type: 2}
-  isTesting: 1
+  isTesting: 0
 --- !u!114 &6537075125531594710
 MonoBehaviour:
   m_ObjectHideFlags: 0

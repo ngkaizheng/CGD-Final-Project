@@ -15,18 +15,12 @@ public class SimpleCameraFollow : NetworkBehaviour
     public Vector2 pitchClamp = new Vector2(-35f, 80f);
     public float rotationSharpness = 10f;
     public CinemachineCamera vcam;
-    public CameraShaker cameraShaker; // Assign the CameraShaker component if needed
 
     [Networked] public Vector2 NetworkedLookRotation { get; set; }
     [Networked] public Vector3 NetworkedCameraForward { get; set; }
     [Networked] public Vector3 NetworkedCameraRight { get; set; }
     [Networked] public Vector2 lockedLookRotation { get; set; }
     [Networked] private NetworkButtons PreviousButtons { get; set; }
-
-    // Add these new variables for local prediction
-    private Vector2 _localLookRotation;
-    private bool _hasLocalInput;
-    private Vector2 _lastReceivedNetworkedLookRotation;
 
     public void SetupLocalCamera(bool HasInputAuthority)
     {
@@ -53,7 +47,6 @@ public class SimpleCameraFollow : NetworkBehaviour
             Debug.LogError("Player component not found on player object!");
             return;
         }
-        cameraShaker = GetComponentInChildren<CameraShaker>();
 
         SetupLocalCamera(HasInputAuthority);
     }
@@ -67,9 +60,6 @@ public class SimpleCameraFollow : NetworkBehaviour
         {
             if (!playerComponent.Object.IsValid) return;
 
-            // Store whether we have local input this tick
-            _hasLocalInput = input.LookDelta.sqrMagnitude > 0.001f;
-
             if (HasStateAuthority)
             {
                 // Handle camera rotation based on input
@@ -79,23 +69,41 @@ public class SimpleCameraFollow : NetworkBehaviour
                     pitchClamp.x,
                     pitchClamp.y
                 );
+
+                // Calculate camera vectors based on networked rotation
+                Quaternion camRotation = Quaternion.Euler(NetworkedLookRotation);
+                NetworkedCameraForward = camRotation * Vector3.forward;
+                NetworkedCameraRight = camRotation * Vector3.right;
             }
 
-            // LOCAL player does additional prediction
-            if (HasInputAuthority)
-            {
-                _localLookRotation = KCCUtility.GetClampedEulerLookRotation(
-                    _localLookRotation,
-                    input.LookDelta * playerComponent.NetworkedLookSensitivity,
-                    pitchClamp.x,
-                    pitchClamp.y
-                );
-            }
+            // if (HasStateAuthority)
+            // {
+            //     // When Alt is first pressed, lock the look rotation
+            //     if (input.Buttons.WasPressed(PreviousButtons, InputButton.Alt))
+            //     {
+            //         lockedLookRotation = NetworkedLookRotation;
+            //     }
 
-            // Calculate camera vectors based on appropriate rotation
-            Quaternion camRotation = Quaternion.Euler(HasInputAuthority ? _localLookRotation : NetworkedLookRotation);
-            NetworkedCameraForward = camRotation * Vector3.forward;
-            NetworkedCameraRight = camRotation * Vector3.right;
+            //     // Always allow camera to look around
+            //     NetworkedLookRotation = KCCUtility.GetClampedEulerLookRotation(
+            //         NetworkedLookRotation,
+            //         input.LookDelta * playerComponent.NetworkedLookSensitivity,
+            //         pitchClamp.x,
+            //         pitchClamp.y
+            //     );
+
+            //     // Calculate camera vectors based on networked rotation
+            //     Quaternion camRotation = Quaternion.Euler(NetworkedLookRotation);
+            //     NetworkedCameraForward = camRotation * Vector3.forward;
+            //     NetworkedCameraRight = camRotation * Vector3.right;
+
+            //     // If Alt was just released, snap camera/player to lockedLookRotation
+            //     if (input.Buttons.WasReleased(PreviousButtons, InputButton.Alt))
+            //     {
+            //         NetworkedLookRotation = lockedLookRotation;
+            //     }
+            //     PreviousButtons = input.Buttons;
+            // }
         }
     }
 
@@ -107,27 +115,8 @@ public class SimpleCameraFollow : NetworkBehaviour
         // Match player position exactly (no offset)
         transform.position = player.position;
 
-        // // Apply networked rotation to the holder (pivot) for camera rotation
-        // Quaternion targetRotation = Quaternion.Euler(NetworkedLookRotation.x, NetworkedLookRotation.y, 0);
-
-        // if (rotationSharpness > 0)
-        // {
-        //     CameraPivot.transform.rotation = Quaternion.Slerp(
-        //         CameraPivot.transform.rotation,
-        //         targetRotation,
-        //         rotationSharpness * Time.deltaTime
-        //     );
-        // }
-        // else
-        // {
-        //     CameraPivot.transform.rotation = targetRotation;
-        // }
-
-        // For local player with input authority, use the locally predicted rotation
-        Vector2 renderRotation = HasInputAuthority ? _localLookRotation : NetworkedLookRotation;
-
-        // Apply rotation to the holder (pivot) for camera rotation
-        Quaternion targetRotation = Quaternion.Euler(renderRotation.x, renderRotation.y, 0);
+        // Apply networked rotation to the holder (pivot) for camera rotation
+        Quaternion targetRotation = Quaternion.Euler(NetworkedLookRotation.x, NetworkedLookRotation.y, 0);
 
         if (rotationSharpness > 0)
         {
@@ -140,24 +129,6 @@ public class SimpleCameraFollow : NetworkBehaviour
         else
         {
             CameraPivot.transform.rotation = targetRotation;
-        }
-
-        // Handle reconciliation if we're the local player
-        if (HasInputAuthority && !_hasLocalInput)
-        {
-            // Smoothly reconcile if there's no local input
-            _localLookRotation = Vector2.Lerp(_localLookRotation, NetworkedLookRotation, Runner.DeltaTime * 10f);
-        }
-        else if (HasInputAuthority && NetworkedLookRotation != _lastReceivedNetworkedLookRotation)
-        {
-            // New networked data arrived - reconcile
-            _lastReceivedNetworkedLookRotation = NetworkedLookRotation;
-
-            // Only reconcile if the difference is significant
-            if (Vector2.Distance(_localLookRotation, NetworkedLookRotation) > 1f)
-            {
-                _localLookRotation = NetworkedLookRotation;
-            }
         }
     }
 

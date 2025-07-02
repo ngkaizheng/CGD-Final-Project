@@ -10,6 +10,7 @@ public class ProfileController : MonoBehaviour
     [SerializeField] private TMP_InputField displayNameInput;
     [SerializeField] private Button updateButton;
     [SerializeField] private Button backButton;
+    [SerializeField] public TMP_Text statusText;
 
     public static ProfileController Instance;
 
