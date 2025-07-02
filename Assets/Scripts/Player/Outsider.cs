@@ -22,13 +22,17 @@ public class Outsider : Player
 
         axeObj.SetActive(false);
 
+        OutsiderHeartbeatController heartbeatController = GetComponentInChildren<OutsiderHeartbeatController>();
+
         if (Object.InputAuthority == Runner.LocalPlayer)
         {
-            GetComponentInChildren<OutsiderHeartbeatController>().enabled = true;
+            heartbeatController.isSelf = true;
+            heartbeatController.enabled = true;
+            ObserverUI.Instance.EnableHeartbeatController(this); // Link it
         }
         else
         {
-            GetComponentInChildren<OutsiderHeartbeatController>().enabled = false;
+            heartbeatController.enabled = false;
         }
     }
 

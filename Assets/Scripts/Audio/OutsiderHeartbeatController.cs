@@ -17,11 +17,15 @@ public class OutsiderHeartbeatController : MonoBehaviour
     private bool isInitialized = false;
     private float currentDistance;
     private float heartbeatTimer = 0f;
+    public bool isSelf = false;
 
     private void OnEnable()
     {
         if (gameInitToEveryoneEvent != null)
             gameInitToEveryoneEvent.OnRaised.AddListener(OnGameInit);
+
+        if (!isSelf)
+            OnGameInit();
     }
 
     private void OnDisable()
@@ -30,7 +34,7 @@ public class OutsiderHeartbeatController : MonoBehaviour
             gameInitToEveryoneEvent.OnRaised.RemoveListener(OnGameInit);
     }
 
-    private void OnGameInit()
+    public void OnGameInit()
     {
         var pontianak = FindFirstObjectByType<Pontianak>();
         if (pontianak != null)
@@ -72,7 +76,9 @@ public class OutsiderHeartbeatController : MonoBehaviour
         heartbeatTimer -= Time.deltaTime;
         if (heartbeatTimer <= 0f)
         {
+            audioSource.transform.position = pontianakTransform.position;
             AudioController.Instance.PlaySoundEffect(heartbeatSound, audioSource);
+            // AudioController.Instance.PlaySoundEffectAtPosition(heartbeatSound, pontianakTransform.position);
             heartbeatTimer = interval; // Use the latest interval
         }
     }

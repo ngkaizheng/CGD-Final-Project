@@ -33,6 +33,7 @@ public class HauntCooldownUI : MonoBehaviour
     private void Update()
     {
         if (trackedAbility == null) return;
+        if (Instance.cooldownHolder.activeSelf == false) return; // Make sure only pontianak run this
 
         float remainingTime = trackedAbility.CooldownProgress;
         float totalCooldown = trackedAbility.GetCooldownDuration();

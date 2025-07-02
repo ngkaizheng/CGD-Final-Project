@@ -62,6 +62,8 @@ public class EndGameUI : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        ObserverUI.Instance.DisableCurrentHeartbeatController();
     }
 
     public void ShowPlayerEscaped(int reward, float timeUsedSeconds)

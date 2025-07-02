@@ -10,11 +10,16 @@ public class GameController : NetworkBehaviour
     [Header("Game Timer")]
     [SerializeField] public float gameDurationSeconds = 60f; // 1 minute
 
+    [Header("Events")]
     public GameEvent gameInitEvent; // Assign in inspector
 
     [Networked] public TickTimer GameTimer { get; set; }
     [Networked] public TickTimer LastChanceTimer { get; set; }
     [Networked] public bool IsTimeUp { get; set; }
+    [Networked] public bool IsGameEnding { get; private set; }
+
+    private Coroutine gameTimerCoroutine;
+
 
     private void OnEnable()
     {
@@ -46,8 +51,24 @@ public class GameController : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             GameTimer = TickTimer.CreateFromSeconds(Runner, gameDurationSeconds);
-            StartCoroutine(GameTimerCoroutine());
+            gameTimerCoroutine = StartCoroutine(GameTimerCoroutine());
         }
+    }
+
+    public void StopAllTimers()
+    {
+        if (IsGameEnding) return;
+
+        IsGameEnding = true;
+
+        if (gameTimerCoroutine != null)
+        {
+            StopCoroutine(gameTimerCoroutine);
+            gameTimerCoroutine = null;
+        }
+
+        GameTimer = TickTimer.None;
+        LastChanceTimer = TickTimer.None;
     }
 
     private IEnumerator GameTimerCoroutine()
@@ -58,6 +79,9 @@ public class GameController : NetworkBehaviour
         {
             yield return null;
         }
+
+        if (IsGameEnding) yield break;
+
         GameTimer = TickTimer.None;
         RPC_SetGameTimerExpired();
 
@@ -70,6 +94,9 @@ public class GameController : NetworkBehaviour
         {
             yield return null;
         }
+
+        if (IsGameEnding) yield break;
+
         LastChanceTimer = TickTimer.None;
 
         // Damage all Outsiders using InGamePlayerManager

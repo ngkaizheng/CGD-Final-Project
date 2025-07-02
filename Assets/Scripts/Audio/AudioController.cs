@@ -153,7 +153,7 @@ public class AudioController : MonoBehaviour
     }
 
     // Play a sound effect by enum using a specified AudioSource (for spatial audio)
-    public void PlaySoundEffect(SoundEffect effect, AudioSource audioSource, bool stopCurrent = false)
+    public void PlaySoundEffect(SoundEffect effect, AudioSource audioSource, bool stopCurrent = false, bool is3D = true)
     {
         if (audioSource == null)
         {
@@ -168,7 +168,8 @@ public class AudioController : MonoBehaviour
                 audioSource.Stop();
             }
             audioSource.volume = sfxVolume;
-            audioSource.spatialBlend = 1f; // Ensure 3D audio
+            if (is3D)
+                audioSource.spatialBlend = 1f; // Ensure 3D audio
             audioSource.PlayOneShot(clip);
         }
         else
@@ -178,7 +179,7 @@ public class AudioController : MonoBehaviour
     }
 
     // Play a sound effect at a specific position (for short-lived objects)
-    public void PlaySoundEffectAtPosition(SoundEffect effect, Vector3 position)
+    public void PlaySoundEffectAtPosition(SoundEffect effect, Vector3 position, bool is3D = true)
     {
         if (soundEffectDictionary.TryGetValue(effect, out AudioClip clip))
         {
@@ -186,7 +187,8 @@ public class AudioController : MonoBehaviour
             tempAudioObject.transform.position = position;
             AudioSource tempSource = tempAudioObject.AddComponent<AudioSource>();
             tempSource.volume = sfxVolume;
-            tempSource.spatialBlend = 1f; // 3D audio
+            if (is3D)
+                tempSource.spatialBlend = 1f; // 3D audio
             tempSource.maxDistance = 10f; // Adjust as needed
             tempSource.rolloffMode = AudioRolloffMode.Logarithmic;
             tempSource.PlayOneShot(clip);

@@ -14,6 +14,7 @@ public class ObserverUI : MonoBehaviour
     public List<PlayerRef> allPlayerRefs = new List<PlayerRef>();
     public int currentIndex = 0;
     public CinemachineCamera currentActiveCamera; // Track currently active camera
+    private OutsiderHeartbeatController currentHeartbeatController; // Track current heartbeat controller
 
     public static ObserverUI Instance { get; private set; }
 
@@ -52,6 +53,7 @@ public class ObserverUI : MonoBehaviour
             currentActiveCamera.gameObject.SetActive(false);
             currentActiveCamera = null;
         }
+        DisableCurrentHeartbeatController();
     }
 
     private void RefreshPlayerList()
@@ -143,6 +145,7 @@ public class ObserverUI : MonoBehaviour
             {
                 Debug.Log($"[ObserverUI] Showing outsider camera for PlayerRef {allPlayerRefs[currentIndex]}.");
                 SetActiveCamera(outsiderPair.Camera);
+                EnableHeartbeatController(outsiderPair.Player as Outsider);
                 return;
             }
             // If not valid, find next living outsider
@@ -157,6 +160,7 @@ public class ObserverUI : MonoBehaviour
             {
                 Debug.Log($"[ObserverUI] Showing pontianak camera for PlayerRef {allPlayerRefs[currentIndex]}.");
                 SetActiveCamera(pontianakPair.Camera);
+                DisableCurrentHeartbeatController();
                 return;
             }
             // If not valid, find next living pontianak
@@ -178,6 +182,34 @@ public class ObserverUI : MonoBehaviour
         newCamera.gameObject.SetActive(true);
         currentActiveCamera = newCamera;
     }
+
+    #region HeartBeat
+    public void EnableHeartbeatController(Outsider outsider)
+    {
+        // Disable previous heartbeat controller if exists
+        DisableCurrentHeartbeatController();
+
+        if (outsider != null)
+        {
+            currentHeartbeatController = outsider.GetComponentInChildren<OutsiderHeartbeatController>();
+            if (currentHeartbeatController != null)
+            {
+                currentHeartbeatController.enabled = true;
+                Debug.Log($"[ObserverUI] Enabled heartbeat controller for {outsider.name}");
+            }
+        }
+    }
+
+    public void DisableCurrentHeartbeatController()
+    {
+        if (currentHeartbeatController != null)
+        {
+            currentHeartbeatController.enabled = false;
+            Debug.Log($"[ObserverUI] Disabled heartbeat controller for {currentHeartbeatController.name}");
+            currentHeartbeatController = null;
+        }
+    }
+    #endregion
 
     #region Public Methods
     public void ShowObserverUI(bool show)

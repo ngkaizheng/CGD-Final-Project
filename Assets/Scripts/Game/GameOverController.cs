@@ -11,6 +11,7 @@ public class GameOverController : NetworkBehaviour
 
     [Header("Events")]
     [SerializeField] private GameEvent gameOverEvent;
+    [Networked] public bool IsGameOver { get; private set; }
 
     public override void Spawned()
     {
@@ -28,6 +29,9 @@ public class GameOverController : NetworkBehaviour
 
         if (!PlayerTracker.Instance.IsAnyPlayerAlive())
         {
+            if (IsGameOver) return; // Prevent duplicate triggers
+            IsGameOver = true;
+            GameController.Instance.StopAllTimers();
             Debug.Log("Game Over condition met!");
             StartCoroutine(GameOverWithDelay());
         }
