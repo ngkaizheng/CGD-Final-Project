@@ -93,16 +93,24 @@ public class LeaderboardUI : MonoBehaviour
         valueHeaderText.text = "Time";
         ClearLeaderboard();
 
-        // Sort entries by StatValue ascending (lowest time first)
         entries.Sort((a, b) => a.StatValue.CompareTo(b.StatValue));
 
-        foreach (var entry in entries)
+        for (int i = 0; i < entries.Count; i++)
         {
+            var entry = entries[i];
             float seconds = entry.StatValue / 1000f;
             var item = Instantiate(leaderboardItemPrefab, leaderboardContentParent);
-            item.Setup(entry.Position + 1, entry.DisplayName ?? entry.PlayFabId, $"{seconds:F2}s");
+            item.Setup(i + 1, entry.DisplayName ?? entry.PlayFabId, $"{seconds:F2}s");
             spawnedItems.Add(item);
         }
+
+        // foreach (var entry in entries)
+        // {
+        //     float seconds = entry.StatValue / 1000f;
+        //     var item = Instantiate(leaderboardItemPrefab, leaderboardContentParent);
+        //     item.Setup(entry.Position + 1, entry.DisplayName ?? entry.PlayFabId, $"{seconds:F2}s");
+        //     spawnedItems.Add(item);
+        // }
     }
 
     private void ClearLeaderboard()

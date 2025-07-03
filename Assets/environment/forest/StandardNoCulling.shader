@@ -1,50 +1,133 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader "Fantasy Forest/StandardNoCulling"
+Shader "Fantasy Forest/StandardNoCulling URP"
 {
-	Properties
-	{
-		_Cutoff( "Mask Clip Value", Float ) = 0.5
-		_MainTex("Main Texture", 2D) = "white" {}
-		_Color("Color", Color) = (1,1,1,0)
-		[HideInInspector] _texcoord( "", 2D ) = "white" {}
-		[HideInInspector] __dirty( "", Int ) = 1
-	}
-
-	SubShader
-	{
-		Tags{ "RenderType" = "TransparentCutout"  "Queue" = "Geometry+0" }
-		Cull Off
-		CGPROGRAM
-		#pragma target 3.0
-		#pragma surface surf StandardSpecular keepalpha addshadow fullforwardshadows 
-		struct Input
-		{
-			float2 uv_texcoord;
-		};
-
-		uniform float4 _Color;
-		uniform sampler2D _MainTex;
-		uniform float4 _MainTex_ST;
-		uniform float _Cutoff = 0.5;
-
-		void surf( Input i , inout SurfaceOutputStandardSpecular o )
-		{
-			float2 uv_MainTex = i.uv_texcoord * _MainTex_ST.xy + _MainTex_ST.zw;
-			float4 tex2DNode3 = tex2D( _MainTex, uv_MainTex );
-			o.Albedo = ( _Color * tex2DNode3 ).rgb;
-			float temp_output_1_0 = 0.0;
-			float3 temp_cast_1 = (temp_output_1_0).xxx;
-			o.Specular = temp_cast_1;
-			o.Smoothness = temp_output_1_0;
-			o.Alpha = 1;
-			clip( tex2DNode3.a - _Cutoff );
-		}
-
-		ENDCG
-	}
-	Fallback "Diffuse"
-	CustomEditor "ASEMaterialInspector"
+    Properties
+    {
+        _Cutoff("Mask Clip Value", Float) = 0.5
+        _MainTex("Main Texture", 2D) = "white" {}
+        _Color("Color", Color) = (1,1,1,0)
+        [HideInInspector] _texcoord("", 2D) = "white" {}
+        [HideInInspector] __dirty("", Int) = 1
+    }
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "TransparentCutout"
+            "RenderPipeline" = "UniversalPipeline"
+            "Queue" = "Geometry+0"
+        }
+        
+        Cull Off
+        
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+        ENDHLSL
+ 
+        Pass
+        {
+            Name "Forward"
+            Tags { "LightMode" = "UniversalForward" }
+            
+            HLSLPROGRAM
+            #pragma target 3.0
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
+            
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
+                float3 normalOS : NORMAL;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+ 
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float3 normalWS : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+ 
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            
+            CBUFFER_START(UnityPerMaterial)
+                float4 _Color;
+                float4 _MainTex_ST;
+                float _Cutoff;
+            CBUFFER_END
+ 
+            Varyings vert(Attributes input)
+            {
+                Varyings output = (Varyings)0;
+                
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_TRANSFER_INSTANCE_ID(input, output);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+ 
+                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                output.uv = TRANSFORM_TEX(input.uv, _MainTex);
+                
+                return output;
+            }
+ 
+            half4 frag(Varyings input) : SV_Target
+            {
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                
+                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+                clip(mainTex.a - _Cutoff);
+                
+                float4 finalColor = mainTex * _Color;
+                
+                // Lighting calculation
+                Light mainLight = GetMainLight();
+                float3 normalWS = normalize(input.normalWS);
+                float NdotL = saturate(dot(normalWS, mainLight.direction));
+                float3 ambient = SampleSH(normalWS);
+                
+                finalColor.rgb *= (mainLight.color * NdotL + ambient);
+                
+                return finalColor;
+            }
+            ENDHLSL
+        }
+        
+        // Shadow casting support
+        Pass
+        {
+            Name "ShadowCaster"
+            Tags { "LightMode" = "ShadowCaster" }
+ 
+            ZWrite On
+            ZTest LEqual
+            ColorMask 0
+ 
+            HLSLPROGRAM
+            #pragma vertex ShadowPassVertex
+            #pragma fragment ShadowPassFragment
+            #pragma target 3.0
+            
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
+            
+            ENDHLSL
+        }
+    }
 }
 /*ASEBEGIN
 Version=16800
